@@ -7,18 +7,24 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
@@ -65,7 +71,9 @@ fun HomeView(name: String, modifier: Modifier = Modifier) {
         Image(
             painter = painterResource(R.drawable.eclair),
             contentDescription = "Image d'accueil",
-            modifier = Modifier.size(400.dp).border(5.dp, MaterialTheme.colorScheme.secondary)
+            modifier = Modifier
+                .size(400.dp)
+                .border(5.dp, MaterialTheme.colorScheme.secondary)
         )
         Spacer(modifier = Modifier.height(10.dp))
         Surface(shape = MaterialTheme.shapes.small, tonalElevation = 8.dp, modifier = Modifier.align(Alignment.CenterHorizontally)) {
@@ -84,6 +92,54 @@ fun HomeView(name: String, modifier: Modifier = Modifier) {
             )
         }
     }
+}
+
+data class Challenge(val name: String, val point: Int)
+
+@Composable
+fun ChallengeList(challenges: List<Challenge>) {
+    LazyColumn(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp)
+    ) {
+        items(challenges) { challenge ->
+            ChallengeRow(challenge)
+        }
+    }
+}
+
+@Composable
+fun ChallengeRow(challenge: Challenge) {
+    Surface(
+        shape = MaterialTheme.shapes.small,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(16.dp)
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp)
+        ) {
+            Text(
+                text = "${challenge.name} - ${challenge.point} pts",
+                style = MaterialTheme.typography.bodyMedium
+            )
+        }
+    }
+}
+
+@Preview
+@Composable
+fun ChallengeListPreview() {
+    val challenges = listOf(
+        Challenge(name = "Faire 300 pas en 1 minute", point = 5),
+        Challenge(name = "Prendre un selfie devant la Tour Eiffel", point = 30),
+        Challenge(name = "Prendre un bain de minuit", point = 10)
+    )
+
+    ChallengeList(challenges = challenges)
 }
 
 @Preview(
