@@ -49,6 +49,14 @@ class LoginActivity : ComponentActivity() {
                     composable(Screen.Home.route) {
                         HomeScreen("Challenge It", navController)
                     }
+                    composable(Screen.MainPage.route) {
+                        val groups = listOf(
+                            Group(name = "Groupe UQAC"),
+                            Group(name = "Groupe 2"),
+                            Group(name = "Groupe 3")
+                        )
+                        MainPageScreen(navController, groups)
+                    }
                 }
             }
         }
@@ -80,7 +88,7 @@ fun LoginScreen(navController: NavHostController) {
             onValueChange = {}
         )
         Spacer(modifier = Modifier.height(16.dp))
-        Button(onClick = { navController.navigate(Screen.Home.route) }) {
+        Button(onClick = { navController.navigate(Screen.MainPage.route) }) {
             Text(text = "Connexion")
         }
     }
