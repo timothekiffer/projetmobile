@@ -50,7 +50,12 @@ class LoginActivity : ComponentActivity() {
                         HomeScreen("Challenge It", navController)
                     }
                     composable(Screen.MainPage.route) {
-                        MainPageScreen(navController)
+                        val groups = listOf(
+                            Group(name = "Groupe UQAC"),
+                            Group(name = "Groupe 2"),
+                            Group(name = "Groupe 3")
+                        )
+                        MainPageScreen(navController, groups)
                     }
                 }
             }
