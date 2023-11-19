@@ -3,6 +3,7 @@ package com.example.challengeit
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -57,11 +58,10 @@ data class Group(val name: String)
 @Composable
 fun MainPageScreen(navController: NavHostController, groups: List<Group>) {
     Column(modifier = Modifier
-        .fillMaxSize()
-        .padding(10.dp)
-        .verticalScroll(rememberScrollState()),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
+            .fillMaxSize()
+            .padding(10.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
         Text(
             text = "Mes groupes de défis",
             style = MaterialTheme.typography.labelLarge
@@ -69,32 +69,40 @@ fun MainPageScreen(navController: NavHostController, groups: List<Group>) {
         Spacer(modifier = Modifier.height(16.dp))
 
         LazyColumn (
-            modifier = Modifier.fillMaxWidth(),
-            horizontalAlignment = Alignment.CenterHorizontally){
+            modifier = Modifier.fillMaxWidth()
+        ){
             items(groups) { group ->
                 GroupItem(group, navController)
             }
         }
 
         Spacer(modifier = Modifier.height(16.dp))
-        Button(onClick = { navController.navigate(Screen.Home.route) }) {
-            Text(text = "Ajoute un groupe ici")
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp),
+            horizontalArrangement = Arrangement.End
+        ) {
+            Button(onClick = { navController.navigate(Screen.Home.route) }) {
+                Text(text = "Ajoute un groupe ici")
+            }
         }
     }
 }
 
 @Composable
 fun GroupItem(group: Group, navController: NavHostController) {
-    Spacer(modifier = Modifier.height(16.dp))
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(16.dp)
+            .padding(16.dp),
+        horizontalArrangement = Arrangement.Center
     ) {
         Button(onClick = { navController.navigate(Screen.Group.route) }) {
             Text(text = group.name)
         }
     }
+    Spacer(modifier = Modifier.height(16.dp))
 }
 
 @Preview
@@ -108,15 +116,5 @@ fun MainPageScreenPreview() {
     )
     ChallengeItTheme {
         MainPageScreen(navController, groups)
-    }
-}
-
-@Preview
-@Composable
-fun GroupItemPreview() {
-    val navController = rememberNavController()
-    val group = Group(name = "Groupe UQAC")
-    ChallengeItTheme {
-        GroupItem(group, navController)
     }
 }
