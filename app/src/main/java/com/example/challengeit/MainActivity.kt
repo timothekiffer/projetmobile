@@ -32,6 +32,7 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -68,6 +69,9 @@ class MainActivity : ComponentActivity() {
                         composable(Screen.Connexion.route){
                             ConnexionScreen(navController)
                         }
+                        composable(Screen.Inscription.route){
+                            InscriptionScreen(navController)
+                        }
                     }
                 }
             }
@@ -86,8 +90,11 @@ fun HomeScreen(navController: NavHostController) {
     ) {
         Text(text = "Page d'accueil")
         Spacer(modifier = Modifier.height(16.dp))
-        Button(onClick = { navController.navigate(Screen.Home.route) }) {
-            Text(text = "Aller à la page de détail")
+        Button(onClick = { navController.navigate(Screen.Connexion.route) }) {
+            Text(text = "Aller à la page de connexion")
+        }
+        Button(onClick = { navController.navigate(Screen.Inscription.route) }) {
+            Text(text = "Aller à la page d'inscription")
         }
     }
 }
@@ -121,40 +128,71 @@ fun ConnexionScreen(navController: NavHostController) {
             style = MaterialTheme.typography.labelLarge
 
         )
-        Spacer(modifier = Modifier.height(10.dp))
-        Text(
-            text = "Ici, vous pouvez participer à une variété de défis passionnants et enrichissants." +
-                    " Non seulement vous pouvez apprendre et grandir, mais vous pouvez aussi gagner des points et concourir avec d'autres participants.",
-            color = MaterialTheme.colorScheme.secondaryContainer,
-            style = MaterialTheme.typography.bodyLarge
+
+        Spacer(modifier = Modifier.height(16.dp))
+        Text(text = "Adresse email")
+        TextField(
+            value = "login",
+            onValueChange = {}
         )
-        Spacer(modifier = Modifier.height(10.dp))
-        Image(
-            painter = painterResource(R.drawable.eclair),
-            contentDescription = "Image d'accueil",
-            modifier = Modifier
-                .size(400.dp)
-                .border(5.dp, MaterialTheme.colorScheme.secondary)
+        Spacer(modifier = Modifier.height(16.dp))
+        Text(text = "Mot de Passe")
+        TextField(
+            value = "password",
+            onValueChange = {}
         )
-        Spacer(modifier = Modifier.height(10.dp))
-        Surface(shape = MaterialTheme.shapes.small, tonalElevation = 8.dp, modifier = Modifier.align(Alignment.CenterHorizontally)) {
-            Text(
-                text = "Se connecter",
-                modifier = Modifier.padding(all = 8.dp),
-                style = MaterialTheme.typography.labelLarge
-            )
-        }
-        Spacer(modifier = Modifier.height(10.dp))
-        Surface(shape = MaterialTheme.shapes.small, tonalElevation = 8.dp, modifier = Modifier.align(Alignment.CenterHorizontally)) {
-            Text(
-                text = "S'inscrire",
-                modifier = Modifier.padding(all = 8.dp),
-                style = MaterialTheme.typography.labelLarge
-            )
+        Spacer(modifier = Modifier.height(16.dp))
+        Button(onClick = { navController.navigate(Screen.Home.route) }) {
+            Text(text = "Connexion")
         }
     }
 
 }
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun InscriptionScreen(navController: NavHostController) {
+    Column(modifier = Modifier
+        .padding(10.dp)
+        .verticalScroll(rememberScrollState())) {
+        Text(
+            text = "Inscris Toi",
+            style = MaterialTheme.typography.labelLarge
+
+        )
+
+        Spacer(modifier = Modifier.height(16.dp))
+        Text(text = "Dis nous ton âge")
+        TextField(
+            value = "",
+            onValueChange = {}
+        )
+        Spacer(modifier = Modifier.height(16.dp))
+        Text(text = "Pseudo")
+        TextField(
+            value = "",
+            onValueChange = {}
+        )
+        Spacer(modifier = Modifier.height(16.dp))
+        Text(text = "Identifiant")
+        TextField(
+            value = "",
+            onValueChange = {}
+        )
+        Spacer(modifier = Modifier.height(16.dp))
+        Text(text = "Mot de passe")
+        TextField(
+            value = "",
+            onValueChange = {}
+        )
+        Spacer(modifier = Modifier.height(16.dp))
+        Button(onClick = { navController.navigate(Screen.Home.route) }) {
+            Text(text = "Valider")
+        }
+    }
+
+}
+
 
 @Composable
 fun HomeView(name: String, modifier: Modifier = Modifier) {
@@ -337,5 +375,14 @@ fun ConnexionScreenPreview() {
     val navController = rememberNavController()
     ChallengeItTheme {
         ConnexionScreen(navController)
+    }
+}
+
+@Preview
+@Composable
+fun InscriptionScreenPreview() {
+    val navController = rememberNavController()
+    ChallengeItTheme {
+        InscriptionScreen(navController)
     }
 }
