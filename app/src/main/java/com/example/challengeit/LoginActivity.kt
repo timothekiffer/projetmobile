@@ -49,6 +49,9 @@ class LoginActivity : ComponentActivity() {
                     composable(Screen.Home.route) {
                         HomeScreen("Challenge It", navController)
                     }
+                    composable(Screen.MainPage.route) {
+                        MainPageScreen(navController)
+                    }
                 }
             }
         }
@@ -80,7 +83,7 @@ fun LoginScreen(navController: NavHostController) {
             onValueChange = {}
         )
         Spacer(modifier = Modifier.height(16.dp))
-        Button(onClick = { navController.navigate(Screen.Home.route) }) {
+        Button(onClick = { navController.navigate(Screen.MainPage.route) }) {
             Text(text = "Connexion")
         }
     }
