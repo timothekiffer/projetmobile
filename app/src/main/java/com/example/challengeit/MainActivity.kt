@@ -2,6 +2,7 @@ package com.example.challengeit
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Row
@@ -26,10 +27,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.challengeit.ui.theme.ChallengeItTheme
+import com.google.firebase.FirebaseApp
+import com.google.firebase.auth.FirebaseAuth
 
 class MainActivity : ComponentActivity() {
+    companion object{
+        lateinit var auth: FirebaseAuth
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        auth = FirebaseAuth.getInstance()
+        val user = auth.currentUser
         setContent {
             ChallengeItTheme {
                 // A surface container using the 'background' color from the theme
@@ -37,6 +46,17 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
+                    intent = Intent(this, LoginActivity::class.java)
+                    startActivity(intent)
+                    finish()
+                }
+                if( user!= null){
+                    Log.d("UserStatus","Connected")
+                    intent = Intent(this, MainActivity::class.java)
+                    startActivity(intent)
+                    finish()
+                }else{
+                    Log.d("UserStatus","Not Connected")
                     intent = Intent(this, LoginActivity::class.java)
                     startActivity(intent)
                     finish()

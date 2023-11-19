@@ -1,7 +1,10 @@
 package com.example.challengeit
 
+import android.content.ContentValues.TAG
 import android.content.res.Configuration
 import android.os.Bundle
+import android.util.Log
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
@@ -13,12 +16,17 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -32,10 +40,19 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.challengeit.ui.theme.ChallengeItTheme
+import com.google.firebase.Firebase
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.auth
 
 class LoginActivity : ComponentActivity() {
+    private lateinit var auth: FirebaseAuth
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        auth = Firebase.auth
+        val currentUser = auth.currentUser
+        if (currentUser != null) {
+            reload()
+        }
         setContent {
             ChallengeItTheme {
                 val navController = rememberNavController()
@@ -53,11 +70,37 @@ class LoginActivity : ComponentActivity() {
             }
         }
     }
-}
+    private fun signIn(email: String, password: String, param: (Any) -> Unit) {
+        // [START sign_in_with_email]
+        auth.signInWithEmailAndPassword(email, password)
+            .addOnCompleteListener(this) { task ->
+                if (task.isSuccessful) {
+                    // Sign in success, update UI with the signed-in user's information
+                    Log.d(TAG, "signInWithEmail:success")
+                    val user = auth.currentUser
+                } else {
+                    // If sign in fails, display a message to the user.
+                    Log.w(TAG, "signInWithEmail:failure", task.exception)
+                    Toast.makeText(
+                        baseContext,
+                        "Authentication failed.",
+                        Toast.LENGTH_SHORT,
+                    ).show()
+                }
+            }
+        // [END sign_in_with_email]
+    }
+    private fun reload() {
+    }
+
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LoginScreen(navController: NavHostController) {
+    var email by remember { mutableStateOf("") }
+    var password by remember { mutableStateOf("") }
+    var loginResult by remember { mutableStateOf(false) }
     Column(modifier = Modifier
         .padding(10.dp)
         .verticalScroll(rememberScrollState())) {
@@ -70,17 +113,27 @@ fun LoginScreen(navController: NavHostController) {
         Spacer(modifier = Modifier.height(16.dp))
         Text(text = "Adresse email")
         TextField(
-            value = "login",
-            onValueChange = {}
+            value = email,
+            onValueChange = { email = it }
         )
         Spacer(modifier = Modifier.height(16.dp))
         Text(text = "Mot de Passe")
         TextField(
-            value = "password",
-            onValueChange = {}
+            value = password,
+            onValueChange = { password = it }
         )
         Spacer(modifier = Modifier.height(16.dp))
-        Button(onClick = { navController.navigate(Screen.Home.route) }) {
+        Button(onClick = { signIn(email, password){
+                user ->
+            if (user != null) {
+                // User is signed in, navigate to HomeScreen
+                navController.navigate(Screen.Home.route)
+            } else {
+                // Show error dialog
+
+            }
+        }
+             }) {
             Text(text = "Connexion")
         }
     }
@@ -125,6 +178,7 @@ fun RegistrationScreen(navController: NavHostController) {
         Spacer(modifier = Modifier.height(16.dp))
         Button(onClick = { navController.navigate(Screen.Home.route) }) {
             Text(text = "Valider")
+            //navController.navigate(Screen.Home.route)
         }
     }
 }
@@ -210,4 +264,5 @@ fun HomeScreenPreview() {
     ChallengeItTheme {
         HomeScreen("Challenge It", navController)
     }
+}
 }
