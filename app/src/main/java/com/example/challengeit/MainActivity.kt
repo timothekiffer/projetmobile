@@ -6,6 +6,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -21,14 +22,17 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Home
+import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -38,6 +42,10 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import com.example.challengeit.ui.theme.ChallengeItTheme
 
 class MainActivity : ComponentActivity() {
@@ -50,12 +58,141 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    HomeView("Challenge It")
+                    val navController = rememberNavController()
+                    NavHost(navController = navController, startDestination = Screen.Home.route){
+                        composable(Screen.Home.route){
+                            HomeScreen(navController)
+                        }
+                        composable(Screen.Detail.route){
+                            DetailScreen(navController)
+                        }
+                        composable(Screen.Connexion.route){
+                            ConnexionScreen(navController)
+                        }
+                        composable(Screen.Inscription.route){
+                            InscriptionScreen(navController)
+                        }
+                    }
                 }
             }
         }
     }
 }
+
+@Composable
+fun HomeScreen(navController: NavHostController) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Text(text = "Page d'accueil")
+        Spacer(modifier = Modifier.height(16.dp))
+        Button(onClick = { navController.navigate(Screen.Connexion.route) }) {
+            Text(text = "Aller à la page de connexion")
+        }
+        Button(onClick = { navController.navigate(Screen.Inscription.route) }) {
+            Text(text = "Aller à la page d'inscription")
+        }
+    }
+}
+
+@Composable
+fun DetailScreen(navController: NavHostController) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Text(text = "Page de détail")
+        Spacer(modifier = Modifier.height(16.dp))
+        OutlinedButton(onClick = { navController.popBackStack() }) {
+            Text(text = "Retour à la page d'accueil")
+        }
+    }
+}
+
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun ConnexionScreen(navController: NavHostController) {
+    Column(modifier = Modifier
+        .padding(10.dp)
+        .verticalScroll(rememberScrollState())) {
+        Text(
+            text = "Connecte Toi",
+            style = MaterialTheme.typography.labelLarge
+
+        )
+
+        Spacer(modifier = Modifier.height(16.dp))
+        Text(text = "Adresse email")
+        TextField(
+            value = "login",
+            onValueChange = {}
+        )
+        Spacer(modifier = Modifier.height(16.dp))
+        Text(text = "Mot de Passe")
+        TextField(
+            value = "password",
+            onValueChange = {}
+        )
+        Spacer(modifier = Modifier.height(16.dp))
+        Button(onClick = { navController.navigate(Screen.Home.route) }) {
+            Text(text = "Connexion")
+        }
+    }
+
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun InscriptionScreen(navController: NavHostController) {
+    Column(modifier = Modifier
+        .padding(10.dp)
+        .verticalScroll(rememberScrollState())) {
+        Text(
+            text = "Inscris Toi",
+            style = MaterialTheme.typography.labelLarge
+
+        )
+
+        Spacer(modifier = Modifier.height(16.dp))
+        Text(text = "Dis nous ton âge")
+        TextField(
+            value = "",
+            onValueChange = {}
+        )
+        Spacer(modifier = Modifier.height(16.dp))
+        Text(text = "Pseudo")
+        TextField(
+            value = "",
+            onValueChange = {}
+        )
+        Spacer(modifier = Modifier.height(16.dp))
+        Text(text = "Identifiant")
+        TextField(
+            value = "",
+            onValueChange = {}
+        )
+        Spacer(modifier = Modifier.height(16.dp))
+        Text(text = "Mot de passe")
+        TextField(
+            value = "",
+            onValueChange = {}
+        )
+        Spacer(modifier = Modifier.height(16.dp))
+        Button(onClick = { navController.navigate(Screen.Home.route) }) {
+            Text(text = "Valider")
+        }
+    }
+
+}
+
 
 @Composable
 fun HomeView(name: String, modifier: Modifier = Modifier) {
@@ -211,5 +348,41 @@ fun ChallengeListScreenPreview() {
 fun HomeViewPreview() {
     ChallengeItTheme {
         HomeView("Challenge It")
+    }
+}
+
+@Preview
+@Composable
+fun HomeScreenPreview() {
+    val navController = rememberNavController()
+    ChallengeItTheme {
+        HomeScreen(navController)
+    }
+}
+
+@Preview
+@Composable
+fun DetailScreenPreview() {
+    val navController = rememberNavController()
+    ChallengeItTheme {
+        DetailScreen(navController)
+    }
+}
+
+@Preview
+@Composable
+fun ConnexionScreenPreview() {
+    val navController = rememberNavController()
+    ChallengeItTheme {
+        ConnexionScreen(navController)
+    }
+}
+
+@Preview
+@Composable
+fun InscriptionScreenPreview() {
+    val navController = rememberNavController()
+    ChallengeItTheme {
+        InscriptionScreen(navController)
     }
 }
