@@ -46,7 +46,6 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.challengeit.ui.theme.ChallengeItTheme
-import com.example.challengeit.ui.theme.Screen
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -65,6 +64,9 @@ class MainActivity : ComponentActivity() {
                         }
                         composable(Screen.Detail.route){
                             DetailScreen(navController)
+                        }
+                        composable(Screen.Connexion.route){
+                            ConnexionScreen(navController)
                         }
                     }
                 }
@@ -108,6 +110,51 @@ fun DetailScreen(navController: NavHostController) {
 }
 
 
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun ConnexionScreen(navController: NavHostController) {
+    Column(modifier = Modifier
+        .padding(10.dp)
+        .verticalScroll(rememberScrollState())) {
+        Text(
+            text = "Connecte Toi",
+            style = MaterialTheme.typography.labelLarge
+
+        )
+        Spacer(modifier = Modifier.height(10.dp))
+        Text(
+            text = "Ici, vous pouvez participer à une variété de défis passionnants et enrichissants." +
+                    " Non seulement vous pouvez apprendre et grandir, mais vous pouvez aussi gagner des points et concourir avec d'autres participants.",
+            color = MaterialTheme.colorScheme.secondaryContainer,
+            style = MaterialTheme.typography.bodyLarge
+        )
+        Spacer(modifier = Modifier.height(10.dp))
+        Image(
+            painter = painterResource(R.drawable.eclair),
+            contentDescription = "Image d'accueil",
+            modifier = Modifier
+                .size(400.dp)
+                .border(5.dp, MaterialTheme.colorScheme.secondary)
+        )
+        Spacer(modifier = Modifier.height(10.dp))
+        Surface(shape = MaterialTheme.shapes.small, tonalElevation = 8.dp, modifier = Modifier.align(Alignment.CenterHorizontally)) {
+            Text(
+                text = "Se connecter",
+                modifier = Modifier.padding(all = 8.dp),
+                style = MaterialTheme.typography.labelLarge
+            )
+        }
+        Spacer(modifier = Modifier.height(10.dp))
+        Surface(shape = MaterialTheme.shapes.small, tonalElevation = 8.dp, modifier = Modifier.align(Alignment.CenterHorizontally)) {
+            Text(
+                text = "S'inscrire",
+                modifier = Modifier.padding(all = 8.dp),
+                style = MaterialTheme.typography.labelLarge
+            )
+        }
+    }
+
+}
 
 @Composable
 fun HomeView(name: String, modifier: Modifier = Modifier) {
@@ -281,5 +328,14 @@ fun DetailScreenPreview() {
     val navController = rememberNavController()
     ChallengeItTheme {
         DetailScreen(navController)
+    }
+}
+
+@Preview
+@Composable
+fun ConnexionScreenPreview() {
+    val navController = rememberNavController()
+    ChallengeItTheme {
+        ConnexionScreen(navController)
     }
 }
