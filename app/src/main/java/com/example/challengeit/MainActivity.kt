@@ -6,6 +6,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -21,11 +22,13 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Home
+import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -38,6 +41,10 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import com.example.challengeit.ui.theme.ChallengeItTheme
 
 class MainActivity : ComponentActivity() {
@@ -50,12 +57,56 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    HomeView("Challenge It")
+                    val navController = rememberNavController()
+                    NavHost(navController = navController, startDestination = "home"){
+                        composable("home"){
+                            HomeScreen(navController)
+                        }
+                        composable("detail"){
+                            DetailScreen(navController)
+                        }
+                    }
                 }
             }
         }
     }
 }
+
+@Composable
+fun HomeScreen(navController: NavHostController) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Text(text = "Page d'accueil")
+        Spacer(modifier = Modifier.height(16.dp))
+        Button(onClick = { navController.navigate("detail") }) {
+            Text(text = "Aller à la page de détail")
+        }
+    }
+}
+
+@Composable
+fun DetailScreen(navController: NavHostController) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Text(text = "Page de détail")
+        Spacer(modifier = Modifier.height(16.dp))
+        OutlinedButton(onClick = { navController.popBackStack() }) {
+            Text(text = "Retour à la page d'accueil")
+        }
+    }
+}
+
+
 
 @Composable
 fun HomeView(name: String, modifier: Modifier = Modifier) {
@@ -211,5 +262,23 @@ fun ChallengeListScreenPreview() {
 fun HomeViewPreview() {
     ChallengeItTheme {
         HomeView("Challenge It")
+    }
+}
+
+@Preview
+@Composable
+fun HomeScreenPreview() {
+    val navController = rememberNavController()
+    ChallengeItTheme {
+        HomeScreen(navController)
+    }
+}
+
+@Preview
+@Composable
+fun DetailScreenPreview() {
+    val navController = rememberNavController()
+    ChallengeItTheme {
+        DetailScreen(navController)
     }
 }
