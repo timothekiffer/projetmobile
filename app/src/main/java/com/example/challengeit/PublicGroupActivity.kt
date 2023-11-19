@@ -13,8 +13,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Home
@@ -38,30 +36,25 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.challengeit.ui.theme.ChallengeItTheme
 
-class MainPageActivity : ComponentActivity() {
+class PublicGroupActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             ChallengeItTheme {
+                // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
                     val navController = rememberNavController()
-                    NavHost(
-                        navController = navController,
-                        startDestination = Screen.MainPage.route
-                    ) {
-                        composable(Screen.MainPage.route) {
+                    NavHost(navController = navController, startDestination = Screen.PublicGroup.route){
+                        composable(Screen.PublicGroup.route) {
                             val groups = listOf(
-                                Group(name = "Groupe UQAC"),
-                                Group(name = "Groupe 2"),
+                                Group(name = "Groupe France"),
+                                Group(name = "Groupe Canada"),
                                 Group(name = "Groupe 3")
                             )
-                            MainPageScreen(groups, navController)
-                        }
-                        composable(Screen.Home.route) {
-                            HomeScreen("Challenge It", navController)
+                            PublicGroupScreen(groups, navController)
                         }
                     }
                 }
@@ -70,29 +63,27 @@ class MainPageActivity : ComponentActivity() {
     }
 }
 
-data class Group(val name: String)
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainPageScreen(groups: List<Group>, navController: NavHostController) {
+fun PublicGroupScreen(groups: List<Group>, navController: NavHostController) {
     ChallengeItTheme {
         Scaffold(
             bottomBar = { Navigation() }
         ) { innerPadding ->
-            MainPageBody(navController, groups, Modifier.padding(innerPadding))
+            PublicGroupBody(navController, groups, Modifier.padding(innerPadding))
         }
     }
 }
 
 @Composable
-fun MainPageBody(navController: NavHostController, groups: List<Group>, modifier: Modifier) {
+fun PublicGroupBody(navController: NavHostController, groups: List<Group>, modifier: Modifier) {
     Column(modifier = Modifier
-            .fillMaxSize()
-            .padding(10.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
+        .fillMaxSize()
+        .padding(10.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
         Text(
-            text = "Mes groupes de défis",
+            text = "Rejoins un groupe public",
             style = MaterialTheme.typography.labelLarge
         )
         Spacer(modifier = Modifier.height(16.dp))
@@ -112,73 +103,23 @@ fun MainPageBody(navController: NavHostController, groups: List<Group>, modifier
                 .padding(16.dp),
             horizontalArrangement = Arrangement.End
         ) {
-            Button(onClick = { navController.navigate(Screen.JoinGroup.route) }) {
-                Text(text = "Ajoute un groupe ici")
+            Button(onClick = { navController.popBackStack() }) {
+                Text(text = "Retour")
             }
         }
     }
 }
 
-@Composable
-fun GroupItem(group: Group, navController: NavHostController) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(16.dp),
-        horizontalArrangement = Arrangement.Center
-    ) {
-        Button(onClick = { navController.navigate(Screen.Group.route) }) {
-            Text(text = group.name)
-        }
-    }
-    Spacer(modifier = Modifier.height(16.dp))
-}
-
-@Composable
-fun Navigation(modifier: Modifier = Modifier) {
-    NavigationBar(
-        containerColor = MaterialTheme.colorScheme.surfaceVariant,
-        modifier = modifier
-    ) {
-        NavigationBarItem(
-            icon = {
-                Icon(
-                    imageVector = Icons.Default.Home,
-                    contentDescription = null
-                )
-            },
-            label = {
-                Text(text = "home")
-            },
-            selected = true,
-            onClick = {}
-        )
-        NavigationBarItem(
-            icon = {
-                Icon(
-                    imageVector = Icons.Default.AccountCircle,
-                    contentDescription = null
-                )
-            },
-            label = {
-                Text(text = "profile")
-            },
-            selected = false,
-            onClick = {}
-        )
-    }
-}
-
 @Preview
 @Composable
-fun MainPageScreenPreview() {
+fun PublicGroupScreenPreview() {
     val navController = rememberNavController()
     val groups = listOf(
-        Group(name = "Groupe UQAC"),
-        Group(name = "Groupe 2"),
+        Group(name = "Groupe France"),
+        Group(name = "Groupe Canada"),
         Group(name = "Groupe 3")
     )
     ChallengeItTheme {
-        MainPageScreen(groups, navController)
+        PublicGroupScreen(groups, navController)
     }
 }
