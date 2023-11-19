@@ -46,6 +46,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.challengeit.ui.theme.ChallengeItTheme
+import com.example.challengeit.ui.theme.Screen
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -58,11 +59,11 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
                     val navController = rememberNavController()
-                    NavHost(navController = navController, startDestination = "home"){
-                        composable("home"){
+                    NavHost(navController = navController, startDestination = Screen.Home.route){
+                        composable(Screen.Home.route){
                             HomeScreen(navController)
                         }
-                        composable("detail"){
+                        composable(Screen.Detail.route){
                             DetailScreen(navController)
                         }
                     }
@@ -83,7 +84,7 @@ fun HomeScreen(navController: NavHostController) {
     ) {
         Text(text = "Page d'accueil")
         Spacer(modifier = Modifier.height(16.dp))
-        Button(onClick = { navController.navigate("detail") }) {
+        Button(onClick = { navController.navigate(Screen.Home.route) }) {
             Text(text = "Aller à la page de détail")
         }
     }
