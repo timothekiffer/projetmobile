@@ -1,7 +1,10 @@
 package com.example.challengeit
 
+import android.content.ContentValues.TAG
 import android.content.res.Configuration
 import android.os.Bundle
+import android.util.Log
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
@@ -19,6 +22,10 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -31,11 +38,17 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.challengeit.MainActivity.Companion.auth
 import com.example.challengeit.ui.theme.ChallengeItTheme
+import com.google.firebase.Firebase
+import com.google.firebase.auth.auth
 
 class LoginActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        auth = Firebase.auth
+        val currentUser = auth.currentUser
+
         setContent {
             ChallengeItTheme {
                 val navController = rememberNavController()
@@ -61,11 +74,33 @@ class LoginActivity : ComponentActivity() {
             }
         }
     }
-}
+    private fun signIn(email: String, password: String, param: (Any) -> Unit) {
+        // [START sign_in_with_email]
+        auth.signInWithEmailAndPassword(email, password)
+            .addOnCompleteListener(this) { task ->
+                if (task.isSuccessful) {
+                    Log.d(TAG, "signInWithEmail:success")
+                    val currentUser = auth.currentUser
+                } else {
+                    Log.w(TAG, "signInWithEmail:failure", task.exception)
+                    Toast.makeText(
+                        baseContext,
+                        "Authentication failed.",
+                        Toast.LENGTH_SHORT,
+                    ).show()
+                }
+            }
+    }
+
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LoginScreen(navController: NavHostController) {
+    var email by remember { mutableStateOf("") }
+    var password by remember { mutableStateOf("") }
+    var loginResult by remember { mutableStateOf(false) } // Nouvelle propriété pour stocker le résultat de la connexion
+
     Column(modifier = Modifier
         .padding(10.dp)
         .verticalScroll(rememberScrollState())) {
@@ -78,17 +113,30 @@ fun LoginScreen(navController: NavHostController) {
         Spacer(modifier = Modifier.height(16.dp))
         Text(text = "Adresse email")
         TextField(
-            value = "login",
-            onValueChange = {}
+            value = email,
+            onValueChange = { email = it }
         )
         Spacer(modifier = Modifier.height(16.dp))
         Text(text = "Mot de Passe")
         TextField(
-            value = "password",
-            onValueChange = {}
+            value = password,
+            onValueChange = { password = it }
         )
         Spacer(modifier = Modifier.height(16.dp))
-        Button(onClick = { navController.navigate(Screen.MainPage.route) }) {
+        Button(onClick = { signIn(email, password){
+            val user =auth.currentUser
+
+            if (user != null) {
+                Log.d(user.toString(), "signInWithEmail1:success")
+                // User is signed in
+                navController.navigate(Screen.Home.route)
+            } else {
+                Log.d(user.toString(), "signInWithEmail1:echec")
+                // ERREUR
+
+            }
+        }
+        }) {
             Text(text = "Connexion")
         }
     }
@@ -218,4 +266,6 @@ fun HomeScreenPreview() {
     ChallengeItTheme {
         HomeScreen("Challenge It", navController)
     }
+}
+
 }

@@ -60,9 +60,7 @@ class MainPageActivity : ComponentActivity() {
                             )
                             MainPageScreen(groups, navController)
                         }
-                        composable(Screen.Home.route) {
-                            HomeScreen("Challenge It", navController)
-                        }
+
                     }
                 }
             }

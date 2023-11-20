@@ -26,9 +26,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.challengeit.ui.theme.ChallengeItTheme
+import com.google.firebase.auth.FirebaseAuth
 
 class MainActivity : ComponentActivity() {
+    companion object{
+        lateinit var auth: FirebaseAuth
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
+
+        auth = FirebaseAuth.getInstance()
+        val user = auth.currentUser
+
         super.onCreate(savedInstanceState)
         setContent {
             ChallengeItTheme {
