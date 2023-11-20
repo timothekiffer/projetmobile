@@ -79,7 +79,7 @@ class JoinGroupActivity : ComponentActivity() {
 fun JoinGroupScreen(navController: NavHostController) {
     ChallengeItTheme {
         Scaffold(
-            bottomBar = { Navigation() }
+            bottomBar = { Navigation(navController = navController) }
         ) { innerPadding ->
             JoinGroupBody(navController, Modifier.padding(innerPadding))
         }

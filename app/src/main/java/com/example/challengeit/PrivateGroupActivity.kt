@@ -75,7 +75,7 @@ class PrivateGroupActivity : ComponentActivity() {
 fun PrivateGroupScreen(navController: NavHostController) {
     ChallengeItTheme {
         Scaffold(
-            bottomBar = { Navigation() }
+            bottomBar = { Navigation(navController = navController) }
         ) { innerPadding ->
             PrivateGroupBody(navController, Modifier.padding(innerPadding))
         }

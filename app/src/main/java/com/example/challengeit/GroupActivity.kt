@@ -87,7 +87,7 @@ data class Challenge(val id: Int, val name: String, val description: String, val
 fun GroupScreen(challenges: List<Challenge>, navController: NavHostController) {
     ChallengeItTheme {
         Scaffold(
-            bottomBar = { Navigation() }
+            bottomBar = { Navigation(navController = navController) }
         ) { innerPadding ->
             GroupBody(challenges, navController, Modifier.padding(innerPadding))
         }

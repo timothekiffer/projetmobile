@@ -65,7 +65,7 @@ class NewGroupActivity : ComponentActivity() {
 fun NewGroupScreen(navController: NavHostController) {
     ChallengeItTheme {
         Scaffold(
-            bottomBar = { Navigation() }
+            bottomBar = { Navigation(navController = navController) }
         ) { innerPadding ->
             NewGroupBody(navController, Modifier.padding(innerPadding))
         }

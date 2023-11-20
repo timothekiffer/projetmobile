@@ -66,7 +66,7 @@ class ChallengeActivity : ComponentActivity() {
 fun ChallengeScreen(challenge: Challenge, navController: NavHostController) {
     ChallengeItTheme {
         Scaffold(
-            bottomBar = { Navigation() }
+            bottomBar = { Navigation(navController = navController) }
         ) { innerPadding ->
             ChallengeBody(challenge, navController, Modifier.padding(innerPadding))
         }

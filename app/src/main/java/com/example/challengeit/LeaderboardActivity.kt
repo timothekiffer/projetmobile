@@ -80,7 +80,7 @@ data class User(val id: Int, val name: String, val point: Int)
 fun LeaderboardScreen(users: List<User>, navController: NavHostController) {
     ChallengeItTheme {
         Scaffold(
-            bottomBar = { Navigation() }
+            bottomBar = { Navigation(navController = navController) }
         ) { innerPadding ->
             LeaderboardBody(users, navController, Modifier.padding(innerPadding))
         }

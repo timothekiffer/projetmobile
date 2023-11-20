@@ -81,7 +81,7 @@ class PublicGroupActivity : ComponentActivity() {
 fun PublicGroupScreen(groups: List<Group>, navController: NavHostController) {
     ChallengeItTheme {
         Scaffold(
-            bottomBar = { Navigation() }
+            bottomBar = { Navigation(navController = navController) }
         ) { innerPadding ->
             PublicGroupBody(navController, groups, Modifier.padding(innerPadding))
         }
