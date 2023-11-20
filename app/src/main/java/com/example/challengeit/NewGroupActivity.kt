@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -18,8 +19,11 @@ import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -78,7 +82,9 @@ fun NewGroupBody(navController: NavHostController, modifier: Modifier) {
     ) {
         Text(
             text = "Création du groupe",
-            style = MaterialTheme.typography.labelLarge
+            color = Color.Black,
+            fontSize = 30.sp,
+            fontWeight = FontWeight.Bold
         )
         Spacer(modifier = Modifier.height(16.dp))
         Text(text = "Nom du groupe")
@@ -87,7 +93,11 @@ fun NewGroupBody(navController: NavHostController, modifier: Modifier) {
             onValueChange = {}
         )
         Spacer(modifier = Modifier.height(16.dp))
-        Button(onClick = { navController.navigate(Screen.MainPage.route) }) {
+        Button(
+            onClick = { navController.navigate(Screen.MainPage.route) },
+            colors = ButtonDefaults.buttonColors(containerColor = Color.Gray),
+            shape = MaterialTheme.shapes.medium
+        ) {
             Text(text = "Créer")
         }
     }

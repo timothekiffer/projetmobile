@@ -15,6 +15,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -26,8 +27,11 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -97,19 +101,33 @@ fun JoinGroupBody(navController: NavHostController, modifier: Modifier) {
         ) {
             Text(
                 text = "Tu veux..",
-                style = MaterialTheme.typography.labelLarge
+                color = Color.Black,
+                fontSize = 30.sp,
+                fontWeight = FontWeight.Bold
             )
         }
         Spacer(modifier = Modifier.height(16.dp))
-        Button(onClick = { navController.navigate(Screen.PrivateGroup.route) }) {
+        Button(
+            onClick = { navController.navigate(Screen.PrivateGroup.route) },
+            colors = ButtonDefaults.buttonColors(containerColor = Color.Gray),
+            shape = MaterialTheme.shapes.medium
+        ) {
             Text(text = "Rejoindre un groupe privé")
         }
         Spacer(modifier = Modifier.height(16.dp))
-        Button(onClick = { navController.navigate(Screen.PublicGroup.route) }) {
+        Button(
+            onClick = { navController.navigate(Screen.PublicGroup.route) },
+            colors = ButtonDefaults.buttonColors(containerColor = Color.Gray),
+            shape = MaterialTheme.shapes.medium
+        ) {
             Text(text = "Rejoindre un groupe public")
         }
         Spacer(modifier = Modifier.height(16.dp))
-        Button(onClick = { navController.navigate(Screen.NewGroup.route) }) {
+        Button(
+            onClick = { navController.navigate(Screen.NewGroup.route) },
+            colors = ButtonDefaults.buttonColors(containerColor = Color.Gray),
+            shape = MaterialTheme.shapes.medium
+        ) {
             Text(text = "Créer un groupe")
         }
         Spacer(modifier = Modifier.height(16.dp))
@@ -119,7 +137,11 @@ fun JoinGroupBody(navController: NavHostController, modifier: Modifier) {
                 .padding(16.dp),
             horizontalArrangement = Arrangement.End
         ) {
-            Button(onClick = { navController.popBackStack() }) {
+            Button(
+                onClick = { navController.popBackStack() },
+                colors = ButtonDefaults.buttonColors(containerColor = Color.Gray),
+                shape = MaterialTheme.shapes.medium
+            ) {
                 Text(text = "Retour")
             }
         }

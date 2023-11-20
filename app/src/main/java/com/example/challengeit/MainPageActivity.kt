@@ -19,6 +19,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -30,8 +31,11 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -89,7 +93,7 @@ data class Group(val name: String)
 fun MainPageScreen(groups: List<Group>, navController: NavHostController) {
     ChallengeItTheme {
         Scaffold(
-            bottomBar = { Navigation() }
+            bottomBar = { Navigation(navController = navController) }
         ) { innerPadding ->
             MainPageBody(navController, groups, Modifier.padding(innerPadding))
         }
@@ -105,7 +109,9 @@ fun MainPageBody(navController: NavHostController, groups: List<Group>, modifier
         ) {
         Text(
             text = "Mes groupes de défis",
-            style = MaterialTheme.typography.labelLarge
+            color = Color.Black,
+            fontSize = 30.sp,
+            fontWeight = FontWeight.Bold
         )
         Spacer(modifier = Modifier.height(16.dp))
 
@@ -124,7 +130,11 @@ fun MainPageBody(navController: NavHostController, groups: List<Group>, modifier
                 .padding(16.dp),
             horizontalArrangement = Arrangement.End
         ) {
-            Button(onClick = { navController.navigate(Screen.JoinGroup.route) }) {
+            Button(
+                onClick = { navController.navigate(Screen.JoinGroup.route) },
+                colors = ButtonDefaults.buttonColors(containerColor = Color.Gray),
+                shape = MaterialTheme.shapes.medium
+            ) {
                 Text(text = "Ajoute un groupe ici")
             }
         }
@@ -139,7 +149,11 @@ fun GroupItem(group: Group, navController: NavHostController) {
             .padding(16.dp),
         horizontalArrangement = Arrangement.Center
     ) {
-        Button(onClick = { navController.navigate(Screen.Group.route) }) {
+        Button(
+            onClick = { navController.navigate(Screen.Group.route) },
+            colors = ButtonDefaults.buttonColors(containerColor = Color.Gray),
+            shape = MaterialTheme.shapes.medium
+        ) {
             Text(text = group.name)
         }
     }
@@ -147,7 +161,7 @@ fun GroupItem(group: Group, navController: NavHostController) {
 }
 
 @Composable
-fun Navigation(modifier: Modifier = Modifier) {
+fun Navigation(modifier: Modifier = Modifier, navController: NavHostController) {
     NavigationBar(
         containerColor = MaterialTheme.colorScheme.surfaceVariant,
         modifier = modifier
@@ -163,7 +177,7 @@ fun Navigation(modifier: Modifier = Modifier) {
                 Text(text = "home")
             },
             selected = true,
-            onClick = {}
+            onClick = { navController.navigate(Screen.MainPage.route) }
         )
         NavigationBarItem(
             icon = {
