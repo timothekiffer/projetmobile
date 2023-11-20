@@ -55,7 +55,7 @@ class LoginActivity : ComponentActivity() {
                             Group(name = "Groupe 2"),
                             Group(name = "Groupe 3")
                         )
-                        MainPageScreen(navController, groups)
+                        MainPageScreen(groups, navController)
                     }
                 }
             }

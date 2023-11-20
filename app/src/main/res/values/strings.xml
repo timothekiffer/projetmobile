@@ -1,4 +1,11 @@
 <resources>
     <string name="app_name">ChallengeIt</string>
     <string name="title_activity_login">LoginActivity</string>
+    <string name="title_activity_group">GroupActivity</string>
+    <string name="title_activity_challenge">ChallengeActivity</string>
+    <string name="title_activity_join_group">JoinGroupActivity</string>
+    <string name="title_activity_private_group">PrivateGroupActivity</string>
+    <string name="title_activity_public_group">PublicGroupActivity</string>
+    <string name="title_activity_new_group">NewGroupActivity</string>
+    <string name="title_activity_leaderboard">LeaderboardActivity</string>
 </resources>
