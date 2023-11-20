@@ -41,6 +41,14 @@ class NewGroupActivity : ComponentActivity() {
                         composable(Screen.NewGroup.route) {
                             NewGroupScreen(navController)
                         }
+                        composable(Screen.MainPage.route) {
+                            val groups = listOf(
+                                Group(name = "Groupe UQAC"),
+                                Group(name = "Groupe 2"),
+                                Group(name = "Groupe 3")
+                            )
+                            MainPageScreen(groups, navController)
+                        }
                     }
                 }
             }

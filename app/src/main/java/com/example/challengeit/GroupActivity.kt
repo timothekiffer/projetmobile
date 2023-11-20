@@ -57,6 +57,18 @@ class GroupActivity : ComponentActivity() {
                             )
                             GroupScreen(challenges, navController)
                         }
+                        composable(Screen.Challenge.route) {
+                            val challenge = Challenge(id = 1, name = "Faire 300 pas en 1 minute", description = "Pour valider le défi, tu dois faire 1000 pas en 1 minute, cela devra être filmé et uploadé sur l’appli", point = 5)
+                            ChallengeScreen(challenge, navController)
+                        }
+                        composable(Screen.Leaderboard.route) {
+                            val users = listOf(
+                                User(id = 1, name = "Timothé", point = 150),
+                                User(id = 2, name = "Alexandre", point = 89),
+                                User(id = 3, name = "Romain", point = 18)
+                            )
+                            LeaderboardScreen(users, navController)
+                        }
                     }
                 }
             }

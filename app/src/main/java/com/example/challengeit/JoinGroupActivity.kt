@@ -49,6 +49,20 @@ class JoinGroupActivity : ComponentActivity() {
                         composable(Screen.JoinGroup.route) {
                             JoinGroupScreen(navController)
                         }
+                        composable(Screen.PrivateGroup.route) {
+                            PrivateGroupScreen(navController)
+                        }
+                        composable(Screen.PublicGroup.route) {
+                            val groups = listOf(
+                                Group(name = "Groupe France"),
+                                Group(name = "Groupe Canada"),
+                                Group(name = "Groupe 3")
+                            )
+                            PublicGroupScreen(groups, navController)
+                        }
+                        composable(Screen.NewGroup.route) {
+                            NewGroupScreen(navController)
+                        }
                     }
                 }
             }
