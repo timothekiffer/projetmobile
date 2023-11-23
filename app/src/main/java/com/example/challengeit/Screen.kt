@@ -1,7 +1,7 @@
 package com.example.challengeit
 
 sealed class Screen(val route: String){
-    object Home : Screen("home")
+    object Welcome : Screen("welcome")
     object Login : Screen("login")
     object Registration : Screen("registration")
     object MainPage : Screen("mainPage")
