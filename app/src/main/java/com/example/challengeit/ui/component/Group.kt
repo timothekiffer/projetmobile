@@ -1,4 +1,4 @@
-package com.example.challengeit
+package com.example.challengeit.ui.component
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -26,6 +26,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.example.challengeit.ui.navigation.Screen
 import com.example.challengeit.ui.theme.ChallengeItTheme
 
 data class Challenge(val id: Int, val name: String, val description: String, val point: Int)

@@ -1,4 +1,4 @@
-package com.example.challengeit
+package com.example.challengeit.ui.component
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -28,61 +28,39 @@ import com.example.challengeit.ui.theme.ChallengeItTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun JoinGroupScreen(navController: NavHostController) {
+fun ChallengeScreen(challenge: Challenge, navController: NavHostController) {
     ChallengeItTheme {
         Scaffold(
             bottomBar = { Navigation(navController = navController) }
         ) { innerPadding ->
-            JoinGroupBody(navController, Modifier.padding(innerPadding))
+            ChallengeBody(challenge, navController, Modifier.padding(innerPadding))
         }
     }
 }
 
 @Composable
-fun JoinGroupBody(navController: NavHostController, modifier: Modifier) {
+fun ChallengeBody(challenge: Challenge, navController: NavHostController, modifier: Modifier) {
     Column(modifier = Modifier
         .fillMaxSize()
         .padding(10.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp),
-            horizontalArrangement = Arrangement.Start
-        ) {
-            Text(
-                text = "Tu veux..",
-                color = Color.Black,
-                fontSize = 30.sp,
-                fontWeight = FontWeight.Bold
-            )
-        }
+        Text(
+            text = challenge.name,
+            color = Color.Black,
+            fontSize = 30.sp,
+            fontWeight = FontWeight.Bold
+        )
         Spacer(modifier = Modifier.height(16.dp))
-        Button(
-            onClick = { navController.navigate(Screen.PrivateGroup.route) },
-            colors = ButtonDefaults.buttonColors(containerColor = Color.Gray),
-            shape = MaterialTheme.shapes.medium
-        ) {
-            Text(text = "Rejoindre un groupe privé")
-        }
+        Text(
+            text = challenge.description,
+            style = MaterialTheme.typography.labelLarge
+        )
         Spacer(modifier = Modifier.height(16.dp))
-        Button(
-            onClick = { navController.navigate(Screen.PublicGroup.route) },
-            colors = ButtonDefaults.buttonColors(containerColor = Color.Gray),
-            shape = MaterialTheme.shapes.medium
-        ) {
-            Text(text = "Rejoindre un groupe public")
-        }
-        Spacer(modifier = Modifier.height(16.dp))
-        Button(
-            onClick = { navController.navigate(Screen.NewGroup.route) },
-            colors = ButtonDefaults.buttonColors(containerColor = Color.Gray),
-            shape = MaterialTheme.shapes.medium
-        ) {
-            Text(text = "Créer un groupe")
-        }
-        Spacer(modifier = Modifier.height(16.dp))
+        Text(
+            text = "Récompense : ${challenge.point} pts",
+            style = MaterialTheme.typography.labelLarge
+        )
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -102,9 +80,10 @@ fun JoinGroupBody(navController: NavHostController, modifier: Modifier) {
 
 @Preview()
 @Composable
-fun JoinGroupScreenPreview() {
+fun ChallengeScreenPreview() {
     val navController = rememberNavController()
+    val challenge = Challenge(id = 1, name = "Faire 300 pas en 1 minute", description = "Pour valider le défi, tu dois faire 1000 pas en 1 minute, cela devra être filmé et uploadé sur l’appli", point = 5)
     ChallengeItTheme {
-        JoinGroupScreen(navController)
+        ChallengeScreen(challenge, navController)
     }
 }

@@ -1,7 +1,5 @@
-package com.example.challengeit
+package com.example.challengeit.ui.component
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -28,88 +26,93 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.example.challengeit.ui.navigation.Screen
 import com.example.challengeit.ui.theme.ChallengeItTheme
 
-data class User(val id: Int, val name: String, val point: Int)
+data class Group(val name: String)
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun LeaderboardScreen(users: List<User>, navController: NavHostController) {
+fun MainPageScreen(groups: List<Group>, navController: NavHostController) {
     ChallengeItTheme {
         Scaffold(
             bottomBar = { Navigation(navController = navController) }
         ) { innerPadding ->
-            LeaderboardBody(users, navController, Modifier.padding(innerPadding))
+            MainPageBody(navController, groups, Modifier.padding(innerPadding))
         }
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun LeaderboardBody(users: List<User>, navController: NavHostController, modifier: Modifier) {
+fun MainPageBody(navController: NavHostController, groups: List<Group>, modifier: Modifier) {
     Column(modifier = Modifier
         .fillMaxSize()
         .padding(10.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            text = "Classement",
+            text = "Mes groupes de défis",
             color = Color.Black,
             fontSize = 30.sp,
             fontWeight = FontWeight.Bold
         )
         Spacer(modifier = Modifier.height(16.dp))
 
-        LazyColumn {
-            item {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(8.dp),
-                    horizontalArrangement = Arrangement.SpaceBetween
-                ) {
-                    Text("ID", fontWeight = FontWeight.Bold)
-                    Text("Nom", fontWeight = FontWeight.Bold)
-                    Text("Points", fontWeight = FontWeight.Bold)
-                }
-                Spacer(modifier = Modifier.height(4.dp))
-            }
-            items(users) {user ->
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(8.dp)
-                        .background(MaterialTheme.colorScheme.surface)
-                        .border(1.dp, MaterialTheme.colorScheme.onSurface, shape = MaterialTheme.shapes.small),
-                    horizontalArrangement = Arrangement.SpaceBetween
-                ) {
-                    Text(user.id.toString())
-                    Text(user.name)
-                    Text(user.point.toString())
-                }
+        LazyColumn (
+            modifier = Modifier.fillMaxWidth()
+        ){
+            items(groups) { group ->
+                GroupItem(group, navController)
             }
         }
 
+        Spacer(modifier = Modifier.height(16.dp))
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp),
+            horizontalArrangement = Arrangement.End
+        ) {
+            Button(
+                onClick = { navController.navigate(Screen.JoinGroup.route) },
+                colors = ButtonDefaults.buttonColors(containerColor = Color.Gray),
+                shape = MaterialTheme.shapes.medium
+            ) {
+                Text(text = "Ajoute un groupe ici")
+            }
+        }
+    }
+}
+
+@Composable
+fun GroupItem(group: Group, navController: NavHostController) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(16.dp),
+        horizontalArrangement = Arrangement.Center
+    ) {
         Button(
             onClick = { navController.navigate(Screen.Group.route) },
             colors = ButtonDefaults.buttonColors(containerColor = Color.Gray),
             shape = MaterialTheme.shapes.medium
         ) {
-            Text(text = "Retour aux défis")
+            Text(text = group.name)
         }
     }
+    Spacer(modifier = Modifier.height(16.dp))
 }
 
-@Preview()
+@Preview
 @Composable
-fun LeaderboardScreenPreview() {
+fun MainPageScreenPreview() {
     val navController = rememberNavController()
-    val users = listOf<User>(
-        User(id = 1, name = "Timothé", point = 150),
-        User(id = 2, name = "Alexandre", point = 89),
-        User(id = 3, name = "Romain", point = 18)
+    val groups = listOf(
+        Group(name = "Groupe UQAC"),
+        Group(name = "Groupe 2"),
+        Group(name = "Groupe 3")
     )
     ChallengeItTheme {
-        LeaderboardScreen(users, navController)
+        MainPageScreen(groups, navController)
     }
 }

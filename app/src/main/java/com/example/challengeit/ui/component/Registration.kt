@@ -1,4 +1,4 @@
-package com.example.challengeit
+package com.example.challengeit.ui.component
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -22,49 +22,63 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.example.challengeit.ui.navigation.Screen
 import com.example.challengeit.ui.theme.ChallengeItTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun LoginScreen(navController: NavHostController) {
+fun RegistrationScreen(navController: NavHostController) {
     Column(modifier = Modifier
         .fillMaxSize()
         .padding(10.dp)
         .verticalScroll(rememberScrollState())) {
         Text(
-            text = "Connecte-toi",
+            text = "Inscris-toi",
             color = Color.Black,
             fontSize = 30.sp,
             fontWeight = FontWeight.Bold
         )
 
         Spacer(modifier = Modifier.height(16.dp))
-        Text(text = "Adresse email")
+        Text(text = "Dis nous ton âge")
         TextField(
-            value = "login",
+            value = "",
             onValueChange = {}
         )
         Spacer(modifier = Modifier.height(16.dp))
-        Text(text = "Mot de Passe")
+        Text(text = "Pseudo")
         TextField(
-            value = "password",
+            value = "",
+            onValueChange = {}
+        )
+        Spacer(modifier = Modifier.height(16.dp))
+        Text(text = "Identifiant")
+        TextField(
+            value = "",
+            onValueChange = {}
+        )
+        Spacer(modifier = Modifier.height(16.dp))
+        Text(text = "Mot de passe")
+        TextField(
+            value = "",
             onValueChange = {}
         )
         Spacer(modifier = Modifier.height(16.dp))
         Button(
-            onClick = { navController.navigate(Screen.MainPage.route) },
+            onClick = { navController.navigate(Screen.Welcome.route) },
             colors = ButtonDefaults.buttonColors(containerColor = Color.Gray),
             shape = MaterialTheme.shapes.medium
         ) {
-            Text(text = "Connexion")
+            Text(text = "Valider")
         }
     }
 }
+
 @Preview(showBackground = true)
 @Composable
-fun LoginScreenPreview() {
+fun RegistrationScreenPreview() {
     val navController = rememberNavController()
     ChallengeItTheme {
-        LoginScreen(navController)
+        RegistrationScreen(navController)
     }
 }

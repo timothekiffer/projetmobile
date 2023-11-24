@@ -1,4 +1,4 @@
-package com.example.challengeit
+package com.example.challengeit.ui.navigation
 
 sealed class Screen(val route: String){
     object Welcome : Screen("welcome")

@@ -1,4 +1,4 @@
-package com.example.challengeit
+package com.example.challengeit.ui.component
 
 import android.content.res.Configuration
 import androidx.compose.foundation.Image
@@ -26,6 +26,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.example.challengeit.R
+import com.example.challengeit.ui.navigation.Screen
 import com.example.challengeit.ui.theme.ChallengeItTheme
 
 @Composable

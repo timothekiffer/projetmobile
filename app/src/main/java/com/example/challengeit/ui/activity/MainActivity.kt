@@ -1,4 +1,4 @@
-package com.example.challengeit
+package com.example.challengeit.ui.activity
 
 import android.content.Intent
 import android.os.Bundle
