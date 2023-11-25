@@ -33,25 +33,25 @@ data class Challenge(val id: Int, val name: String, val description: String, val
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun GroupScreen(challenges: List<Challenge>, navController: NavHostController) {
+fun GroupScreen(challenges: List<Challenge>, navController: NavHostController, id: String) {
     ChallengeItTheme {
         Scaffold(
             bottomBar = { Navigation(navController = navController) }
         ) { innerPadding ->
-            GroupBody(challenges, navController, Modifier.padding(innerPadding))
+            GroupBody(challenges, navController, Modifier.padding(innerPadding), id)
         }
     }
 }
 
 @Composable
-fun GroupBody(challenges: List<Challenge>, navController: NavHostController, modifier: Modifier) {
+fun GroupBody(challenges: List<Challenge>, navController: NavHostController, modifier: Modifier, id: String) {
     Column(modifier = Modifier
         .fillMaxSize()
         .padding(10.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            text = "Groupe UQAC",
+            text = id,
             color = Color.Black,
             fontSize = 30.sp,
             fontWeight = FontWeight.Bold
@@ -119,7 +119,8 @@ fun GroupScreenPreview() {
         Challenge(id = 3, name = "Prendre un bain de minuit", description = "", point = 10),
         Challenge(id = 4, name = "Danser la macarena sur une place publique", description = "", point = 20)
     )
+    val id = "Groupe UQAC"
     ChallengeItTheme {
-        GroupScreen(challenges, navController)
+        GroupScreen(challenges, navController, id)
     }
 }
