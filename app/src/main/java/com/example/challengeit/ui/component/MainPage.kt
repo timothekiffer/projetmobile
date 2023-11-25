@@ -93,7 +93,7 @@ fun GroupItem(group: Group, navController: NavHostController) {
         horizontalArrangement = Arrangement.Center
     ) {
         Button(
-            onClick = { navController.navigate(Screen.Group.giveId("12")) },
+            onClick = { navController.navigate(Screen.Group.giveId(group.name)) },
             colors = ButtonDefaults.buttonColors(containerColor = Color.Gray),
             shape = MaterialTheme.shapes.medium
         ) {

@@ -51,7 +51,7 @@ fun GroupBody(challenges: List<Challenge>, navController: NavHostController, mod
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            text = "Groupe UQAC $id",
+            text = id,
             color = Color.Black,
             fontSize = 30.sp,
             fontWeight = FontWeight.Bold
@@ -119,7 +119,7 @@ fun GroupScreenPreview() {
         Challenge(id = 3, name = "Prendre un bain de minuit", description = "", point = 10),
         Challenge(id = 4, name = "Danser la macarena sur une place publique", description = "", point = 20)
     )
-    val id = "10"
+    val id = "Groupe UQAC"
     ChallengeItTheme {
         GroupScreen(challenges, navController, id)
     }
