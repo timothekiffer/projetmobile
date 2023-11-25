@@ -5,7 +5,13 @@ import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import com.example.challengeit.ui.component.LoginScreen
 import com.example.challengeit.ui.component.MainNav
+import com.example.challengeit.ui.component.WelcomeScreen
+import com.example.challengeit.ui.navigation.Screen
 import com.example.challengeit.ui.theme.ChallengeItTheme
 
 class LoginActivity : ComponentActivity() {
@@ -13,7 +19,16 @@ class LoginActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             ChallengeItTheme {
-                MainNav(this)
+                val activity = this
+                val navController = rememberNavController()
+                NavHost(navController = navController, startDestination = Screen.Welcome.route) {
+                    composable(Screen.Welcome.route) {
+                        WelcomeScreen("Challenge It", navController)
+                    }
+                    composable(Screen.Login.route) {
+                        LoginScreen(navController, activity)
+                    }
+                }
             }
         }
     }

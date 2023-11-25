@@ -11,7 +11,7 @@ import com.example.challengeit.ui.navigation.Screen
 @Composable
 fun MainNav(activity: ComponentActivity?) {
     val navController = rememberNavController()
-    NavHost(navController = navController, startDestination = Screen.Welcome.route) {
+    NavHost(navController = navController, startDestination = Screen.MainPage.route) {
         composable(Screen.Welcome.route) {
             WelcomeScreen("Challenge It", navController)
         }
