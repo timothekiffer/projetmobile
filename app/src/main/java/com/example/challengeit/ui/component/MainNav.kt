@@ -27,14 +27,15 @@ fun MainNav() {
             )
             MainPageScreen(groups, navController)
         }
-        composable(Screen.Group.route) {
+        composable(Screen.Group.route) {backStackEntry ->
+            val id = backStackEntry.arguments?.getString("id").orEmpty()
             val challenges = listOf(
                 Challenge(id = 1, name = "Faire 300 pas en 1 minute", description = "Pour valider le défi, tu dois faire 1000 pas en 1 minute, cela devra être filmé et uploadé sur l’appli", point = 5),
                 Challenge(id = 2, name = "Prendre un selfie devant la Tour Eiffel", description = "", point = 30),
                 Challenge(id = 3, name = "Prendre un bain de minuit", description = "", point = 10),
                 Challenge(id = 4, name = "Danser la macarena sur une place publique", description = "", point = 20)
             )
-            GroupScreen(challenges, navController)
+            GroupScreen(challenges, navController, id)
         }
         composable(Screen.JoinGroup.route) {
             JoinGroupScreen(navController)

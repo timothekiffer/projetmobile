@@ -5,7 +5,11 @@ sealed class Screen(val route: String){
     object Login : Screen("login")
     object Registration : Screen("registration")
     object MainPage : Screen("mainPage")
-    object Group : Screen("group")
+    object Group : Screen("group/{id}") {
+        fun giveId(id: String): String{
+            return "group/$id"
+        }
+    }
     object Challenge : Screen("challenge")
     object JoinGroup : Screen("joinGroup")
     object PrivateGroup : Screen("privateGroup")
