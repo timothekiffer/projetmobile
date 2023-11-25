@@ -1,20 +1,24 @@
 package com.example.challengeit.ui.component
 
+import androidx.activity.ComponentActivity
 import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.challengeit.ui.activity.LoginActivity
 import com.example.challengeit.ui.navigation.Screen
 
 @Composable
-fun MainNav() {
+fun MainNav(activity: ComponentActivity?) {
     val navController = rememberNavController()
     NavHost(navController = navController, startDestination = Screen.Welcome.route) {
         composable(Screen.Welcome.route) {
             WelcomeScreen("Challenge It", navController)
         }
         composable(Screen.Login.route){
-            LoginScreen(navController)
+            if (activity != null) {
+                LoginScreen(navController, activity)
+            }
         }
         composable(Screen.Registration.route){
             RegistrationScreen(navController)
