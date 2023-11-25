@@ -13,6 +13,11 @@
         android:theme="@style/Theme.ChallengeIt"
         tools:targetApi="31">
         <activity
+            android:name=".ui.activity.HomeActivity"
+            android:exported="false"
+            android:label="@string/title_activity_home"
+            android:theme="@style/Theme.ChallengeIt" />
+        <activity
             android:name=".ui.activity.LoginActivity"
             android:exported="false"
             android:label="@string/title_activity_login"
