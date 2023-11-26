@@ -26,10 +26,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.example.challengeit.ui.dataclass.Group
 import com.example.challengeit.ui.navigation.Screen
 import com.example.challengeit.ui.theme.ChallengeItTheme
-
-data class Group(val name: String)
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -108,9 +107,9 @@ fun GroupItem(group: Group, navController: NavHostController) {
 fun MainPageScreenPreview() {
     val navController = rememberNavController()
     val groups = listOf(
-        Group(name = "Groupe UQAC"),
-        Group(name = "Groupe 2"),
-        Group(name = "Groupe 3")
+        Group(name = "Groupe UQAC", description = ""),
+        Group(name = "Groupe 2", description = ""),
+        Group(name = "Groupe 3", description = "")
     )
     ChallengeItTheme {
         MainPageScreen(groups, navController)

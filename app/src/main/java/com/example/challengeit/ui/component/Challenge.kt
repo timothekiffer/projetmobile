@@ -24,6 +24,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.example.challengeit.ui.dataclass.Challenge
 import com.example.challengeit.ui.theme.ChallengeItTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -82,7 +83,7 @@ fun ChallengeBody(challenge: Challenge, navController: NavHostController, modifi
 @Composable
 fun ChallengeScreenPreview() {
     val navController = rememberNavController()
-    val challenge = Challenge(id = 1, name = "Faire 300 pas en 1 minute", description = "Pour valider le défi, tu dois faire 1000 pas en 1 minute, cela devra être filmé et uploadé sur l’appli", point = 5)
+    val challenge = Challenge(name = "Faire 300 pas en 1 minute", description = "Pour valider le défi, tu dois faire 1000 pas en 1 minute, cela devra être filmé et uploadé sur l’appli", point = 5)
     ChallengeItTheme {
         ChallengeScreen(challenge, navController)
     }

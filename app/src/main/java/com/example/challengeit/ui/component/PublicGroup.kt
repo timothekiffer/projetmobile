@@ -26,6 +26,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.example.challengeit.ui.dataclass.Group
 import com.example.challengeit.ui.theme.ChallengeItTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -86,9 +87,9 @@ fun PublicGroupBody(navController: NavHostController, groups: List<Group>, modif
 fun PublicGroupScreenPreview() {
     val navController = rememberNavController()
     val groups = listOf(
-        Group(name = "Groupe France"),
-        Group(name = "Groupe Canada"),
-        Group(name = "Groupe 3")
+        Group(name = "Groupe France", description = ""),
+        Group(name = "Groupe Canada", description = ""),
+        Group(name = "Groupe 3", description = "")
     )
     ChallengeItTheme {
         PublicGroupScreen(groups, navController)
