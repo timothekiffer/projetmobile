@@ -13,17 +13,6 @@ import com.example.challengeit.ui.navigation.Screen
 fun MainNav(activity: ComponentActivity?) {
     val navController = rememberNavController()
     NavHost(navController = navController, startDestination = Screen.MainPage.route) {
-        composable(Screen.Welcome.route) {
-            WelcomeScreen("Challenge It", navController)
-        }
-        composable(Screen.Login.route){
-            if (activity != null) {
-                LoginScreen(navController, activity)
-            }
-        }
-        composable(Screen.Registration.route){
-            RegistrationScreen(navController)
-        }
         composable(Screen.MainPage.route) {
             val groups = listOf(
                 Group(name = "Groupe UQAC", description = ""),

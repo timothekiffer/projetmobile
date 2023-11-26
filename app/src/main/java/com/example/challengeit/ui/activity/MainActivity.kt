@@ -37,21 +37,4 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
-    private fun signIn(email: String, password: String, param: (Any) -> Unit) {
-        // [START sign_in_with_email]
-        auth.signInWithEmailAndPassword(email, password)
-            .addOnCompleteListener(this) { task ->
-                if (task.isSuccessful) {
-                    Log.d(ContentValues.TAG, "signInWithEmail:success")
-                    val currentUser = auth.currentUser
-                } else {
-                    Log.w(ContentValues.TAG, "signInWithEmail:failure", task.exception)
-                    Toast.makeText(
-                        baseContext,
-                        "Authentication failed.",
-                        Toast.LENGTH_SHORT,
-                    ).show()
-                }
-            }
-    }
 }

@@ -1,5 +1,6 @@
 package com.example.challengeit.ui.component
 
+import android.text.InputType
 import androidx.activity.ComponentActivity
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -61,8 +62,7 @@ fun LoginScreen(navController: NavHostController, activity: ComponentActivity) {
         Text(text = "Mot de Passe")
         TextField(
             value = password,
-            onValueChange = { password = it }
-        )
+            onValueChange = { password = it }        )
         Spacer(modifier = Modifier.height(16.dp))
         Button(
             onClick = {
