@@ -107,9 +107,9 @@ fun GroupItem(group: Group, navController: NavHostController) {
 fun MainPageScreenPreview() {
     val navController = rememberNavController()
     val groups = listOf(
-        Group(id = "", name = "Groupe UQAC", description = ""),
-        Group(id = "", name = "Groupe 2", description = ""),
-        Group(id = "", name = "Groupe 3", description = "")
+        Group(name = "Groupe UQAC", description = ""),
+        Group(name = "Groupe 2", description = ""),
+        Group(name = "Groupe 3", description = "")
     )
     ChallengeItTheme {
         MainPageScreen(groups, navController)

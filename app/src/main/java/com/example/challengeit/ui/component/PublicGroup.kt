@@ -87,9 +87,9 @@ fun PublicGroupBody(navController: NavHostController, groups: List<Group>, modif
 fun PublicGroupScreenPreview() {
     val navController = rememberNavController()
     val groups = listOf(
-        Group(id = "", name = "Groupe France", description = ""),
-        Group(id = "", name = "Groupe Canada", description = ""),
-        Group(id = "", name = "Groupe 3", description = "")
+        Group(name = "Groupe France", description = ""),
+        Group(name = "Groupe Canada", description = ""),
+        Group(name = "Groupe 3", description = "")
     )
     ChallengeItTheme {
         PublicGroupScreen(groups, navController)

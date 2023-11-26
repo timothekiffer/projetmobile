@@ -35,8 +35,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.challengeit.ui.dataclass.Group
 import com.example.challengeit.ui.navigation.Screen
 import com.example.challengeit.ui.theme.ChallengeItTheme
-import com.google.firebase.Firebase
-import com.google.firebase.database.database
+import com.google.firebase.firestore.FirebaseFirestore
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -57,6 +56,7 @@ fun NewGroupBody(navController: NavHostController, modifier: Modifier) {
     var description by remember { mutableStateOf("") }
     val context = LocalContext.current
     val keyboardController = LocalSoftwareKeyboardController.current
+    val firestore = FirebaseFirestore.getInstance()
     Column(modifier = Modifier
         .fillMaxSize()
         .padding(10.dp),
@@ -91,11 +91,8 @@ fun NewGroupBody(navController: NavHostController, modifier: Modifier) {
         Spacer(modifier = Modifier.height(16.dp))
         Button(
             onClick = {
-                val database = Firebase.database
-                val reference = database.getReference("group")
-                val id = reference.push().key ?: ""
-                val group = Group(id = id, name = name, description = description)
-                reference.child(id).setValue(group)
+                val group = Group(name = name, description = description)
+                firestore.collection("group").add(group)
 
                 // Effacer les champs après l'ajout
                 name = ""

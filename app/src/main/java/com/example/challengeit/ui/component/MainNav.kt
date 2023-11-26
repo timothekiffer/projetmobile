@@ -25,9 +25,9 @@ fun MainNav(activity: ComponentActivity?) {
         }
         composable(Screen.MainPage.route) {
             val groups = listOf(
-                Group(id = "", name = "Groupe UQAC", description = ""),
-                Group(id = "", name = "Groupe 2", description = ""),
-                Group(id = "", name = "Groupe 3", description = "")
+                Group(name = "Groupe UQAC", description = ""),
+                Group(name = "Groupe 2", description = ""),
+                Group(name = "Groupe 3", description = "")
             )
             MainPageScreen(groups, navController)
         }
@@ -53,9 +53,9 @@ fun MainNav(activity: ComponentActivity?) {
         }
         composable(Screen.PublicGroup.route) {
             val groups = listOf(
-                Group(id = "", name = "Groupe France", description = ""),
-                Group(id = "", name = "Groupe Canada", description = ""),
-                Group(id = "", name = "Groupe 3", description = "")
+                Group(name = "Groupe France", description = ""),
+                Group(name = "Groupe Canada", description = ""),
+                Group(name = "Groupe 3", description = "")
             )
             PublicGroupScreen(groups, navController)
         }
