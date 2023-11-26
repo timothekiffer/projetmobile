@@ -10,6 +10,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.challengeit.ui.component.LoginScreen
 import com.example.challengeit.ui.component.MainNav
+import com.example.challengeit.ui.component.RegistrationScreen
 import com.example.challengeit.ui.component.WelcomeScreen
 import com.example.challengeit.ui.navigation.Screen
 import com.example.challengeit.ui.theme.ChallengeItTheme
@@ -28,6 +29,9 @@ class LoginActivity : ComponentActivity() {
                     composable(Screen.Login.route) {
                         LoginScreen(navController, activity)
                     }
+                    composable(Screen.Registration.route) {
+                        RegistrationScreen(navController, activity)
+                    }
                 }
             }
         }
@@ -42,6 +46,20 @@ fun connexion(username: String, password: String, activity: ComponentActivity) {
                 activity.finish()
             } else {
                 Log.d("UserStatus", "Connection failed")
+            }
+        }
+}
+fun inscription(email: String, password: String, pseudo:String, activity: ComponentActivity) {
+    MainActivity.auth.createUserWithEmailAndPassword(email, password)
+        .addOnCompleteListener(activity) { task ->
+            if (task.isSuccessful) {
+                // Sign in success, update UI with the signed-in user's information
+                Log.d("UserStatus", "createUserWithEmail:success")
+                activity.startActivity(Intent(activity, HomeActivity::class.java))
+                activity.finish()
+            } else {
+                // If sign in fails, display a message to the user.
+                Log.w("UserStatus", "createUserWithEmail:failure", task.exception)
             }
         }
 }
