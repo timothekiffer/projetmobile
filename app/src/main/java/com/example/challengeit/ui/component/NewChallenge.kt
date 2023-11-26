@@ -105,7 +105,7 @@ fun NewChallengeBody(navController: NavHostController, modifier: Modifier) {
             onValueChange = {
                 // Vérifie si la nouvelle valeur est un nombre positif
                 val newValue = it.toIntOrNull()
-                if (newValue != null && newValue >= 0) {
+                if ((newValue != null) && (newValue >= 0)) {
                     point = newValue
                 }
             },

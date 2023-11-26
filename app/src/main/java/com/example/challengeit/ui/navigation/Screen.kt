@@ -15,5 +15,6 @@ sealed class Screen(val route: String){
     object PrivateGroup : Screen("privateGroup")
     object PublicGroup : Screen("publicGroup")
     object NewGroup : Screen("newGroup")
+    object NewChallenge : Screen("newChallenge")
     object Leaderboard : Screen("leaderboard")
 }

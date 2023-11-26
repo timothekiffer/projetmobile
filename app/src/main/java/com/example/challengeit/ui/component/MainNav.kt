@@ -52,6 +52,9 @@ fun MainNav(activity: ComponentActivity?) {
         composable(Screen.NewGroup.route) {
             NewGroupScreen(navController)
         }
+        composable(Screen.NewChallenge.route) {
+            NewChallengeScreen(navController)
+        }
         composable(Screen.Leaderboard.route) {
             val users = listOf(
                 User(id = 1, name = "Timothé", point = 150),

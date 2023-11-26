@@ -79,6 +79,13 @@ fun GroupBody(challenges: List<Challenge>, navController: NavHostController, mod
                 ChallengeItem(challenge, navController)
             }
         }
+        Button(
+            onClick = { navController.navigate(Screen.NewChallenge.route) },
+            colors = ButtonDefaults.buttonColors(containerColor = Color.Gray),
+            shape = MaterialTheme.shapes.medium
+        ) {
+            Text(text = "Nouveau défi")
+        }
         Spacer(modifier = Modifier.height(16.dp))
         Button(
             onClick = { navController.navigate(Screen.Leaderboard.route) },
