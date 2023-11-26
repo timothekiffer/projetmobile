@@ -5,7 +5,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.challengeit.ui.activity.LoginActivity
+import com.example.challengeit.ui.dataclass.Group
 import com.example.challengeit.ui.navigation.Screen
 
 @Composable
@@ -25,9 +25,9 @@ fun MainNav(activity: ComponentActivity?) {
         }
         composable(Screen.MainPage.route) {
             val groups = listOf(
-                Group(name = "Groupe UQAC"),
-                Group(name = "Groupe 2"),
-                Group(name = "Groupe 3")
+                Group(id = "", name = "Groupe UQAC", description = ""),
+                Group(id = "", name = "Groupe 2", description = ""),
+                Group(id = "", name = "Groupe 3", description = "")
             )
             MainPageScreen(groups, navController)
         }
@@ -53,9 +53,9 @@ fun MainNav(activity: ComponentActivity?) {
         }
         composable(Screen.PublicGroup.route) {
             val groups = listOf(
-                Group(name = "Groupe France"),
-                Group(name = "Groupe Canada"),
-                Group(name = "Groupe 3")
+                Group(id = "", name = "Groupe France", description = ""),
+                Group(id = "", name = "Groupe Canada", description = ""),
+                Group(id = "", name = "Groupe 3", description = "")
             )
             PublicGroupScreen(groups, navController)
         }
