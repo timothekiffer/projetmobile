@@ -107,7 +107,7 @@ fun RegistrationScreen(navController: NavHostController, activity: ComponentActi
                 onValueChange = {
                     // Vérifie si la nouvelle valeur est un nombre positif
                     val newValue = it.toIntOrNull()
-                    if ((newValue != null) && (newValue >= 0)) {
+                    if ((newValue != null) && (newValue >= 18)) {
                         age = newValue
                     }
                 },
@@ -124,6 +124,7 @@ fun RegistrationScreen(navController: NavHostController, activity: ComponentActi
                     focusedIndicatorColor = colorResource(id = R.color.purple_200), // Couleur de l'indicateur lorsqu'il est activé
                 ),
                 keyboardOptions = KeyboardOptions.Default.copy(
+                    keyboardType = KeyboardType.Number,
                     imeAction = ImeAction.Done
                 ),
                 keyboardActions = KeyboardActions(
@@ -176,7 +177,7 @@ fun RegistrationScreen(navController: NavHostController, activity: ComponentActi
 
             // Champ pour l'email
             Text(
-                text = "Il nous faut ton email t'identifier",
+                text = "Il nous faut ton email",
                 color = Color.White,
                 fontWeight = FontWeight.Bold,
                 fontSize = 20.sp
@@ -213,7 +214,7 @@ fun RegistrationScreen(navController: NavHostController, activity: ComponentActi
 
             // Champ pour le mot de passe
             Text(
-                text = "Écris un mot de passe de 8 caractères",
+                text = "Écris un mot de passe sécurisé",
                 color = Color.White,
                 fontWeight = FontWeight.Bold,
                 fontSize = 20.sp
@@ -279,7 +280,10 @@ fun RegistrationScreen(navController: NavHostController, activity: ComponentActi
                     contentDescription = null,
                     tint = Color.White
                 )
-                Text(text = "Retour")
+                Text(
+                    text = "Retour",
+                    color = Color.White
+                )
             }
         }
 

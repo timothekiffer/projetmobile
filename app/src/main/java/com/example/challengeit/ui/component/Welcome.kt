@@ -89,7 +89,7 @@ fun WelcomeScreen(name: String, navController: NavHostController, modifier: Modi
                 )
             }
 
-            Spacer(modifier = Modifier.height(20.dp))
+            Spacer(modifier = Modifier.height(10.dp))
 
             // Ajoute une ligne avec le texte "OU" au milieu
             Row(
@@ -107,7 +107,7 @@ fun WelcomeScreen(name: String, navController: NavHostController, modifier: Modi
                 )
             }
 
-            Spacer(modifier = Modifier.height(20.dp))
+            Spacer(modifier = Modifier.height(10.dp))
 
             // Bouton d'inscription
             Button(
