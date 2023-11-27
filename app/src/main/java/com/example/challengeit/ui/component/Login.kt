@@ -204,7 +204,10 @@ fun LoginScreen(navController: NavHostController, activity: ComponentActivity) {
                     contentDescription = null,
                     tint = Color.White
                 )
-                Text(text = "Retour")
+                Text(
+                    text = "Retour",
+                    color = Color.White
+                )
             }
         }
 
