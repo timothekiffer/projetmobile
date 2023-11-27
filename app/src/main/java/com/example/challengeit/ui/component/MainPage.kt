@@ -18,6 +18,9 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -30,11 +33,14 @@ import androidx.navigation.compose.rememberNavController
 import com.example.challengeit.ui.dataclass.Group
 import com.example.challengeit.ui.navigation.Screen
 import com.example.challengeit.ui.theme.ChallengeItTheme
+import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.tasks.await
 
 // Annotation indiquant que l'utilisation de l'API expérimentale est acceptée
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainPageScreen(groups: List<Group>, navController: NavHostController) {
+fun MainPageScreen(navController: NavHostController) {
     // Applique le thème ChallengeIt
     ChallengeItTheme {
         // Utilise le composant Scaffold pour définir la structure de la page
@@ -43,14 +49,16 @@ fun MainPageScreen(groups: List<Group>, navController: NavHostController) {
             bottomBar = { Navigation(navController = navController) }
         ) { innerPadding ->
             // Appelle le composant représentant le corps de la page principale (MainPageBody)
-            MainPageBody(navController, groups, Modifier.padding(innerPadding))
+            MainPageBody(navController, Modifier.padding(innerPadding))
         }
     }
 }
 
 // Composant représentant le corps de la page principale
 @Composable
-fun MainPageBody(navController: NavHostController, groups: List<Group>, modifier: Modifier) {
+fun MainPageBody(navController: NavHostController, modifier: Modifier) {
+    // Déclare la liste des groupes
+    val groups by remember { mutableStateOf(runBlocking { getGroupes() }) }
     // Utilise un Column pour organiser les éléments verticalement
     Column(modifier = Modifier
         .fillMaxSize()
@@ -118,20 +126,27 @@ fun GroupItem(group: Group, navController: NavHostController) {
     Spacer(modifier = Modifier.height(16.dp))
 }
 
+// Fonction suspendue pour récupérer la liste des groupes depuis Firestore
+suspend fun getGroupes(): List<Group> {
+    // Obtenir une instance de la base de données Firestore
+    val firestore = FirebaseFirestore.getInstance()
+
+    // Effectuer une requête asynchrone pour obtenir un snapshot de la collection "group"
+    val snapshot = firestore.collection("group").get().await()
+
+    // Convertir le snapshot en une liste d'objets de type Group à l'aide de l'extension toObjects
+    return snapshot.toObjects(Group::class.java)
+}
+
+
 // Composant de prévisualisation pour l'écran principal
 @Preview
 @Composable
 fun MainPageScreenPreview() {
     // Initialise un contrôleur de navigation Jetpack Compose pour la prévisualisation
     val navController = rememberNavController()
-    // Liste factice de groupes pour la prévisualisation
-    val groups = listOf(
-        Group(name = "Groupe UQAC", description = "",isPrivate = false),
-        Group(name = "Groupe 2", description = "",isPrivate = false),
-        Group(name = "Groupe 3", description = "",isPrivate = false)
-    )
     // Applique le thème ChallengeIt et appelle le composant représentant l'écran principal (MainPageScreen)
     ChallengeItTheme {
-        MainPageScreen(groups, navController)
+        MainPageScreen(navController)
     }
 }

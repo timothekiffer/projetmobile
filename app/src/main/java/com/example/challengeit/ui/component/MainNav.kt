@@ -20,14 +20,8 @@ fun MainNav(activity: ComponentActivity?) {
     NavHost(navController = navController, startDestination = Screen.MainPage.route) {
         // Écran principal de l'application
         composable(Screen.MainPage.route) {
-            // Liste factice de groupes pour la prévisualisation
-            val groups = listOf(
-                Group(name = "Groupe UQAC", description = "",false),
-                Group(name = "Groupe 2", description = "",false),
-                Group(name = "Groupe 3", description = "",false)
-            )
             // Appelle le composant représentant l'écran principal (MainPageScreen)
-            MainPageScreen(groups, navController)
+            MainPageScreen(navController)
         }
 
         // Écran de détails d'un groupe
