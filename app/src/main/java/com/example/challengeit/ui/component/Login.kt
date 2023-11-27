@@ -1,3 +1,4 @@
+// Déclaration du package et des importations nécessaires
 package com.example.challengeit.ui.component
 
 import android.text.InputType
@@ -35,16 +36,22 @@ import com.example.challengeit.ui.activity.connexion
 import com.example.challengeit.ui.navigation.Screen
 import com.example.challengeit.ui.theme.ChallengeItTheme
 
+// Annotation indiquant que l'utilisation de l'API Material3 est expérimentale
 @OptIn(ExperimentalMaterial3Api::class)
+// Composable représentant l'écran de connexion
 @Composable
 fun LoginScreen(navController: NavHostController, activity: ComponentActivity) {
+    // Déclaration des variables d'état pour l'email, le mot de passe et le résultat de la connexion
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var loginResult by remember { mutableStateOf(false) }
+
+    // Utilise une colonne pour organiser les éléments de manière verticale avec défilement vertical
     Column(modifier = Modifier
         .fillMaxSize()
         .padding(10.dp)
         .verticalScroll(rememberScrollState())) {
+        // Affiche le titre "Connecte-toi" avec une taille de police, une couleur et un style spécifiques
         Text(
             text = "Connecte-toi",
             color = Color.Black,
@@ -52,20 +59,33 @@ fun LoginScreen(navController: NavHostController, activity: ComponentActivity) {
             fontWeight = FontWeight.Bold
         )
 
+        // Ajoute un espace vertical
         Spacer(modifier = Modifier.height(16.dp))
+
+        // Affiche le texte "Adresse email" suivi d'un champ de texte pour l'email
         Text(text = "Adresse email")
         TextField(
             value = email,
             onValueChange = { email = it }
         )
+
+        // Ajoute un espace vertical
         Spacer(modifier = Modifier.height(16.dp))
+
+        // Affiche le texte "Mot de Passe" suivi d'un champ de texte pour le mot de passe
         Text(text = "Mot de Passe")
         TextField(
             value = password,
-            onValueChange = { password = it }        )
+            onValueChange = { password = it }
+        )
+
+        // Ajoute un espace vertical
         Spacer(modifier = Modifier.height(16.dp))
+
+        // Ajoute un bouton de connexion avec une action associée
         Button(
             onClick = {
+                // Appelle la fonction de connexion avec les informations d'identification fournies
                 connexion(email, password, activity)
             },
             colors = ButtonDefaults.buttonColors(containerColor = Color.Gray),
@@ -76,3 +96,16 @@ fun LoginScreen(navController: NavHostController, activity: ComponentActivity) {
     }
 }
 
+// Fonction de prévisualisation pour l'écran de connexion
+@Preview()
+@Composable
+fun LoginScreenPreview() {
+    // Initialise un contrôleur de navigation factice pour la prévisualisation
+    val navController = rememberNavController()
+    // Initialise une activité factice pour la prévisualisation
+    val activity = ComponentActivity()
+    // Applique le thème personnalisé ChallengeItTheme et appelle le composant LoginScreen
+    ChallengeItTheme {
+        LoginScreen(navController, activity)
+    }
+}

@@ -1,3 +1,4 @@
+// Déclaration du package et des importations nécessaires
 package com.example.challengeit.ui.component
 
 import androidx.compose.foundation.background
@@ -31,37 +32,50 @@ import androidx.navigation.compose.rememberNavController
 import com.example.challengeit.ui.navigation.Screen
 import com.example.challengeit.ui.theme.ChallengeItTheme
 
+// Data class représentant un utilisateur avec un identifiant, un nom et un nombre de points
 data class User(val id: Int, val name: String, val point: Int)
 
+// Annotation indiquant que l'utilisation de l'API Material3 est expérimentale
 @OptIn(ExperimentalMaterial3Api::class)
+// Composable principal pour l'écran du classement
 @Composable
 fun LeaderboardScreen(users: List<User>, navController: NavHostController) {
+    // Applique le thème personnalisé ChallengeItTheme
     ChallengeItTheme {
+        // Utilise le composant Scaffold pour définir la structure de base de l'écran
         Scaffold(
             bottomBar = { Navigation(navController = navController) }
         ) { innerPadding ->
+            // Appelle le composant LeaderboardBody pour définir le contenu principal de l'écran
             LeaderboardBody(users, navController, Modifier.padding(innerPadding))
         }
     }
 }
 
+// Annotation indiquant que l'utilisation de l'API Material3 est expérimentale
 @OptIn(ExperimentalMaterial3Api::class)
+// Composable pour le corps principal de l'écran du classement
 @Composable
 fun LeaderboardBody(users: List<User>, navController: NavHostController, modifier: Modifier) {
-    Column(modifier = Modifier
+    // Utilise une colonne pour organiser les éléments de manière verticale
+    Column(modifier = modifier
         .fillMaxSize()
         .padding(10.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        // Affiche le titre "Classement" avec une taille de police, une couleur et un style spécifiques
         Text(
             text = "Classement",
             color = Color.Black,
             fontSize = 30.sp,
             fontWeight = FontWeight.Bold
         )
+        // Ajoute un espace vertical
         Spacer(modifier = Modifier.height(16.dp))
 
+        // Utilise un composant LazyColumn pour afficher la liste des utilisateurs de manière paresseuse
         LazyColumn {
+            // Ajoute une ligne d'en-tête avec les noms de colonnes
             item {
                 Row(
                     modifier = Modifier
@@ -73,9 +87,11 @@ fun LeaderboardBody(users: List<User>, navController: NavHostController, modifie
                     Text("Nom", fontWeight = FontWeight.Bold)
                     Text("Points", fontWeight = FontWeight.Bold)
                 }
+                // Ajoute un espacement après la ligne d'en-tête
                 Spacer(modifier = Modifier.height(4.dp))
             }
-            items(users) {user ->
+            // Ajoute des éléments pour chaque utilisateur dans la liste
+            items(users) { user ->
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -84,6 +100,7 @@ fun LeaderboardBody(users: List<User>, navController: NavHostController, modifie
                         .border(1.dp, MaterialTheme.colorScheme.onSurface, shape = MaterialTheme.shapes.small),
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
+                    // Affiche l'ID, le nom et le nombre de points de chaque utilisateur
                     Text(user.id.toString())
                     Text(user.name)
                     Text(user.point.toString())
@@ -91,6 +108,7 @@ fun LeaderboardBody(users: List<User>, navController: NavHostController, modifie
             }
         }
 
+        // Ajoute un bouton "Retour aux défis" avec une couleur et une forme spécifiques
         Button(
             onClick = { navController.navigate(Screen.Group.route) },
             colors = ButtonDefaults.buttonColors(containerColor = Color.Gray),
@@ -101,15 +119,19 @@ fun LeaderboardBody(users: List<User>, navController: NavHostController, modifie
     }
 }
 
+// Fonction de prévisualisation pour l'écran du classement
 @Preview()
 @Composable
 fun LeaderboardScreenPreview() {
+    // Initialise un contrôleur de navigation factice pour la prévisualisation
     val navController = rememberNavController()
+    // Initialise une liste d'utilisateurs pour la prévisualisation
     val users = listOf<User>(
         User(id = 1, name = "Timothé", point = 150),
         User(id = 2, name = "Alexandre", point = 89),
         User(id = 3, name = "Romain", point = 18)
     )
+    // Applique le thème personnalisé ChallengeItTheme et appelle le composant LeaderboardScreen
     ChallengeItTheme {
         LeaderboardScreen(users, navController)
     }
