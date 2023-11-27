@@ -58,7 +58,7 @@ fun MainPageScreen(navController: NavHostController) {
 @Composable
 fun MainPageBody(navController: NavHostController, modifier: Modifier) {
     // Déclare la liste des groupes
-    val groups by remember { mutableStateOf(runBlocking { getGroupes() }) }
+    val groups by remember { mutableStateOf(runBlocking { getGroups() }) }
     // Utilise un Column pour organiser les éléments verticalement
     Column(modifier = Modifier
         .fillMaxSize()
@@ -127,7 +127,7 @@ fun GroupItem(group: Group, navController: NavHostController) {
 }
 
 // Fonction suspendue pour récupérer la liste des groupes depuis Firestore
-suspend fun getGroupes(): List<Group> {
+suspend fun getGroups(): List<Group> {
     // Obtenir une instance de la base de données Firestore
     val firestore = FirebaseFirestore.getInstance()
 

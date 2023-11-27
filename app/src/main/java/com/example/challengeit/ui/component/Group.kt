@@ -18,6 +18,9 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -30,12 +33,15 @@ import androidx.navigation.compose.rememberNavController
 import com.example.challengeit.ui.dataclass.Challenge
 import com.example.challengeit.ui.navigation.Screen
 import com.example.challengeit.ui.theme.ChallengeItTheme
+import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.tasks.await
 
 // Annotation indiquant que l'utilisation de l'API Material3 est expérimentale
 @OptIn(ExperimentalMaterial3Api::class)
 // Composable principal pour l'écran de groupe
 @Composable
-fun GroupScreen(challenges: List<Challenge>, navController: NavHostController, id: String) {
+fun GroupScreen(navController: NavHostController, id: String) {
     // Applique le thème personnalisé ChallengeItTheme
     ChallengeItTheme {
         // Utilise le composant Scaffold pour définir la structure de base de l'écran
@@ -43,14 +49,16 @@ fun GroupScreen(challenges: List<Challenge>, navController: NavHostController, i
             bottomBar = { Navigation(navController = navController) }
         ) { innerPadding ->
             // Appelle le composant GroupBody pour définir le contenu principal de l'écran
-            GroupBody(challenges, navController, Modifier.padding(innerPadding), id)
+            GroupBody(navController, Modifier.padding(innerPadding), id)
         }
     }
 }
 
 // Composable pour le corps principal de l'écran de groupe
 @Composable
-fun GroupBody(challenges: List<Challenge>, navController: NavHostController, modifier: Modifier, id: String) {
+fun GroupBody(navController: NavHostController, modifier: Modifier, id: String) {
+    // Déclare la liste des défis
+    val challenges by remember { mutableStateOf(runBlocking { getChallenges() }) }
     // Utilise une colonne pour organiser les éléments de manière verticale
     Column(modifier = modifier
         .fillMaxSize()
@@ -137,23 +145,28 @@ fun ChallengeItem(challenge: Challenge, navController: NavHostController) {
     }
 }
 
+// Fonction suspendue pour récupérer la liste des groupes depuis Firestore
+suspend fun getChallenges(): List<Challenge> {
+    // Obtenir une instance de la base de données Firestore
+    val firestore = FirebaseFirestore.getInstance()
+
+    // Effectuer une requête asynchrone pour obtenir un snapshot de la collection "challenge"
+    val snapshot = firestore.collection("group").get().await()
+
+    // Convertir le snapshot en une liste d'objets de type Challenge à l'aide de l'extension toObjects
+    return snapshot.toObjects(Challenge::class.java)
+}
+
 // Fonction de prévisualisation pour l'écran de groupe
 @Preview()
 @Composable
 fun GroupScreenPreview() {
     // Initialise un contrôleur de navigation factice pour la prévisualisation
     val navController = rememberNavController()
-    // Initialise une liste d'objets Challenge pour la prévisualisation
-    val challenges = listOf(
-        Challenge(name = "Faire 300 pas en 1 minute", description = "Pour valider le défi, tu dois faire 1000 pas en 1 minute, cela devra être filmé et uploadé sur l’appli", point = 5),
-        Challenge(name = "Prendre un selfie devant la Tour Eiffel", description = "", point = 30),
-        Challenge(name = "Prendre un bain de minuit", description = "", point = 10),
-        Challenge(name = "Danser la macarena sur une place publique", description = "", point = 20)
-    )
     // Initialise un ID pour le groupe
     val id = "Groupe UQAC"
     // Applique le thème personnalisé ChallengeItTheme et appelle le composant GroupScreen
     ChallengeItTheme {
-        GroupScreen(challenges, navController, id)
+        GroupScreen(navController, id)
     }
 }

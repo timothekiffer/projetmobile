@@ -28,15 +28,8 @@ fun MainNav(activity: ComponentActivity?) {
         composable(Screen.Group.route) { backStackEntry ->
             // Récupère l'ID du groupe à partir des arguments de la navigation
             val id = backStackEntry.arguments?.getString("id").orEmpty()
-            // Liste factice de défis pour la prévisualisation
-            val challenges = listOf(
-                Challenge(name = "Faire 300 pas en 1 minute", description = "Pour valider le défi, tu dois faire 1000 pas en 1 minute, cela devra être filmé et uploadé sur l’appli", point = 5),
-                Challenge(name = "Prendre un selfie devant la Tour Eiffel", description = "", point = 30),
-                Challenge(name = "Prendre un bain de minuit", description = "", point = 10),
-                Challenge(name = "Danser la macarena sur une place publique", description = "", point = 20)
-            )
             // Appelle le composant représentant l'écran de détails du groupe (GroupScreen)
-            GroupScreen(challenges, navController, id)
+            GroupScreen(navController, id)
         }
 
         // Écran pour rejoindre un groupe
@@ -61,7 +54,7 @@ fun MainNav(activity: ComponentActivity?) {
 
         // Écran pour rejoindre un groupe public
         composable(Screen.PublicGroup.route) {
-            // Liste factice de groupes publics pour la prévisualisation
+            // Liste factice de groupes publics
             val groups = listOf(
                 Group(name = "Groupe France", description = "",isPrivate = false),
                 Group(name = "Groupe Canada", description = "",isPrivate = false),
@@ -85,7 +78,7 @@ fun MainNav(activity: ComponentActivity?) {
 
         // Écran du classement (leaderboard)
         composable(Screen.Leaderboard.route) {
-            // Liste factice d'utilisateurs pour la prévisualisation
+            // Liste factice d'utilisateurs
             val users = listOf(
                 User(id = 1, name = "Timothé", point = 150),
                 User(id = 2, name = "Alexandre", point = 89),

@@ -8,7 +8,5 @@ data class Challenge(
     val description: String,
     val point: Int
 ) {
-    override fun toString(): String {
-        return "Challenge(name='$name', description='$description', point=$point)"
-    }
+    constructor() : this("", "", 0)
 }

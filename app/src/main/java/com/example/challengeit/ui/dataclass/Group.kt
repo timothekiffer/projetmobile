@@ -10,6 +10,5 @@ data class Group(
     @PropertyName("private") var isPrivate: Boolean,
 ) {
     constructor() : this("", "", false)
-
 }
 
