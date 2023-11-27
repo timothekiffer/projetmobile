@@ -151,7 +151,7 @@ suspend fun getChallenges(): List<Challenge> {
     val firestore = FirebaseFirestore.getInstance()
 
     // Effectuer une requête asynchrone pour obtenir un snapshot de la collection "challenge"
-    val snapshot = firestore.collection("group").get().await()
+    val snapshot = firestore.collection("challenge").get().await()
 
     // Convertir le snapshot en une liste d'objets de type Challenge à l'aide de l'extension toObjects
     return snapshot.toObjects(Challenge::class.java)
