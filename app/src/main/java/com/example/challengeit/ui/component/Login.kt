@@ -5,17 +5,22 @@ import android.text.InputType
 import androidx.activity.ComponentActivity
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -76,7 +81,7 @@ fun LoginScreen(navController: NavHostController, activity: ComponentActivity) {
             fontSize = 50.sp,
             fontWeight = FontWeight.Bold,
             textAlign = TextAlign.Center,
-            modifier = Modifier.padding(top = 110.dp)
+            modifier = Modifier.padding(top = 100.dp)
         )
 
         // Ajoute un espace vertical
@@ -180,6 +185,29 @@ fun LoginScreen(navController: NavHostController, activity: ComponentActivity) {
                 )
             }
         }
+
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp),
+            horizontalArrangement = Arrangement.Start,
+            verticalAlignment = Alignment.Bottom
+        ) {
+            // Ajouter un bouton "Retour" avec une icône de flèche vers la gauche
+            Button(
+                onClick = { navController.popBackStack() },
+                colors = ButtonDefaults.buttonColors(containerColor = colorResource(id = R.color.purple_200)),
+                shape = MaterialTheme.shapes.medium
+            ) {
+                Icon(
+                    imageVector = Icons.Default.ArrowBack,
+                    contentDescription = null,
+                    tint = Color.White
+                )
+                Text(text = "Retour")
+            }
+        }
+
     }
 }
 
