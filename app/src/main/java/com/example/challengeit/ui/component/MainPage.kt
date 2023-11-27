@@ -126,9 +126,9 @@ fun MainPageScreenPreview() {
     val navController = rememberNavController()
     // Liste factice de groupes pour la prévisualisation
     val groups = listOf(
-        Group(name = "Groupe UQAC", description = ""),
-        Group(name = "Groupe 2", description = ""),
-        Group(name = "Groupe 3", description = "")
+        Group(name = "Groupe UQAC", description = "",isPrivate = false),
+        Group(name = "Groupe 2", description = "",isPrivate = false),
+        Group(name = "Groupe 3", description = "",isPrivate = false)
     )
     // Applique le thème ChallengeIt et appelle le composant représentant l'écran principal (MainPageScreen)
     ChallengeItTheme {

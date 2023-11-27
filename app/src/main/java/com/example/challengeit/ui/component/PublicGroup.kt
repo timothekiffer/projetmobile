@@ -103,9 +103,9 @@ fun PublicGroupScreenPreview() {
 
     // Liste fictive de groupes publics pour la prévisualisation
     val groups = listOf(
-        Group(name = "Groupe France", description = ""),
-        Group(name = "Groupe Canada", description = ""),
-        Group(name = "Groupe 3", description = "")
+        Group(name = "Groupe France", description = "",isPrivate = false),
+        Group(name = "Groupe Canada", description = "",isPrivate = false),
+        Group(name = "Groupe 3", description = "",isPrivate = false)
     )
 
     // Applique le thème ChallengeIt

@@ -10,6 +10,7 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Checkbox
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -57,9 +58,10 @@ fun NewGroupScreen(navController: NavHostController) {
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
 @Composable
 fun NewGroupBody(navController: NavHostController, modifier: Modifier) {
-    // États pour stocker les valeurs du nom et de la description du groupe
+    // États pour stocker les valeurs du nom, de la description et de la visibilité du groupe
     var name by remember { mutableStateOf("") }
     var description by remember { mutableStateOf("") }
+    var isPrivate by remember { mutableStateOf(false) } // Nouvel état pour la visibilité du groupe
 
     // Obtient le contexte local et le contrôleur de clavier
     val context = LocalContext.current
@@ -117,11 +119,21 @@ fun NewGroupBody(navController: NavHostController, modifier: Modifier) {
         )
         Spacer(modifier = Modifier.height(16.dp))
 
+        // Case à cocher pour définir si le groupe est privé ou non
+        Checkbox(
+            checked = isPrivate,
+            onCheckedChange = { isPrivate = it },
+            modifier = Modifier.padding(8.dp),
+        )
+        Text("Groupe privé")
+
+        Spacer(modifier = Modifier.height(16.dp))
+
         // Bouton pour créer le groupe
         Button(
             onClick = {
                 // Crée une instance de Group avec les données fournies
-                val group = Group(name = name, description = description)
+                val group = Group(name = name, description = description, isPrivate = isPrivate)
 
                 // Ajoute le groupe à la collection "group" de Firestore
                 firestore.collection("group").add(group)
@@ -129,6 +141,7 @@ fun NewGroupBody(navController: NavHostController, modifier: Modifier) {
                 // Efface les champs après l'ajout
                 name = ""
                 description = ""
+                isPrivate = false // Réinitialise la visibilité du groupe
 
                 // Redirige l'utilisateur vers l'écran principal après l'ajout du groupe
                 navController.navigate(Screen.MainPage.route)
@@ -141,7 +154,6 @@ fun NewGroupBody(navController: NavHostController, modifier: Modifier) {
         }
     }
 }
-
 // Prévisualisation de l'écran de création d'un nouveau groupe
 @Preview()
 @Composable

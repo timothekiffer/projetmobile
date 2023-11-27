@@ -22,9 +22,9 @@ fun MainNav(activity: ComponentActivity?) {
         composable(Screen.MainPage.route) {
             // Liste factice de groupes pour la prévisualisation
             val groups = listOf(
-                Group(name = "Groupe UQAC", description = ""),
-                Group(name = "Groupe 2", description = ""),
-                Group(name = "Groupe 3", description = "")
+                Group(name = "Groupe UQAC", description = "",false),
+                Group(name = "Groupe 2", description = "",false),
+                Group(name = "Groupe 3", description = "",false)
             )
             // Appelle le composant représentant l'écran principal (MainPageScreen)
             MainPageScreen(groups, navController)
@@ -69,9 +69,9 @@ fun MainNav(activity: ComponentActivity?) {
         composable(Screen.PublicGroup.route) {
             // Liste factice de groupes publics pour la prévisualisation
             val groups = listOf(
-                Group(name = "Groupe France", description = ""),
-                Group(name = "Groupe Canada", description = ""),
-                Group(name = "Groupe 3", description = "")
+                Group(name = "Groupe France", description = "",isPrivate = false),
+                Group(name = "Groupe Canada", description = "",isPrivate = false),
+                Group(name = "Groupe 3", description = "",isPrivate = false)
             )
             // Appelle le composant représentant l'écran de rejoindre un groupe public (PublicGroupScreen)
             PublicGroupScreen(groups, navController)
