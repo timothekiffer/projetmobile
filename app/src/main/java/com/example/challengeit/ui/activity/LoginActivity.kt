@@ -65,7 +65,7 @@ fun connexion(username: String, password: String, activity: ComponentActivity) {
 }
 
 // Fonction d'inscription avec Firebase
-fun inscription(email: String, password: String, pseudo: String, activity: ComponentActivity) {
+fun inscription(email: String, password: String, pseudo: String, age: Int, activity: ComponentActivity) {
     MainActivity.auth.createUserWithEmailAndPassword(email, password)
         .addOnCompleteListener(activity) { task ->
             if (task.isSuccessful) {
