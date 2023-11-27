@@ -1,3 +1,4 @@
+// Déclaration du package et des importations nécessaires
 package com.example.challengeit.ui.component
 
 import androidx.compose.foundation.layout.Arrangement
@@ -29,25 +30,32 @@ import androidx.navigation.compose.rememberNavController
 import com.example.challengeit.ui.dataclass.Group
 import com.example.challengeit.ui.theme.ChallengeItTheme
 
+// Annotation indiquant que cette fonction utilise des fonctionnalités expérimentales de Compose
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PublicGroupScreen(groups: List<Group>, navController: NavHostController) {
+    // Utilise le thème ChallengeIt
     ChallengeItTheme {
+        // Utilise le composant Scaffold pour la mise en page de l'écran
         Scaffold(
             bottomBar = { Navigation(navController = navController) }
         ) { innerPadding ->
+            // Utilise le composant PublicGroupBody pour la partie centrale de l'écran
             PublicGroupBody(navController, groups, Modifier.padding(innerPadding))
         }
     }
 }
 
+// Composant représentant le corps de l'écran de sélection d'un groupe public
 @Composable
 fun PublicGroupBody(navController: NavHostController, groups: List<Group>, modifier: Modifier) {
-    Column(modifier = Modifier
+    // Utilise le composant Column pour organiser les éléments de manière verticale
+    Column(modifier = modifier
         .fillMaxSize()
         .padding(10.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        // Titre de la page
         Text(
             text = "Rejoins un groupe public",
             color = Color.Black,
@@ -56,15 +64,19 @@ fun PublicGroupBody(navController: NavHostController, groups: List<Group>, modif
         )
         Spacer(modifier = Modifier.height(16.dp))
 
+        // Utilise le composant LazyColumn pour afficher la liste des groupes publics
         LazyColumn (
             modifier = Modifier.fillMaxWidth()
-        ){
+        ) {
             items(groups) { group ->
+                // Utilise le composant GroupItem pour afficher chaque élément de la liste
                 GroupItem(group, navController)
             }
         }
 
         Spacer(modifier = Modifier.height(16.dp))
+
+        // Bouton de retour
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -72,7 +84,7 @@ fun PublicGroupBody(navController: NavHostController, groups: List<Group>, modif
             horizontalArrangement = Arrangement.End
         ) {
             Button(
-                onClick = { navController.popBackStack() },
+                onClick = { navController.popBackStack() },  // Action de retour
                 colors = ButtonDefaults.buttonColors(containerColor = Color.Gray),
                 shape = MaterialTheme.shapes.medium
             ) {
@@ -82,16 +94,23 @@ fun PublicGroupBody(navController: NavHostController, groups: List<Group>, modif
     }
 }
 
+// Prévisualisation de l'écran de sélection d'un groupe public
 @Preview
 @Composable
 fun PublicGroupScreenPreview() {
+    // Initialise le contrôleur de navigation
     val navController = rememberNavController()
+
+    // Liste fictive de groupes publics pour la prévisualisation
     val groups = listOf(
         Group(name = "Groupe France", description = ""),
         Group(name = "Groupe Canada", description = ""),
         Group(name = "Groupe 3", description = "")
     )
+
+    // Applique le thème ChallengeIt
     ChallengeItTheme {
+        // Affiche l'écran de sélection d'un groupe public dans la prévisualisation
         PublicGroupScreen(groups, navController)
     }
 }

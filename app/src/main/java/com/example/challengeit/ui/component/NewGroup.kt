@@ -1,3 +1,4 @@
+// Déclaration du package et des importations nécessaires
 package com.example.challengeit.ui.component
 
 import androidx.compose.foundation.layout.Column
@@ -37,31 +38,43 @@ import com.example.challengeit.ui.navigation.Screen
 import com.example.challengeit.ui.theme.ChallengeItTheme
 import com.google.firebase.firestore.FirebaseFirestore
 
-@OptIn(ExperimentalMaterial3Api::class)
+// Composant représentant l'écran de création d'un nouveau groupe
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
 @Composable
 fun NewGroupScreen(navController: NavHostController) {
     ChallengeItTheme {
+        // Utilise le composant Scaffold pour la mise en page de l'écran
         Scaffold(
             bottomBar = { Navigation(navController = navController) }
         ) { innerPadding ->
+            // Utilise le composant NewGroupBody pour la partie centrale de l'écran
             NewGroupBody(navController, Modifier.padding(innerPadding))
         }
     }
 }
 
+// Composant représentant le corps de l'écran de création d'un nouveau groupe
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
 @Composable
 fun NewGroupBody(navController: NavHostController, modifier: Modifier) {
+    // États pour stocker les valeurs du nom et de la description du groupe
     var name by remember { mutableStateOf("") }
     var description by remember { mutableStateOf("") }
+
+    // Obtient le contexte local et le contrôleur de clavier
     val context = LocalContext.current
     val keyboardController = LocalSoftwareKeyboardController.current
+
+    // Obtient une instance de FirebaseFirestore pour interagir avec la base de données Firestore
     val firestore = FirebaseFirestore.getInstance()
+
+    // Utilise le composant Column pour organiser les éléments de manière verticale
     Column(modifier = Modifier
         .fillMaxSize()
         .padding(10.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        // Titre de la page
         Text(
             text = "Création du groupe",
             color = Color.Black,
@@ -69,59 +82,76 @@ fun NewGroupBody(navController: NavHostController, modifier: Modifier) {
             fontWeight = FontWeight.Bold
         )
         Spacer(modifier = Modifier.height(16.dp))
+
+        // Champ de texte pour le nom du groupe
         TextField(
             value = name,
-            onValueChange = { name = it},
+            onValueChange = { name = it },
             label = { Text("Nom du groupe") },
             keyboardOptions = KeyboardOptions.Default.copy(
                 imeAction = ImeAction.Done
             ),
             keyboardActions = KeyboardActions(
                 onDone = {
+                    // Cache le clavier virtuel lorsque l'utilisateur appuie sur "Done"
                     keyboardController?.hide()
                 }
             ),
         )
         Spacer(modifier = Modifier.height(16.dp))
+
+        // Champ de texte pour la description du groupe
         TextField(
             value = description,
-            onValueChange = { description = it},
+            onValueChange = { description = it },
             label = { Text("Description du groupe") },
             keyboardOptions = KeyboardOptions.Default.copy(
                 imeAction = ImeAction.Done
             ),
             keyboardActions = KeyboardActions(
                 onDone = {
+                    // Cache le clavier virtuel lorsque l'utilisateur appuie sur "Done"
                     keyboardController?.hide()
                 }
             ),
         )
         Spacer(modifier = Modifier.height(16.dp))
+
+        // Bouton pour créer le groupe
         Button(
             onClick = {
+                // Crée une instance de Group avec les données fournies
                 val group = Group(name = name, description = description)
+
+                // Ajoute le groupe à la collection "group" de Firestore
                 firestore.collection("group").add(group)
 
                 // Efface les champs après l'ajout
                 name = ""
                 description = ""
 
-                // Redirige après l'ajout
+                // Redirige l'utilisateur vers l'écran principal après l'ajout du groupe
                 navController.navigate(Screen.MainPage.route)
-                      },
+            },
             colors = ButtonDefaults.buttonColors(containerColor = Color.Gray),
             shape = MaterialTheme.shapes.medium
         ) {
+            // Texte du bouton "Créer"
             Text(text = "Créer")
         }
     }
 }
 
+// Prévisualisation de l'écran de création d'un nouveau groupe
 @Preview()
 @Composable
 fun NewGroupScreenPreview() {
+    // Initialise le contrôleur de navigation
     val navController = rememberNavController()
+
+    // Applique le thème ChallengeIt
     ChallengeItTheme {
+        // Affiche l'écran de création d'un nouveau groupe dans la prévisualisation
         NewGroupScreen(navController)
     }
 }

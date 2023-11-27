@@ -1,3 +1,4 @@
+// Déclaration du package et des importations nécessaires
 package com.example.challengeit.ui.component
 
 import androidx.compose.foundation.layout.Column
@@ -34,37 +35,48 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.challengeit.ui.dataclass.Challenge
-import com.example.challengeit.ui.dataclass.Group
 import com.example.challengeit.ui.navigation.Screen
 import com.example.challengeit.ui.theme.ChallengeItTheme
 import com.google.firebase.firestore.FirebaseFirestore
 
-@OptIn(ExperimentalMaterial3Api::class)
+// Composant représentant l'écran de création d'un nouveau défi
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
 @Composable
 fun NewChallengeScreen(navController: NavHostController) {
     ChallengeItTheme {
+        // Utilise le composant Scaffold pour la mise en page de l'écran
         Scaffold(
             bottomBar = { Navigation(navController = navController) }
         ) { innerPadding ->
+            // Utilise le composant NewChallengeBody pour la partie centrale de l'écran
             NewChallengeBody(navController, Modifier.padding(innerPadding))
         }
     }
 }
 
+// Composant représentant le corps de l'écran de création d'un nouveau défi
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
 @Composable
 fun NewChallengeBody(navController: NavHostController, modifier: Modifier) {
+    // États pour stocker les valeurs du nom, de la description et du nombre de points du défi
     var name by remember { mutableStateOf("") }
     var description by remember { mutableStateOf("") }
     var point by remember { mutableStateOf(0) }
+
+    // Obtient le contexte local et le contrôleur de clavier
     val context = LocalContext.current
     val keyboardController = LocalSoftwareKeyboardController.current
+
+    // Obtient une instance de FirebaseFirestore pour interagir avec la base de données Firestore
     val firestore = FirebaseFirestore.getInstance()
+
+    // Utilise le composant Column pour organiser les éléments de manière verticale
     Column(modifier = Modifier
         .fillMaxSize()
         .padding(10.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        // Titre de la page
         Text(
             text = "Création du défi",
             color = Color.Black,
@@ -72,34 +84,42 @@ fun NewChallengeBody(navController: NavHostController, modifier: Modifier) {
             fontWeight = FontWeight.Bold
         )
         Spacer(modifier = Modifier.height(16.dp))
+
+        // Champ de texte pour le nom du défi
         TextField(
             value = name,
-            onValueChange = { name = it},
+            onValueChange = { name = it },
             label = { Text("Nom du défi") },
             keyboardOptions = KeyboardOptions.Default.copy(
                 imeAction = ImeAction.Done
             ),
             keyboardActions = KeyboardActions(
                 onDone = {
+                    // Cache le clavier virtuel lorsque l'utilisateur appuie sur "Done"
                     keyboardController?.hide()
                 }
             ),
         )
         Spacer(modifier = Modifier.height(16.dp))
+
+        // Champ de texte pour la description du défi
         TextField(
             value = description,
-            onValueChange = { description = it},
+            onValueChange = { description = it },
             label = { Text("Description du défi") },
             keyboardOptions = KeyboardOptions.Default.copy(
                 imeAction = ImeAction.Done
             ),
             keyboardActions = KeyboardActions(
                 onDone = {
+                    // Cache le clavier virtuel lorsque l'utilisateur appuie sur "Done"
                     keyboardController?.hide()
                 }
             ),
         )
         Spacer(modifier = Modifier.height(16.dp))
+
+        // Champ de texte pour le nombre de points du défi
         TextField(
             value = point.toString(),
             onValueChange = {
@@ -116,14 +136,20 @@ fun NewChallengeBody(navController: NavHostController, modifier: Modifier) {
             ),
             keyboardActions = KeyboardActions(
                 onDone = {
+                    // Cache le clavier virtuel lorsque l'utilisateur appuie sur "Done"
                     keyboardController?.hide()
                 }
             ),
         )
         Spacer(modifier = Modifier.height(16.dp))
+
+        // Bouton pour créer le défi
         Button(
             onClick = {
+                // Crée une instance de Challenge avec les données fournies
                 val challenge = Challenge(name = name, description = description, point = point)
+
+                // Ajoute le défi à la collection "challenge" de Firestore
                 firestore.collection("challenge").add(challenge)
 
                 // Efface les champs après l'ajout
@@ -131,22 +157,28 @@ fun NewChallengeBody(navController: NavHostController, modifier: Modifier) {
                 description = ""
                 point = 0
 
-                // Redirige après l'ajout
+                // Redirige l'utilisateur vers l'écran principal après l'ajout du défi
                 navController.navigate(Screen.MainPage.route)
             },
             colors = ButtonDefaults.buttonColors(containerColor = Color.Gray),
             shape = MaterialTheme.shapes.medium
         ) {
+            // Texte du bouton "Créer"
             Text(text = "Créer")
         }
     }
 }
 
+// Prévisualisation de l'écran de création d'un nouveau défi
 @Preview()
 @Composable
 fun NewChallengeScreenPreview() {
+    // Initialise le contrôleur de navigation
     val navController = rememberNavController()
+
+    // Applique le thème ChallengeIt
     ChallengeItTheme {
+        // Affiche l'écran de création d'un nouveau défi dans la prévisualisation
         NewChallengeScreen(navController)
     }
 }

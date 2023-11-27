@@ -1,3 +1,4 @@
+// Déclaration du package et des importations nécessaires
 package com.example.challengeit.ui.activity
 
 import android.content.Intent
@@ -9,20 +10,29 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.challengeit.ui.component.LoginScreen
-import com.example.challengeit.ui.component.MainNav
 import com.example.challengeit.ui.component.RegistrationScreen
 import com.example.challengeit.ui.component.WelcomeScreen
 import com.example.challengeit.ui.navigation.Screen
 import com.example.challengeit.ui.theme.ChallengeItTheme
 
+// Déclaration de la classe LoginActivity qui étend ComponentActivity
 class LoginActivity : ComponentActivity() {
+
+    // Fonction appelée lors de la création de l'activité
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        // Configuration du contenu de l'activité en utilisant Jetpack Compose
         setContent {
+            // Utilisation du thème personnalisé ChallengeItTheme
             ChallengeItTheme {
+                // Récupération de l'activité et création du contrôleur de navigation
                 val activity = this
                 val navController = rememberNavController()
+
+                // Définition du point d'entrée de la navigation (NavHost)
                 NavHost(navController = navController, startDestination = Screen.Welcome.route) {
+                    // Configuration des écrans de l'application avec Compose
                     composable(Screen.Welcome.route) {
                         WelcomeScreen("Challenge It", navController)
                     }
@@ -37,28 +47,34 @@ class LoginActivity : ComponentActivity() {
         }
     }
 }
+
+// Fonction de connexion avec Firebase
 fun connexion(username: String, password: String, activity: ComponentActivity) {
     MainActivity.auth.signInWithEmailAndPassword(username, password)
         .addOnCompleteListener(activity) { task ->
             if (task.isSuccessful) {
+                // Connexion réussie, redirection vers HomeActivity
                 Log.d("UserStatus", "Connection success")
                 activity.startActivity(Intent(activity, HomeActivity::class.java))
                 activity.finish()
             } else {
+                // Échec de la connexion
                 Log.d("UserStatus", "Connection failed")
             }
         }
 }
-fun inscription(email: String, password: String, pseudo:String, activity: ComponentActivity) {
+
+// Fonction d'inscription avec Firebase
+fun inscription(email: String, password: String, pseudo: String, activity: ComponentActivity) {
     MainActivity.auth.createUserWithEmailAndPassword(email, password)
         .addOnCompleteListener(activity) { task ->
             if (task.isSuccessful) {
-                // Sign in success, update UI with the signed-in user's information
+                // Inscription réussie, redirection vers HomeActivity
                 Log.d("UserStatus", "createUserWithEmail:success")
                 activity.startActivity(Intent(activity, HomeActivity::class.java))
                 activity.finish()
             } else {
-                // If sign in fails, display a message to the user.
+                // Échec de l'inscription, affichage d'un message d'erreur
                 Log.w("UserStatus", "createUserWithEmail:failure", task.exception)
             }
         }

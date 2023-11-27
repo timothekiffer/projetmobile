@@ -1,3 +1,4 @@
+// Déclaration du package et des importations nécessaires
 package com.example.challengeit.ui.component
 
 import androidx.compose.foundation.layout.Arrangement
@@ -30,39 +31,50 @@ import com.example.challengeit.ui.dataclass.Challenge
 import com.example.challengeit.ui.navigation.Screen
 import com.example.challengeit.ui.theme.ChallengeItTheme
 
+// Annotation indiquant que l'utilisation de l'API Material3 est expérimentale
 @OptIn(ExperimentalMaterial3Api::class)
+// Composable principal pour l'écran de groupe
 @Composable
 fun GroupScreen(challenges: List<Challenge>, navController: NavHostController, id: String) {
+    // Applique le thème personnalisé ChallengeItTheme
     ChallengeItTheme {
+        // Utilise le composant Scaffold pour définir la structure de base de l'écran
         Scaffold(
             bottomBar = { Navigation(navController = navController) }
         ) { innerPadding ->
+            // Appelle le composant GroupBody pour définir le contenu principal de l'écran
             GroupBody(challenges, navController, Modifier.padding(innerPadding), id)
         }
     }
 }
 
+// Composable pour le corps principal de l'écran de groupe
 @Composable
 fun GroupBody(challenges: List<Challenge>, navController: NavHostController, modifier: Modifier, id: String) {
-    Column(modifier = Modifier
+    // Utilise une colonne pour organiser les éléments de manière verticale
+    Column(modifier = modifier
         .fillMaxSize()
         .padding(10.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        // Affiche le nom du groupe avec une taille de police, une couleur et un style spécifiques
         Text(
             text = id,
             color = Color.Black,
             fontSize = 30.sp,
             fontWeight = FontWeight.Bold
         )
+        // Ajoute un espace vertical
         Spacer(modifier = Modifier.height(16.dp))
 
+        // Utilise une rangée pour organiser les éléments horizontalement avec un espacement au début
         Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(16.dp),
             horizontalArrangement = Arrangement.Start
         ) {
+            // Affiche le titre "Défis en cours" avec une taille de police, une couleur et un style spécifiques
             Text(
                 text = "Défis en cours :",
                 color = Color.Black,
@@ -70,15 +82,19 @@ fun GroupBody(challenges: List<Challenge>, navController: NavHostController, mod
                 fontWeight = FontWeight.Bold
             )
         }
+        // Ajoute un autre espace vertical
         Spacer(modifier = Modifier.height(16.dp))
 
+        // Utilise une colonne pour organiser les éléments de manière verticale avec un espacement à la fin
         LazyColumn(
             modifier = Modifier.padding(16.dp)
         ) {
+            // Utilise le composant ChallengeItem pour chaque élément de la liste de défis
             items(challenges) { challenge ->
                 ChallengeItem(challenge, navController)
             }
         }
+        // Ajoute un bouton "Nouveau défi" avec une couleur et une forme spécifiques
         Button(
             onClick = { navController.navigate(Screen.NewChallenge.route) },
             colors = ButtonDefaults.buttonColors(containerColor = Color.Gray),
@@ -86,7 +102,9 @@ fun GroupBody(challenges: List<Challenge>, navController: NavHostController, mod
         ) {
             Text(text = "Nouveau défi")
         }
+        // Ajoute un autre espace vertical
         Spacer(modifier = Modifier.height(16.dp))
+        // Ajoute un bouton "Classement" avec une couleur et une forme spécifiques
         Button(
             onClick = { navController.navigate(Screen.Leaderboard.route) },
             colors = ButtonDefaults.buttonColors(containerColor = Color.Gray),
@@ -97,35 +115,44 @@ fun GroupBody(challenges: List<Challenge>, navController: NavHostController, mod
     }
 }
 
+// Composable pour afficher un élément de défi dans la liste
 @Composable
 fun ChallengeItem(challenge: Challenge, navController: NavHostController) {
+    // Utilise une rangée pour organiser les éléments horizontalement centrés
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .padding(16.dp),
         horizontalArrangement = Arrangement.Center
     ) {
+        // Utilise un bouton pour représenter l'élément de défi avec une couleur et une forme spécifiques
         Button(
             onClick = { navController.navigate(Screen.Challenge.route) },
             colors = ButtonDefaults.buttonColors(containerColor = Color.Gray),
             shape = MaterialTheme.shapes.medium
         ) {
+            // Affiche le nom du défi et sa récompense
             Text(text = "${challenge.name} - ${challenge.point} pts")
         }
     }
 }
 
+// Fonction de prévisualisation pour l'écran de groupe
 @Preview()
 @Composable
 fun GroupScreenPreview() {
+    // Initialise un contrôleur de navigation factice pour la prévisualisation
     val navController = rememberNavController()
+    // Initialise une liste d'objets Challenge pour la prévisualisation
     val challenges = listOf(
         Challenge(name = "Faire 300 pas en 1 minute", description = "Pour valider le défi, tu dois faire 1000 pas en 1 minute, cela devra être filmé et uploadé sur l’appli", point = 5),
         Challenge(name = "Prendre un selfie devant la Tour Eiffel", description = "", point = 30),
         Challenge(name = "Prendre un bain de minuit", description = "", point = 10),
         Challenge(name = "Danser la macarena sur une place publique", description = "", point = 20)
     )
+    // Initialise un ID pour le groupe
     val id = "Groupe UQAC"
+    // Applique le thème personnalisé ChallengeItTheme et appelle le composant GroupScreen
     ChallengeItTheme {
         GroupScreen(challenges, navController, id)
     }

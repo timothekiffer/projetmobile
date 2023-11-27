@@ -1,5 +1,7 @@
+// Déclaration du package de l'application
 package com.example.challengeit.ui.activity
 
+// Importation des bibliothèques nécessaires
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -10,17 +12,25 @@ import androidx.compose.ui.Modifier
 import com.example.challengeit.ui.activity.ui.theme.ChallengeItTheme
 import com.example.challengeit.ui.component.MainNav
 
+// Déclaration de la classe HomeActivity qui étend ComponentActivity
 class HomeActivity : ComponentActivity() {
+
+    // Fonction appelée lors de la création de l'activité
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        // Configuration du contenu de l'activité en utilisant Jetpack Compose
         setContent {
+            // Utilisation du thème personnalisé ChallengeItTheme
             ChallengeItTheme {
-                // A surface container using the 'background' color from the theme
+                // Création d'une surface (zone rectangulaire) qui occupe toute la taille disponible
                 Surface(
                     modifier = Modifier.fillMaxSize(),
+                    // Utilisation de la couleur d'arrière-plan définie dans le thème MaterialTheme
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    MainNav(null);
+                    // Appel du composant MainNav pour afficher la navigation principale
+                    MainNav(null)
                 }
             }
         }

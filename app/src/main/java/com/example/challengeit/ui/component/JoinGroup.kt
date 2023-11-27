@@ -1,3 +1,4 @@
+// Déclaration du package et des importations nécessaires
 package com.example.challengeit.ui.component
 
 import androidx.compose.foundation.layout.Arrangement
@@ -27,31 +28,40 @@ import androidx.navigation.compose.rememberNavController
 import com.example.challengeit.ui.navigation.Screen
 import com.example.challengeit.ui.theme.ChallengeItTheme
 
+// Annotation indiquant que l'utilisation de l'API Material3 est expérimentale
 @OptIn(ExperimentalMaterial3Api::class)
+// Composable principal pour l'écran de rejoindre un groupe
 @Composable
 fun JoinGroupScreen(navController: NavHostController) {
+    // Applique le thème personnalisé ChallengeItTheme
     ChallengeItTheme {
+        // Utilise le composant Scaffold pour définir la structure de base de l'écran
         Scaffold(
             bottomBar = { Navigation(navController = navController) }
         ) { innerPadding ->
+            // Appelle le composant JoinGroupBody pour définir le contenu principal de l'écran
             JoinGroupBody(navController, Modifier.padding(innerPadding))
         }
     }
 }
 
+// Composable pour le corps principal de l'écran de rejoindre un groupe
 @Composable
 fun JoinGroupBody(navController: NavHostController, modifier: Modifier) {
-    Column(modifier = Modifier
+    // Utilise une colonne pour organiser les éléments de manière verticale
+    Column(modifier = modifier
         .fillMaxSize()
         .padding(10.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        // Utilise une rangée pour organiser les éléments horizontalement avec un espacement au début
         Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(16.dp),
             horizontalArrangement = Arrangement.Start
         ) {
+            // Affiche le texte "Tu veux.." avec une taille de police, une couleur et un style spécifiques
             Text(
                 text = "Tu veux..",
                 color = Color.Black,
@@ -59,7 +69,9 @@ fun JoinGroupBody(navController: NavHostController, modifier: Modifier) {
                 fontWeight = FontWeight.Bold
             )
         }
+        // Ajoute un espace vertical
         Spacer(modifier = Modifier.height(16.dp))
+        // Ajoute un bouton "Rejoindre un groupe privé" avec une couleur et une forme spécifiques
         Button(
             onClick = { navController.navigate(Screen.PrivateGroup.route) },
             colors = ButtonDefaults.buttonColors(containerColor = Color.Gray),
@@ -67,7 +79,9 @@ fun JoinGroupBody(navController: NavHostController, modifier: Modifier) {
         ) {
             Text(text = "Rejoindre un groupe privé")
         }
+        // Ajoute un autre espace vertical
         Spacer(modifier = Modifier.height(16.dp))
+        // Ajoute un bouton "Rejoindre un groupe public" avec une couleur et une forme spécifiques
         Button(
             onClick = { navController.navigate(Screen.PublicGroup.route) },
             colors = ButtonDefaults.buttonColors(containerColor = Color.Gray),
@@ -75,7 +89,9 @@ fun JoinGroupBody(navController: NavHostController, modifier: Modifier) {
         ) {
             Text(text = "Rejoindre un groupe public")
         }
+        // Ajoute un autre espace vertical
         Spacer(modifier = Modifier.height(16.dp))
+        // Ajoute un bouton "Créer un groupe" avec une couleur et une forme spécifiques
         Button(
             onClick = { navController.navigate(Screen.NewGroup.route) },
             colors = ButtonDefaults.buttonColors(containerColor = Color.Gray),
@@ -83,13 +99,16 @@ fun JoinGroupBody(navController: NavHostController, modifier: Modifier) {
         ) {
             Text(text = "Créer un groupe")
         }
+        // Ajoute un autre espace vertical
         Spacer(modifier = Modifier.height(16.dp))
+        // Utilise une rangée pour organiser les éléments horizontalement avec un espacement à la fin
         Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(16.dp),
             horizontalArrangement = Arrangement.End
         ) {
+            // Ajoute un bouton "Retour" avec une couleur et une forme spécifiques
             Button(
                 onClick = { navController.popBackStack() },
                 colors = ButtonDefaults.buttonColors(containerColor = Color.Gray),
@@ -101,10 +120,13 @@ fun JoinGroupBody(navController: NavHostController, modifier: Modifier) {
     }
 }
 
+// Fonction de prévisualisation pour l'écran de rejoindre un groupe
 @Preview()
 @Composable
 fun JoinGroupScreenPreview() {
+    // Initialise un contrôleur de navigation factice pour la prévisualisation
     val navController = rememberNavController()
+    // Applique le thème personnalisé ChallengeItTheme et appelle le composant JoinGroupScreen
     ChallengeItTheme {
         JoinGroupScreen(navController)
     }

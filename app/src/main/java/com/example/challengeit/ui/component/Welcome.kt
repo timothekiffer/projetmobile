@@ -32,18 +32,23 @@ import com.example.challengeit.ui.theme.ChallengeItTheme
 
 @Composable
 fun WelcomeScreen(name: String, navController: NavHostController, modifier: Modifier = Modifier) {
-    Column(modifier = Modifier
-        .padding(10.dp)
-        .verticalScroll(rememberScrollState()),
+    Column(
+        modifier = Modifier
+            .padding(10.dp)
+            .verticalScroll(rememberScrollState()),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        // Titre de bienvenue avec le nom de la plateforme
         Text(
             text = "Bienvenue sur $name, la plateforme de défi !",
             style = TextStyle(fontWeight = FontWeight.Bold),
-            color = Color(0,0,0),
+            color = Color(0, 0, 0),  // Couleur personnalisée (noir)
             fontSize = 30.sp
         )
+
         Spacer(modifier = Modifier.height(10.dp))
+
+        // Texte d'introduction avec des informations sur la plateforme
         Text(
             text = "Ici, vous pouvez participer à une variété de défis passionnants et enrichissants." +
                     " Non seulement vous pouvez apprendre et grandir, mais vous pouvez aussi gagner des points et concourir avec d'autres participants.",
@@ -51,7 +56,10 @@ fun WelcomeScreen(name: String, navController: NavHostController, modifier: Modi
             style = MaterialTheme.typography.bodyLarge,
             modifier = modifier
         )
+
         Spacer(modifier = Modifier.height(10.dp))
+
+        // Image d'accueil
         Image(
             painter = painterResource(R.drawable.eclair),
             contentDescription = "Image d'accueil",
@@ -59,7 +67,10 @@ fun WelcomeScreen(name: String, navController: NavHostController, modifier: Modi
                 .size(400.dp)
                 .border(5.dp, MaterialTheme.colorScheme.secondary)
         )
+
         Spacer(modifier = Modifier.height(10.dp))
+
+        // Bouton de connexion
         Button(
             onClick = { navController.navigate(Screen.Login.route) },
             colors = ButtonDefaults.buttonColors(containerColor = Color.Gray),
@@ -71,7 +82,10 @@ fun WelcomeScreen(name: String, navController: NavHostController, modifier: Modi
                 style = MaterialTheme.typography.labelLarge
             )
         }
+
         Spacer(modifier = Modifier.height(10.dp))
+
+        // Bouton d'inscription
         Button(
             onClick = { navController.navigate(Screen.Registration.route) },
             colors = ButtonDefaults.buttonColors(containerColor = Color.Gray),
@@ -85,6 +99,7 @@ fun WelcomeScreen(name: String, navController: NavHostController, modifier: Modi
         }
     }
 }
+
 @Preview(
     name = "Light Mode",
     showBackground = true

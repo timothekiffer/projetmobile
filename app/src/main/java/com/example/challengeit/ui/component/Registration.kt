@@ -30,13 +30,19 @@ import com.example.challengeit.ui.activity.inscription
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RegistrationScreen(navController: NavHostController, activity: ComponentActivity) {
+    // Variables d'état pour stocker les informations de l'utilisateur
     var email by remember { mutableStateOf("") }
     var pseudo by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
-    Column(modifier = Modifier
-        .fillMaxSize()
-        .padding(10.dp)
-        .verticalScroll(rememberScrollState())) {
+
+    // Utilisation du composant Column pour organiser les éléments de manière verticale
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(10.dp)
+            .verticalScroll(rememberScrollState())
+    ) {
+        // Titre de la page
         Text(
             text = "Inscris-toi",
             color = Color.Black,
@@ -45,32 +51,46 @@ fun RegistrationScreen(navController: NavHostController, activity: ComponentActi
         )
 
         Spacer(modifier = Modifier.height(16.dp))
+
+        // Champ pour l'âge (ici, il n'est pas lié à une variable d'état)
         Text(text = "Dis nous ton âge")
         TextField(
             value = "",
             onValueChange = {}
         )
+
         Spacer(modifier = Modifier.height(16.dp))
+
+        // Champ pour le pseudo
         Text(text = "Pseudo")
         TextField(
             value = pseudo,
-            onValueChange = {pseudo = it}
+            onValueChange = { pseudo = it }
         )
+
         Spacer(modifier = Modifier.height(16.dp))
+
+        // Champ pour l'email
         Text(text = "Email")
         TextField(
             value = email,
-            onValueChange = {email = it}
+            onValueChange = { email = it }
         )
+
         Spacer(modifier = Modifier.height(16.dp))
+
+        // Champ pour le mot de passe
         Text(text = "Mot de passe")
         TextField(
             value = password,
-            onValueChange = {password = it}
+            onValueChange = { password = it }
         )
+
         Spacer(modifier = Modifier.height(16.dp))
+
+        // Bouton de validation avec l'appel à la fonction "inscription"
         Button(
-            onClick = { inscription(email, password,pseudo, activity) },
+            onClick = { inscription(email, password, pseudo, activity) },
             colors = ButtonDefaults.buttonColors(containerColor = Color.Gray),
             shape = MaterialTheme.shapes.medium
         ) {
