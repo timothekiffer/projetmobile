@@ -76,7 +76,7 @@ fun LoginScreen(navController: NavHostController, activity: ComponentActivity) {
             fontSize = 50.sp,
             fontWeight = FontWeight.Bold,
             textAlign = TextAlign.Center,
-            modifier = Modifier.padding(top = 100.dp)
+            modifier = Modifier.padding(top = 110.dp)
         )
 
         // Ajoute un espace vertical
