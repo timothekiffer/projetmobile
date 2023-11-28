@@ -25,12 +25,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.challengeit.ui.dataclass.Challenge
+import com.example.challengeit.ui.dataclass.Group
 import com.example.challengeit.ui.navigation.Screen
 import com.example.challengeit.ui.theme.ChallengeItTheme
 import com.google.firebase.firestore.FirebaseFirestore
@@ -41,7 +41,7 @@ import kotlinx.coroutines.tasks.await
 @OptIn(ExperimentalMaterial3Api::class)
 // Composable principal pour l'écran de groupe
 @Composable
-fun GroupScreen(navController: NavHostController, id: String) {
+fun GroupScreen(navController: NavHostController, group: Group) {
     // Applique le thème personnalisé ChallengeItTheme
     ChallengeItTheme {
         // Utilise le composant Scaffold pour définir la structure de base de l'écran
@@ -49,16 +49,16 @@ fun GroupScreen(navController: NavHostController, id: String) {
             bottomBar = { Navigation(navController = navController) }
         ) { innerPadding ->
             // Appelle le composant GroupBody pour définir le contenu principal de l'écran
-            GroupBody(navController, Modifier.padding(innerPadding), id)
+            GroupBody(navController, Modifier.padding(innerPadding), group)
         }
     }
 }
 
 // Composable pour le corps principal de l'écran de groupe
 @Composable
-fun GroupBody(navController: NavHostController, modifier: Modifier, id: String) {
+fun GroupBody(navController: NavHostController, modifier: Modifier, group: Group) {
     // Déclare la liste des défis
-    val challenges by remember { mutableStateOf(runBlocking { getChallenges() }) }
+    val challenges by remember { mutableStateOf(runBlocking { getChallenges(group.uid) }) }
     // Utilise une colonne pour organiser les éléments de manière verticale
     Column(modifier = modifier
         .fillMaxSize()
@@ -67,7 +67,7 @@ fun GroupBody(navController: NavHostController, modifier: Modifier, id: String) 
     ) {
         // Affiche le nom du groupe avec une taille de police, une couleur et un style spécifiques
         Text(
-            text = id,
+            text = group.name,
             color = Color.Black,
             fontSize = 30.sp,
             fontWeight = FontWeight.Bold
@@ -146,27 +146,14 @@ fun ChallengeItem(challenge: Challenge, navController: NavHostController) {
 }
 
 // Fonction suspendue pour récupérer la liste des groupes depuis Firestore
-suspend fun getChallenges(): List<Challenge> {
+suspend fun getChallenges(id: String): List<Challenge> {
     // Obtenir une instance de la base de données Firestore
     val firestore = FirebaseFirestore.getInstance()
 
     // Effectuer une requête asynchrone pour obtenir un snapshot de la collection "challenge"
-    val snapshot = firestore.collection("challenge").get().await()
+    val snapshot = firestore.collection("challenge").whereEqualTo("group", id).get().await()
 
     // Convertir le snapshot en une liste d'objets de type Challenge à l'aide de l'extension toObjects
     return snapshot.toObjects(Challenge::class.java)
 }
 
-// Fonction de prévisualisation pour l'écran de groupe
-@Preview()
-@Composable
-fun GroupScreenPreview() {
-    // Initialise un contrôleur de navigation factice pour la prévisualisation
-    val navController = rememberNavController()
-    // Initialise un ID pour le groupe
-    val id = "Groupe UQAC"
-    // Applique le thème personnalisé ChallengeItTheme et appelle le composant GroupScreen
-    ChallengeItTheme {
-        GroupScreen(navController, id)
-    }
-}

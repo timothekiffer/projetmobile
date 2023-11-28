@@ -1,6 +1,7 @@
 // Déclaration du package et des importations nécessaires
 package com.example.challengeit.ui.component
 
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
@@ -28,6 +29,8 @@ fun MainNav(activity: ComponentActivity?) {
         composable(Screen.Group.route) { backStackEntry ->
             // Récupère l'ID du groupe à partir des arguments de la navigation
             val id = backStackEntry.arguments?.getString("id").orEmpty()
+            Log.d("test",backStackEntry.arguments.toString())
+            var group = getGroupById(id);
             // Appelle le composant représentant l'écran de détails du groupe (GroupScreen)
             GroupScreen(navController, id)
         }
