@@ -43,6 +43,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
@@ -180,7 +181,7 @@ fun LoginScreen(navController: NavHostController, activity: ComponentActivity) {
                         }
                     ) {
                         Icon(
-                            imageVector = if (isPasswordVisible) Icons.Default.Add else Icons.Default.ArrowDropDown,
+                            painter = if (isPasswordVisible) painterResource(R.drawable.visibility) else painterResource(R.drawable.visibilityoff),
                             contentDescription = if (isPasswordVisible) "Hide Password" else "Show Password",
                             tint = Color.Black
                         )
@@ -256,5 +257,19 @@ fun LoginScreen(navController: NavHostController, activity: ComponentActivity) {
 
             }
         }
+    }
+}
+
+// Fonction de prévisualisation pour l'écran de connexion
+@Preview(showBackground = true)
+@Composable
+fun LoginScreenPreview() {
+    // Initialise un contrôleur de navigation factice pour la prévisualisation
+    val navController = rememberNavController()
+    // Initialise une activité factice pour la prévisualisation
+    val activity = ComponentActivity()
+    // Applique le thème personnalisé ChallengeItTheme et appelle le composant LoginScreen
+    ChallengeItTheme {
+        LoginScreen(navController, activity)
     }
 }

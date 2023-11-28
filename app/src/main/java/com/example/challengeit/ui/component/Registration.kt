@@ -44,6 +44,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -257,7 +258,7 @@ fun RegistrationScreen(navController: NavHostController, activity: ComponentActi
                         }
                     ) {
                         Icon(
-                            imageVector = if (isPasswordVisible) Icons.Default.Add else Icons.Default.ArrowDropDown,
+                            painter = if (isPasswordVisible) painterResource(R.drawable.visibility) else painterResource(R.drawable.visibilityoff),
                             contentDescription = if (isPasswordVisible) "Hide Password" else "Show Password",
                             tint = Color.Black
                         )
