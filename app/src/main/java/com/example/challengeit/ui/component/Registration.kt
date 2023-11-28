@@ -16,14 +16,18 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -43,6 +47,8 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -53,6 +59,7 @@ import com.example.challengeit.R
 import com.example.challengeit.ui.activity.inscription
 import com.example.challengeit.ui.theme.ChallengeItTheme
 
+
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
 @Composable
 fun RegistrationScreen(navController: NavHostController, activity: ComponentActivity) {
@@ -61,7 +68,7 @@ fun RegistrationScreen(navController: NavHostController, activity: ComponentActi
     var pseudo by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var age by remember { mutableStateOf(0) }
-
+    var isPasswordVisible by remember { mutableStateOf(false) }
     // Obtient le contexte local et le contrôleur de clavier
     val context = LocalContext.current
     val keyboardController = LocalSoftwareKeyboardController.current
@@ -220,7 +227,7 @@ fun RegistrationScreen(navController: NavHostController, activity: ComponentActi
                 fontSize = 20.sp
             )
             Spacer(modifier = Modifier.height(8.dp))
-            TextField(
+            OutlinedTextField(
                 value = password,
                 onValueChange = { password = it },
                 label = {
@@ -243,8 +250,21 @@ fun RegistrationScreen(navController: NavHostController, activity: ComponentActi
                         // Cache le clavier virtuel lorsque l'utilisateur appuie sur "Done"
                         keyboardController?.hide()
                     }
-                ),
-            )
+                ),trailingIcon = {
+                    IconButton(
+                        onClick = {
+                            isPasswordVisible = !isPasswordVisible
+                        }
+                    ) {
+                        Icon(
+                            imageVector = if (isPasswordVisible) Icons.Default.Add else Icons.Default.ArrowDropDown,
+                            contentDescription = if (isPasswordVisible) "Hide Password" else "Show Password",
+                            tint = Color.Black
+                        )
+                    }
+                },
+                visualTransformation = if (isPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+                )
 
             // Ajoute un espace vertical
             Spacer(modifier = Modifier.height(20.dp))

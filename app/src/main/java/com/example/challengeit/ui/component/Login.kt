@@ -16,11 +16,15 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.ArrowDropDown
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -42,6 +46,8 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -64,6 +70,8 @@ fun LoginScreen(navController: NavHostController, activity: ComponentActivity) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var loginResult by remember { mutableStateOf(false) }
+    var isPasswordVisible by remember { mutableStateOf(false) }
+    var isLoginErrorDialogVisible by remember { mutableStateOf(false) }
 
     // Obtient le contexte local et le contrôleur de clavier
     val context = LocalContext.current
@@ -165,6 +173,20 @@ fun LoginScreen(navController: NavHostController, activity: ComponentActivity) {
                         keyboardController?.hide()
                     }
                 ),
+                trailingIcon = {
+                    IconButton(
+                        onClick = {
+                            isPasswordVisible = !isPasswordVisible
+                        }
+                    ) {
+                        Icon(
+                            imageVector = if (isPasswordVisible) Icons.Default.Add else Icons.Default.ArrowDropDown,
+                            contentDescription = if (isPasswordVisible) "Hide Password" else "Show Password",
+                            tint = Color.Black
+                        )
+                    }
+                },
+                visualTransformation = if (isPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
             )
 
             // Ajoute un espace vertical
@@ -175,6 +197,7 @@ fun LoginScreen(navController: NavHostController, activity: ComponentActivity) {
                 onClick = {
                     // Appelle la fonction de connexion avec les informations d'identification fournies
                     connexion(email, password, activity)
+
                 },
                 colors = ButtonDefaults.buttonColors(containerColor = Color.White),
                 shape = MaterialTheme.shapes.medium
@@ -209,21 +232,29 @@ fun LoginScreen(navController: NavHostController, activity: ComponentActivity) {
                     color = Color.White
                 )
             }
+            if (isLoginErrorDialogVisible) {
+                AlertDialog(
+                    onDismissRequest = {
+                        isLoginErrorDialogVisible = false
+                    },
+                    title = {
+                        Text("Erreur de connexion")
+                    },
+                    text = {
+                        Text("Le nom d'utilisateur ou le mot de passe est incorrect.")
+                    },
+                    confirmButton = {
+                        Button(
+                            onClick = {
+                                isLoginErrorDialogVisible = false
+                            }
+                        ) {
+                            Text("OK")
+                        }
+                    }
+                )
+
+            }
         }
-
-    }
-}
-
-// Fonction de prévisualisation pour l'écran de connexion
-@Preview(showBackground = true)
-@Composable
-fun LoginScreenPreview() {
-    // Initialise un contrôleur de navigation factice pour la prévisualisation
-    val navController = rememberNavController()
-    // Initialise une activité factice pour la prévisualisation
-    val activity = ComponentActivity()
-    // Applique le thème personnalisé ChallengeItTheme et appelle le composant LoginScreen
-    ChallengeItTheme {
-        LoginScreen(navController, activity)
     }
 }

@@ -4,6 +4,7 @@ package com.example.challengeit.ui.activity
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.navigation.compose.NavHost
@@ -49,7 +50,8 @@ class LoginActivity : ComponentActivity() {
 }
 
 // Fonction de connexion avec Firebase
-fun connexion(username: String, password: String, activity: ComponentActivity) {
+fun connexion(username: String, password: String, activity: ComponentActivity){
+
     MainActivity.auth.signInWithEmailAndPassword(username, password)
         .addOnCompleteListener(activity) { task ->
             if (task.isSuccessful) {
@@ -59,8 +61,9 @@ fun connexion(username: String, password: String, activity: ComponentActivity) {
                 activity.finish()
             } else {
                 // Échec de la connexion
-                Log.d("UserStatus", "Connection failed")
+                Toast.makeText(activity, "Mauvais identifiant ou mot de passe ! Veuillez réessayer", Toast.LENGTH_SHORT).show()
             }
+
         }
 }
 
@@ -74,8 +77,10 @@ fun inscription(email: String, password: String, pseudo: String, age: Int, activ
                 activity.startActivity(Intent(activity, HomeActivity::class.java))
                 activity.finish()
             } else {
+                Toast.makeText(activity, "Echec de l'inscription ! Veuillez réessayer", Toast.LENGTH_SHORT).show()
+
                 // Échec de l'inscription, affichage d'un message d'erreur
-                Log.w("UserStatus", "createUserWithEmail:failure", task.exception)
+                    Log.w("UserStatus", "createUserWithEmail:failure", task.exception)
             }
         }
 }
