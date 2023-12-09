@@ -28,7 +28,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import com.example.challengeit.ui.dataclass.Challenge
 import com.example.challengeit.ui.dataclass.Group
 import com.example.challengeit.ui.navigation.Screen
@@ -41,7 +40,7 @@ import kotlinx.coroutines.tasks.await
 @OptIn(ExperimentalMaterial3Api::class)
 // Composable principal pour l'écran de groupe
 @Composable
-fun GroupScreen(navController: NavHostController, group: Group) {
+fun GroupScreen(navController: NavHostController, group: Group?) {
     // Applique le thème personnalisé ChallengeItTheme
     ChallengeItTheme {
         // Utilise le composant Scaffold pour définir la structure de base de l'écran
@@ -49,7 +48,9 @@ fun GroupScreen(navController: NavHostController, group: Group) {
             bottomBar = { Navigation(navController = navController) }
         ) { innerPadding ->
             // Appelle le composant GroupBody pour définir le contenu principal de l'écran
-            GroupBody(navController, Modifier.padding(innerPadding), group)
+            if (group != null) {
+                GroupBody(navController, Modifier.padding(innerPadding), group)
+            }
         }
     }
 }
@@ -58,7 +59,7 @@ fun GroupScreen(navController: NavHostController, group: Group) {
 @Composable
 fun GroupBody(navController: NavHostController, modifier: Modifier, group: Group) {
     // Déclare la liste des défis
-    val challenges by remember { mutableStateOf(runBlocking { getChallenges(group.uid) }) }
+    val challenges by remember { mutableStateOf(runBlocking { getChallenges(group.id) }) }
     // Utilise une colonne pour organiser les éléments de manière verticale
     Column(modifier = modifier
         .fillMaxSize()
@@ -151,9 +152,18 @@ suspend fun getChallenges(id: String): List<Challenge> {
     val firestore = FirebaseFirestore.getInstance()
 
     // Effectuer une requête asynchrone pour obtenir un snapshot de la collection "challenge"
-    val snapshot = firestore.collection("challenge").whereEqualTo("group", id).get().await()
+    val snapshot = firestore.collection("challenge")
+        .whereEqualTo("group", id)
+        .get()
+        .await()
 
     // Convertir le snapshot en une liste d'objets de type Challenge à l'aide de l'extension toObjects
-    return snapshot.toObjects(Challenge::class.java)
+    val resultList = mutableListOf<Challenge>()
+    for (document in snapshot.documents) {
+        val challenge = document.toObject(Challenge::class.java)
+        if (challenge != null){
+            resultList.add(challenge)
+        }
+    }
+    return resultList
 }
-

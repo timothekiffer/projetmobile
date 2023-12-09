@@ -4,6 +4,11 @@ package com.example.challengeit.ui.component
 import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -30,9 +35,19 @@ fun MainNav(activity: ComponentActivity?) {
             // Récupère l'ID du groupe à partir des arguments de la navigation
             val id = backStackEntry.arguments?.getString("id").orEmpty()
             Log.d("test",backStackEntry.arguments.toString())
-            var group = getGroupById(id);
-            // Appelle le composant représentant l'écran de détails du groupe (GroupScreen)
-            GroupScreen(navController, id)
+
+            // Utilise remember pour stocker le résultat de la coroutine
+            var group by remember(id) { mutableStateOf<Group?>(null) }
+
+            // Utilise LaunchedEffect pour lancer une coroutine
+            LaunchedEffect(id) {
+                // Appelle la fonction suspendue getGroupById dans la coroutine
+                val result: Group? = getGroupById(id)
+                group = result
+            }
+
+            // Utilise le groupe dans votre UI
+            GroupScreen(navController, group)
         }
 
         // Écran pour rejoindre un groupe
