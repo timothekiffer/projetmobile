@@ -5,6 +5,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.List
+import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
@@ -33,8 +34,8 @@ fun Navigation(modifier: Modifier = Modifier, navController: NavHostController) 
                 )
             },
             label = {
-                // Texte "home" à côté de l'icône
-                Text(text = "home")
+                // Texte "Accueil" à côté de l'icône
+                Text(text = "Accueil")
             },
             // Indique si cet élément est sélectionné (actif)
             selected = true,
@@ -59,22 +60,22 @@ fun Navigation(modifier: Modifier = Modifier, navController: NavHostController) 
             onClick = {} // Action vide, car la navigation pour cet item n'est pas définie
         )
 
-        // Item de navigation pour l'écran de classement (List)
+        // Item de navigation pour l'écran de profil (Person)
         NavigationBarItem(
             icon = {
-                // Utilise l'icône List
+                // Utilise l'icône Person
                 Icon(
-                    imageVector = Icons.Default.List,
+                    imageVector = Icons.Default.Person,
                     contentDescription = null
                 )
             },
             label = {
-                // Texte "classement" à côté de l'icône
-                Text(text = "classement")
+                // Texte "profil" à côté de l'icône
+                Text(text = "Profil")
             },
             selected = false,
             // Action à effectuer lors du clic (naviguer vers l'écran de classement)
-            onClick = { navController.navigate(Screen.Leaderboard.route) }
+            onClick = { navController.navigate(Screen.Profile.route) }
         )
     }
 }

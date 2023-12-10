@@ -61,7 +61,6 @@ fun MainPageScreen(navController: NavHostController) {
 fun MainPageBody(navController: NavHostController, modifier: Modifier) {
     // Déclare la liste des groupes
     val groups by remember { mutableStateOf(runBlocking { getGroupsForCurrentUser(FirebaseAuth.getInstance().currentUser!!.uid) }) }
-    Log.d("test1", groups[0].toString());
     // Utilise un Column pour organiser les éléments verticalement
     Column(modifier = Modifier
         .fillMaxSize()

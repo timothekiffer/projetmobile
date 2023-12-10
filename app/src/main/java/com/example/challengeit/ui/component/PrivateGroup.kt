@@ -118,7 +118,7 @@ fun PrivateGroupBody(navController: NavHostController, modifier: Modifier, userI
                 if (code == group?.code){
                     joinGroupForCurrentUser(userId, group!!)
                     // Redirige l'utilisateur vers l'écran du groupe fraichement rejoint
-                    navController.navigate(Screen.Group.route)
+                    navController.navigate(Screen.MainPage.route)
                 }
             },
             colors = ButtonDefaults.buttonColors(containerColor = Color.Gray),
