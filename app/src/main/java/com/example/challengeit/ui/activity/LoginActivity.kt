@@ -10,11 +10,13 @@ import androidx.activity.compose.setContent
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.challengeit.ui.activity.MainActivity.Companion.auth
 import com.example.challengeit.ui.component.LoginScreen
 import com.example.challengeit.ui.component.RegistrationScreen
 import com.example.challengeit.ui.component.WelcomeScreen
 import com.example.challengeit.ui.navigation.Screen
 import com.example.challengeit.ui.theme.ChallengeItTheme
+import com.google.firebase.auth.FirebaseAuth
 
 // Déclaration de la classe LoginActivity qui étend ComponentActivity
 class LoginActivity : ComponentActivity() {
@@ -50,13 +52,14 @@ class LoginActivity : ComponentActivity() {
 }
 
 // Fonction de connexion avec Firebase
-fun connexion(username: String, password: String, activity: ComponentActivity){
-
-    MainActivity.auth.signInWithEmailAndPassword(username, password)
+fun connexion(username: String, password: String, activity: ComponentActivity) {
+    auth.signInWithEmailAndPassword(username, password)
         .addOnCompleteListener(activity) { task ->
             if (task.isSuccessful) {
                 // Connexion réussie, redirection vers HomeActivity
                 Log.d("UserStatus", "Connection success")
+                var test = FirebaseAuth.getInstance().currentUser?.uid
+                Log.d("Test", test.toString())
                 activity.startActivity(Intent(activity, HomeActivity::class.java))
                 activity.finish()
             } else {
@@ -69,7 +72,7 @@ fun connexion(username: String, password: String, activity: ComponentActivity){
 
 // Fonction d'inscription avec Firebase
 fun inscription(email: String, password: String, pseudo: String, age: Int, activity: ComponentActivity) {
-    MainActivity.auth.createUserWithEmailAndPassword(email, password)
+    auth.createUserWithEmailAndPassword(email, password)
         .addOnCompleteListener(activity) { task ->
             if (task.isSuccessful) {
                 // Inscription réussie, redirection vers HomeActivity

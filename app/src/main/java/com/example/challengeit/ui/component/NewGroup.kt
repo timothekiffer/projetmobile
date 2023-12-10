@@ -37,6 +37,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.challengeit.ui.dataclass.Group
 import com.example.challengeit.ui.navigation.Screen
 import com.example.challengeit.ui.theme.ChallengeItTheme
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 
 // Composant représentant l'écran de création d'un nouveau groupe
@@ -49,7 +50,7 @@ fun NewGroupScreen(navController: NavHostController) {
             bottomBar = { Navigation(navController = navController) }
         ) { innerPadding ->
             // Utilise le composant NewGroupBody pour la partie centrale de l'écran
-            NewGroupBody(navController, Modifier.padding(innerPadding))
+            NewGroupBody(navController, Modifier.padding(innerPadding), FirebaseAuth.getInstance().currentUser!!.uid)
         }
     }
 }
@@ -57,7 +58,7 @@ fun NewGroupScreen(navController: NavHostController) {
 // Composant représentant le corps de l'écran de création d'un nouveau groupe
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
 @Composable
-fun NewGroupBody(navController: NavHostController, modifier: Modifier) {
+fun NewGroupBody(navController: NavHostController, modifier: Modifier, userId: String) {
     // États pour stocker les valeurs du nom, de la description et de la visibilité du groupe
     var name by remember { mutableStateOf("") }
     var description by remember { mutableStateOf("") }
@@ -133,7 +134,7 @@ fun NewGroupBody(navController: NavHostController, modifier: Modifier) {
         Button(
             onClick = {
                 // Crée une instance de Group avec les données fournies
-                val group = Group(name = name, description = description, isPrivate = isPrivate)
+                val group = Group(name = name, description = description, isPrivate = isPrivate, users= listOf(userId))
 
                 // Ajoute le groupe à la collection "group" de Firestore
                 firestore.collection("group").add(group)
