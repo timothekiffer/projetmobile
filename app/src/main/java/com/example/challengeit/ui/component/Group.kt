@@ -68,13 +68,21 @@ fun GroupBody(navController: NavHostController, modifier: Modifier, group: Group
     ) {
         // Affiche le nom du groupe avec une taille de police, une couleur et un style spécifiques
         Text(
-            text = group.name,
+            text = "Nom du groupe : " + group.name,
             color = Color.Black,
             fontSize = 30.sp,
             fontWeight = FontWeight.Bold
         )
         // Ajoute un espace vertical
         Spacer(modifier = Modifier.height(16.dp))
+
+        // Affiche le code du groupe
+        Text(
+            text = "Partage ce code avec tes amis : " + group.code,
+            color = Color.Black,
+            fontSize = 15.sp,
+            fontWeight = FontWeight.Bold
+        )
 
         // Utilise une rangée pour organiser les éléments horizontalement avec un espacement au début
         Row(
