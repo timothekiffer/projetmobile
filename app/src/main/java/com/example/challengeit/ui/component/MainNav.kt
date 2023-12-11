@@ -56,7 +56,7 @@ fun MainNav(activity: ComponentActivity?) {
         }
 
         // Écran de détails d'un défi
-        composable(Screen.Challenge.route) {backStackEntry ->
+        composable(Screen.Challenge.route) { backStackEntry ->
             // Récupère l'ID du challenge à partir des arguments de la navigation
             val id = backStackEntry.arguments?.getString("id").orEmpty()
 
@@ -84,9 +84,9 @@ fun MainNav(activity: ComponentActivity?) {
         composable(Screen.PublicGroup.route) {
             // Liste factice de groupes publics
             val groups = listOf(
-                Group(name = "Groupe France", description = "",isPrivate = false),
-                Group(name = "Groupe Canada", description = "",isPrivate = false),
-                Group(name = "Groupe 3", description = "",isPrivate = false)
+                Group(name = "Groupe France", description = "", isPrivate = false),
+                Group(name = "Groupe Canada", description = "", isPrivate = false),
+                Group(name = "Groupe 3", description = "", isPrivate = false)
             )
             // Appelle le composant représentant l'écran de rejoindre un groupe public (PublicGroupScreen)
             PublicGroupScreen(groups, navController)
@@ -99,7 +99,7 @@ fun MainNav(activity: ComponentActivity?) {
         }
 
         // Écran pour créer un nouveau défi
-        composable(Screen.NewChallenge.route) {backStackEntry ->
+        composable(Screen.NewChallenge.route) { backStackEntry ->
             // Récupère l'ID du groupe à partir des arguments de la navigation
             val id = backStackEntry.arguments?.getString("id").orEmpty()
 
@@ -128,50 +128,49 @@ fun MainNav(activity: ComponentActivity?) {
             // Appelle le composant représentant l'écran du classement (LeaderboardScreen)
             LeaderboardScreen(users, navController)
         }
-        
+
         // Écran pour afficher le profil
         composable(Screen.Profile.route) {
             // Appelle le composant représentant l'écran de profil (ProfileScreen)
             ProfileScreen(navController)
 
-        composable(Screen.UserList.route) {
-            backStackEntry ->
-            // Récupère l'ID du groupe à partir des arguments de la navigation
-            val id = backStackEntry.arguments?.getString("id").orEmpty()
-            Log.d("test1",id)
+            composable(Screen.UserList.route) { backStackEntry ->
+                // Récupère l'ID du groupe à partir des arguments de la navigation
+                val id = backStackEntry.arguments?.getString("id").orEmpty()
+                Log.d("test1", id)
 
-            // Utilise remember pour stocker le résultat de la coroutine
-            var group by remember(id) { mutableStateOf<Group?>(null) }
+                // Utilise remember pour stocker le résultat de la coroutine
+                var group by remember(id) { mutableStateOf<Group?>(null) }
 
-            // Utilise LaunchedEffect pour lancer une coroutine
-            LaunchedEffect(id) {
-                // Appelle la fonction suspendue getGroupById dans la coroutine
-                val result: Group? = getGroupById(id)
-                group = result
+                // Utilise LaunchedEffect pour lancer une coroutine
+                LaunchedEffect(id) {
+                    // Appelle la fonction suspendue getGroupById dans la coroutine
+                    val result: Group? = getGroupById(id)
+                    group = result
+                }
+
+                // Utilise le groupe dans votre UI
+                UserListScreen(navController, group)
             }
 
-            // Utilise le groupe dans votre UI
-            UserListScreen(navController, group)
-        }
-        
-        composable(Screen.UserListAdmin.route) {
-                backStackEntry ->
-            // Récupère l'ID du groupe à partir des arguments de la navigation
-            val id = backStackEntry.arguments?.getString("id").orEmpty()
-            Log.d("test1",id)
+            composable(Screen.UserListAdmin.route) { backStackEntry ->
+                // Récupère l'ID du groupe à partir des arguments de la navigation
+                val id = backStackEntry.arguments?.getString("id").orEmpty()
+                Log.d("test1", id)
 
-            // Utilise remember pour stocker le résultat de la coroutine
-            var group by remember(id) { mutableStateOf<Group?>(null) }
+                // Utilise remember pour stocker le résultat de la coroutine
+                var group by remember(id) { mutableStateOf<Group?>(null) }
 
-            // Utilise LaunchedEffect pour lancer une coroutine
-            LaunchedEffect(id) {
-                // Appelle la fonction suspendue getGroupById dans la coroutine
-                val result: Group? = getGroupById(id)
-                group = result
+                // Utilise LaunchedEffect pour lancer une coroutine
+                LaunchedEffect(id) {
+                    // Appelle la fonction suspendue getGroupById dans la coroutine
+                    val result: Group? = getGroupById(id)
+                    group = result
+                }
+
+                // Utilise le groupe dans votre UI
+                UserListAdminScreen(navController, group)
             }
-
-            // Utilise le groupe dans votre UI
-            UserListAdminScreen(navController, group)
         }
     }
 }
