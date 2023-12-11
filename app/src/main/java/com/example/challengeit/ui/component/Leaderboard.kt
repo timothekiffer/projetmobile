@@ -1,6 +1,7 @@
 // Déclaration du package et des importations nécessaires
 package com.example.challengeit.ui.component
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -20,17 +21,22 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
+import com.example.challengeit.ui.dataclass.Group
 import com.example.challengeit.ui.navigation.Screen
 import com.example.challengeit.ui.theme.ChallengeItTheme
+import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.tasks.await
 
 // Data class représentant un utilisateur avec un identifiant, un nom et un nombre de points
 data class User(val id: String, val displayName: String, val point: Int)
@@ -39,7 +45,7 @@ data class User(val id: String, val displayName: String, val point: Int)
 @OptIn(ExperimentalMaterial3Api::class)
 // Composable principal pour l'écran du classement
 @Composable
-fun LeaderboardScreen(users: List<User>, navController: NavHostController) {
+fun LeaderboardScreen(group: Group, navController: NavHostController) {
     // Applique le thème personnalisé ChallengeItTheme
     ChallengeItTheme {
         // Utilise le composant Scaffold pour définir la structure de base de l'écran
@@ -47,17 +53,22 @@ fun LeaderboardScreen(users: List<User>, navController: NavHostController) {
             bottomBar = { Navigation(navController = navController) }
         ) { innerPadding ->
             // Appelle le composant LeaderboardBody pour définir le contenu principal de l'écran
-            LeaderboardBody(users, navController, Modifier.padding(innerPadding))
+            LeaderboardBody(group, navController, Modifier.padding(innerPadding))
         }
     }
 }
+
 
 // Annotation indiquant que l'utilisation de l'API Material3 est expérimentale
 @OptIn(ExperimentalMaterial3Api::class)
 // Composable pour le corps principal de l'écran du classement
 @Composable
-fun LeaderboardBody(users: List<User>, navController: NavHostController, modifier: Modifier) {
+fun LeaderboardBody(group: Group, navController: NavHostController, modifier: Modifier) {
     // Utilise une colonne pour organiser les éléments de manière verticale
+    val userList by remember { mutableStateOf(runBlocking { getUserList(group.id) }) }
+
+    Log.w("TEST18","issou");
+    Log.d("TEST18", userList[0].point.toString());
     Column(modifier = modifier
         .fillMaxSize()
         .padding(10.dp),
@@ -83,14 +94,14 @@ fun LeaderboardBody(users: List<User>, navController: NavHostController, modifie
                         .padding(8.dp),
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                    Text("Nom", fontWeight = FontWeight.Bold)
+                    Text("Noma", fontWeight = FontWeight.Bold)
                     Text("Points", fontWeight = FontWeight.Bold)
                 }
                 // Ajoute un espacement après la ligne d'en-tête
                 Spacer(modifier = Modifier.height(4.dp))
             }
             // Ajoute des éléments pour chaque utilisateur dans la liste
-            items(users) { user ->
+            items(userList) { user ->
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -108,7 +119,7 @@ fun LeaderboardBody(users: List<User>, navController: NavHostController, modifie
 
         // Ajoute un bouton "Retour aux défis" avec une couleur et une forme spécifiques
         Button(
-            onClick = { navController.navigate(Screen.Group.route) },
+            onClick = { navController.popBackStack() },
             colors = ButtonDefaults.buttonColors(containerColor = Color.Gray),
             shape = MaterialTheme.shapes.medium
         ) {
@@ -117,20 +128,3 @@ fun LeaderboardBody(users: List<User>, navController: NavHostController, modifie
     }
 }
 
-// Fonction de prévisualisation pour l'écran du classement
-@Preview()
-@Composable
-fun LeaderboardScreenPreview() {
-    // Initialise un contrôleur de navigation factice pour la prévisualisation
-    val navController = rememberNavController()
-    // Initialise une liste d'utilisateurs pour la prévisualisation
-    val users = listOf<User>(
-        User(id = "1", displayName = "Timothé", point = 150),
-        User(id = "2", displayName = "Alexandre", point = 89),
-        User(id = "3", displayName = "Romain", point = 18)
-    )
-    // Applique le thème personnalisé ChallengeItTheme et appelle le composant LeaderboardScreen
-    ChallengeItTheme {
-        LeaderboardScreen(users, navController)
-    }
-}

@@ -83,13 +83,9 @@ fun MainNav(activity: ComponentActivity?) {
         // Écran pour rejoindre un groupe public
         composable(Screen.PublicGroup.route) {
             // Liste factice de groupes publics
-            val groups = listOf(
-                Group(name = "Groupe France", description = "", isPrivate = false),
-                Group(name = "Groupe Canada", description = "", isPrivate = false),
-                Group(name = "Groupe 3", description = "", isPrivate = false)
-            )
+
             // Appelle le composant représentant l'écran de rejoindre un groupe public (PublicGroupScreen)
-            PublicGroupScreen(groups, navController)
+            PublicGroupScreen(navController)
         }
 
         // Écran pour créer un nouveau groupe
@@ -118,15 +114,21 @@ fun MainNav(activity: ComponentActivity?) {
         }
 
         // Écran du classement (leaderboard)
-        composable(Screen.Leaderboard.route) {
-            // Liste factice d'utilisateurs
-            val users = listOf(
-                User(id = "1", displayName = "Timothé", point = 150),
-                User(id = "2", displayName = "Alexandre", point = 89),
-                User(id = "3", displayName = "Romain", point = 18)
-            )
+        composable(Screen.Leaderboard.route) { backStackEntry ->
+            // Récupère l'ID du groupe à partir des arguments de la navigation
+            val id = backStackEntry.arguments?.getString("id").orEmpty()
+
+            // Utilise remember pour stocker le résultat de la coroutine
+            var group by remember(id) { mutableStateOf<Group?>(null) }
+
+            // Utilise LaunchedEffect pour lancer une coroutine
+            LaunchedEffect(id) {
+                // Appelle la fonction suspendue getGroupById dans la coroutine
+                val result: Group? = getGroupById(id)
+                group = result
+            }
             // Appelle le composant représentant l'écran du classement (LeaderboardScreen)
-            LeaderboardScreen(users, navController)
+            group?.let { LeaderboardScreen(it, navController) }
         }
 
         // Écran pour afficher le profil
