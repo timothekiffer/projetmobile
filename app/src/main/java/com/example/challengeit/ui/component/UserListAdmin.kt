@@ -135,7 +135,7 @@ fun UserAdminBody(navController: NavHostController, modifier: Modifier, group: G
 
         // Ajoute un bouton "Retour aux défis" avec une couleur et une forme spécifiques
         Button(
-            onClick = { navController.navigate(Screen.Group.route) },
+            onClick = {navController.popBackStack() },
             colors = ButtonDefaults.buttonColors(containerColor = Color.Gray),
             shape = MaterialTheme.shapes.medium
         ) {
