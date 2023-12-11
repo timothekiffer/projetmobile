@@ -108,29 +108,11 @@ fun LeaderboardBody(users: List<User>, navController: NavHostController, modifie
 
         // Ajoute un bouton "Retour aux défis" avec une couleur et une forme spécifiques
         Button(
-            onClick = { navController.navigate(Screen.Group.route) },
+            onClick = { navController.popBackStack() },
             colors = ButtonDefaults.buttonColors(containerColor = Color.Gray),
             shape = MaterialTheme.shapes.medium
         ) {
             Text(text = "Retour aux défis")
         }
-    }
-}
-
-// Fonction de prévisualisation pour l'écran du classement
-@Preview()
-@Composable
-fun LeaderboardScreenPreview() {
-    // Initialise un contrôleur de navigation factice pour la prévisualisation
-    val navController = rememberNavController()
-    // Initialise une liste d'utilisateurs pour la prévisualisation
-    val users = listOf<User>(
-        User(id = "1", displayName = "Timothé", point = 150),
-        User(id = "2", displayName = "Alexandre", point = 89),
-        User(id = "3", displayName = "Romain", point = 18)
-    )
-    // Applique le thème personnalisé ChallengeItTheme et appelle le composant LeaderboardScreen
-    ChallengeItTheme {
-        LeaderboardScreen(users, navController)
     }
 }

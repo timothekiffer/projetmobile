@@ -1,7 +1,9 @@
 // Déclaration du package et des importations nécessaires
 package com.example.challengeit.ui.component
 
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -16,6 +18,10 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -27,9 +33,12 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.challengeit.ui.dataclass.Challenge
 import com.example.challengeit.ui.dataclass.Group
+import com.example.challengeit.ui.dataclass.Proof
 import com.example.challengeit.ui.theme.ChallengeItTheme
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 
@@ -45,14 +54,21 @@ fun ChallengeScreen(navController: NavHostController, challenge: Challenge?) {
             bottomBar = { Navigation(navController = navController) }
         ) { innerPadding ->
             // Appelle le composant ChallengeBody pour définir le contenu principal de l'écran
-            ChallengeBody(navController, Modifier.padding(innerPadding), challenge)
+            if (challenge != null) {
+                ChallengeBody(navController, Modifier.padding(innerPadding), challenge, FirebaseAuth.getInstance().currentUser!!.uid)
+            }
         }
     }
 }
 
 // Composable pour le corps principal de l'écran de défi
 @Composable
-fun ChallengeBody(navController: NavHostController, modifier: Modifier, challenge: Challenge?) {
+fun ChallengeBody(navController: NavHostController, modifier: Modifier, challenge: Challenge, userId: String) {
+    // Obtient une instance de FirebaseFirestore pour interagir avec la base de données Firestore
+    val firestore = FirebaseFirestore.getInstance()
+
+    val isValid by remember { mutableStateOf(runBlocking { checkProofByChallengeAndCurrentUser(challenge?.id ?: "", userId) }) }
+
     // Utilise une colonne pour organiser les éléments de manière verticale
     Column(modifier = modifier
         .fillMaxSize()
@@ -77,7 +93,9 @@ fun ChallengeBody(navController: NavHostController, modifier: Modifier, challeng
                 style = MaterialTheme.typography.labelLarge
             )
         }
+
         // Ajoute un autre espace vertical
+
         Spacer(modifier = Modifier.height(16.dp))
         // Affiche la récompense du défi
         if (challenge != null) {
@@ -86,15 +104,33 @@ fun ChallengeBody(navController: NavHostController, modifier: Modifier, challeng
                 style = MaterialTheme.typography.labelLarge
             )
         }
+
         // Ajoute un espace vertical
         Spacer(modifier = Modifier.height(16.dp))
-        // Bouton concourir
-        Button(
-            onClick = { navController.popBackStack() },
-            colors = ButtonDefaults.buttonColors(containerColor = Color.Blue),
-            shape = MaterialTheme.shapes.medium
-        ) {
-            Text(text = "Concourir")
+
+        // Bouton pour concourir
+        if (!isValid) {
+            Button(
+                onClick = {
+                    // Crée une instance de Proof avec les données fournies
+                    val proof = Proof(challenge = challenge?.id ?: "", user = userId, valid = true)
+
+                    // Ajoute la preuve à la collection "proof" de Firestore
+                    firestore.collection("proof").add(proof)
+
+                    // Retourne à la page d'avant
+                    navController.popBackStack()
+                },
+                colors = ButtonDefaults.buttonColors(containerColor = Color.Blue),
+                shape = MaterialTheme.shapes.medium
+            ) {
+                Text(text = "Concourir")
+            }
+        } else {
+            Text(
+                text = "Vous avez déjà concouru",
+                style = MaterialTheme.typography.labelLarge
+            )
         }
 
         // Utilise une rangée pour organiser les éléments horizontalement avec un espacement à la fin
@@ -114,4 +150,24 @@ fun ChallengeBody(navController: NavHostController, modifier: Modifier, challeng
             }
         }
     }
+}
+
+suspend fun checkProofByChallengeAndCurrentUser(challengeId: String, userId: String): Boolean {
+    // Obtenir une instance de la base de données Firestore
+    val firestore = FirebaseFirestore.getInstance()
+
+    val snapshot = firestore.collection("proof")
+        .whereEqualTo("user", userId)
+        .whereEqualTo("challenge", challengeId)
+        .get()
+        .await()
+
+    if (!snapshot.isEmpty) {
+        val document = snapshot.documents[0]
+        val proof = document.toObject(Proof::class.java)
+        if(proof?.valid == true){
+            return true
+        }
+    }
+    return false
 }
