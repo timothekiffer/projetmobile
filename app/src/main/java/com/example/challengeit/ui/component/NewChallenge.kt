@@ -61,7 +61,7 @@ fun NewChallengeBody(navController: NavHostController, modifier: Modifier, group
     // États pour stocker les valeurs du nom, de la description et du nombre de points du défi
     var name by remember { mutableStateOf("") }
     var description by remember { mutableStateOf("") }
-    var point by remember { mutableIntStateOf(0) }
+    var point by remember { mutableStateOf<String?>(null) }
 
     // Obtient le contexte local et le contrôleur de clavier
     val context = LocalContext.current
@@ -121,12 +121,15 @@ fun NewChallengeBody(navController: NavHostController, modifier: Modifier, group
 
         // Champ de texte pour le nombre de points du défi
         TextField(
-            value = point.toString(),
+            value = point.orEmpty(), // Utilise la valeur de point ou une chaîne vide si point est null
             onValueChange = {
                 // Vérifie si la nouvelle valeur est un nombre positif
                 val newValue = it.toIntOrNull()
                 if ((newValue != null) && (newValue >= 0)) {
-                    point = newValue
+                    point = newValue.toString()
+                } else {
+                    // Si la nouvelle valeur n'est pas valide, utilise null
+                    point = null
                 }
             },
             label = { Text("Nombre de points du défi") },
@@ -147,7 +150,7 @@ fun NewChallengeBody(navController: NavHostController, modifier: Modifier, group
         Button(
             onClick = {
                 // Crée une instance de Challenge avec les données fournies
-                val challenge = Challenge(name = name, description = description, point = point, group = group?.id ?: "")
+                val challenge = Challenge(name = name, description = description, point = point?.toInt()?: 0, group = group?.id ?: "")
 
                 // Ajoute le défi à la collection "challenge" de Firestore
                 firestore.collection("challenge").add(challenge)
@@ -155,7 +158,7 @@ fun NewChallengeBody(navController: NavHostController, modifier: Modifier, group
                 // Efface les champs après l'ajout
                 name = ""
                 description = ""
-                point = 0
+                point = ""
 
                 // Redirige l'utilisateur vers l'écran principal après l'ajout du défi
                 navController.navigate(Screen.MainPage.route)

@@ -131,6 +131,22 @@ fun GroupBody(navController: NavHostController, modifier: Modifier, group: Group
         ) {
             Text(text = "Classement")
         }
+
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp),
+            horizontalArrangement = Arrangement.End
+        ) {
+            // Ajoute un bouton de retour avec une couleur et une forme spécifiques
+            Button(
+                onClick = { navController.popBackStack() },
+                colors = ButtonDefaults.buttonColors(containerColor = Color.Gray),
+                shape = MaterialTheme.shapes.medium
+            ) {
+                Text(text = "Retour")
+            }
+        }
     }
 }
 

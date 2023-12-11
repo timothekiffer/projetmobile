@@ -86,6 +86,17 @@ fun ChallengeBody(navController: NavHostController, modifier: Modifier, challeng
                 style = MaterialTheme.typography.labelLarge
             )
         }
+        // Ajoute un espace vertical
+        Spacer(modifier = Modifier.height(16.dp))
+        // Bouton concourir
+        Button(
+            onClick = { navController.popBackStack() },
+            colors = ButtonDefaults.buttonColors(containerColor = Color.Blue),
+            shape = MaterialTheme.shapes.medium
+        ) {
+            Text(text = "Concourir")
+        }
+
         // Utilise une rangée pour organiser les éléments horizontalement avec un espacement à la fin
         Row(
             modifier = Modifier
