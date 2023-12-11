@@ -9,9 +9,13 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -19,12 +23,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.example.challengeit.R
 import com.example.challengeit.ui.navigation.Screen
 import com.example.challengeit.ui.theme.ChallengeItTheme
 
@@ -64,7 +70,7 @@ fun JoinGroupBody(navController: NavHostController, modifier: Modifier) {
             // Affiche le texte "Tu veux.." avec une taille de police, une couleur et un style spécifiques
             Text(
                 text = "Tu veux..",
-                color = Color.Black,
+                style = LocalTextStyle.current.copy(color = colorResource(id = R.color.purple)),
                 fontSize = 30.sp,
                 fontWeight = FontWeight.Bold
             )
@@ -74,7 +80,7 @@ fun JoinGroupBody(navController: NavHostController, modifier: Modifier) {
         // Ajoute un bouton "Rejoindre un groupe privé" avec une couleur et une forme spécifiques
         Button(
             onClick = { navController.navigate(Screen.PrivateGroup.route) },
-            colors = ButtonDefaults.buttonColors(containerColor = Color.Gray),
+            colors = ButtonDefaults.buttonColors(containerColor = colorResource(id = R.color.purple)),
             shape = MaterialTheme.shapes.medium
         ) {
             Text(text = "Rejoindre un groupe privé")
@@ -84,7 +90,7 @@ fun JoinGroupBody(navController: NavHostController, modifier: Modifier) {
         // Ajoute un bouton "Rejoindre un groupe public" avec une couleur et une forme spécifiques
         Button(
             onClick = { navController.navigate(Screen.PublicGroup.route) },
-            colors = ButtonDefaults.buttonColors(containerColor = Color.Gray),
+            colors = ButtonDefaults.buttonColors(containerColor = colorResource(id = R.color.purple)),
             shape = MaterialTheme.shapes.medium
         ) {
             Text(text = "Rejoindre un groupe public")
@@ -94,7 +100,7 @@ fun JoinGroupBody(navController: NavHostController, modifier: Modifier) {
         // Ajoute un bouton "Créer un groupe" avec une couleur et une forme spécifiques
         Button(
             onClick = { navController.navigate(Screen.NewGroup.route) },
-            colors = ButtonDefaults.buttonColors(containerColor = Color.Gray),
+            colors = ButtonDefaults.buttonColors(containerColor = colorResource(id = R.color.purple)),
             shape = MaterialTheme.shapes.medium
         ) {
             Text(text = "Créer un groupe")
@@ -111,10 +117,18 @@ fun JoinGroupBody(navController: NavHostController, modifier: Modifier) {
             // Ajoute un bouton "Retour" avec une couleur et une forme spécifiques
             Button(
                 onClick = { navController.popBackStack() },
-                colors = ButtonDefaults.buttonColors(containerColor = Color.Gray),
+                colors = ButtonDefaults.buttonColors(containerColor = colorResource(id = R.color.purple_200)),
                 shape = MaterialTheme.shapes.medium
             ) {
-                Text(text = "Retour")
+                Icon(
+                    imageVector = Icons.Default.ArrowBack,
+                    contentDescription = null,
+                    tint = Color.White
+                )
+                Text(
+                    text = "Retour",
+                    color = Color.White
+                )
             }
         }
     }

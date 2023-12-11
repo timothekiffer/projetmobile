@@ -53,11 +53,11 @@ fun Navigation(modifier: Modifier = Modifier, navController: NavHostController) 
                 )
             },
             label = {
-                // Texte "Défier" à côté de l'icône
-                Text(text = "Défier")
+                // Texte "Nouveau" à côté de l'icône
+                Text(text = "Nouveau")
             },
             selected = false, // Non sélectionné
-            onClick = {} // Action vide, car la navigation pour cet item n'est pas définie
+            onClick = { navController.navigate(Screen.JoinGroup.route) }
         )
 
         // Item de navigation pour l'écran de profil (Person)

@@ -17,6 +17,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -29,10 +30,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import com.example.challengeit.R
 import com.example.challengeit.ui.dataclass.Challenge
 import com.example.challengeit.ui.dataclass.Group
 import com.example.challengeit.ui.navigation.Screen
@@ -83,7 +86,7 @@ fun UserAdminBody(navController: NavHostController, modifier: Modifier, group: G
         // Affiche le titre "Classement" avec une taille de police, une couleur et un style spécifiques
         Text(
             text = "Liste des joueurs",
-            color = Color.Black,
+            style = LocalTextStyle.current.copy(color = colorResource(id = R.color.purple)),
             fontSize = 30.sp,
             fontWeight = FontWeight.Bold
         )
@@ -100,8 +103,8 @@ fun UserAdminBody(navController: NavHostController, modifier: Modifier, group: G
                         .padding(8.dp),
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                    Text("Nom", fontWeight = FontWeight.Bold)
-                    Text("Action", fontWeight = FontWeight.Bold)
+                    Text("Nom", style = LocalTextStyle.current.copy(color = colorResource(id = R.color.purple)), fontWeight = FontWeight.Bold)
+                    Text("Action", style = LocalTextStyle.current.copy(color = colorResource(id = R.color.purple)), fontWeight = FontWeight.Bold)
                 }
                 // Ajoute un espacement après la ligne d'en-tête
                 Spacer(modifier = Modifier.height(4.dp))
@@ -113,11 +116,11 @@ fun UserAdminBody(navController: NavHostController, modifier: Modifier, group: G
                         .fillMaxWidth()
                         .padding(8.dp)
                         .background(MaterialTheme.colorScheme.surface)
-                        .border(1.dp, MaterialTheme.colorScheme.onSurface, shape = MaterialTheme.shapes.small),
+                        .border(1.dp, colorResource(id = R.color.purple_200), shape = MaterialTheme.shapes.small),
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     // Affiche l'ID, le nom et le nombre de points de chaque utilisateur
-                    Text(user.displayName)
+                    Text(user.displayName, style = LocalTextStyle.current.copy(color = colorResource(id = R.color.purple)))
                     Button(
                         onClick = {
                             // Appel de la fonction pour supprimer l'utilisateur de la liste
@@ -136,7 +139,7 @@ fun UserAdminBody(navController: NavHostController, modifier: Modifier, group: G
         // Ajoute un bouton "Retour aux défis" avec une couleur et une forme spécifiques
         Button(
             onClick = {navController.popBackStack() },
-            colors = ButtonDefaults.buttonColors(containerColor = Color.Gray),
+            colors = ButtonDefaults.buttonColors(containerColor = colorResource(id = R.color.purple_200)),
             shape = MaterialTheme.shapes.medium
         ) {
             Text(text = "Retour aux défis")

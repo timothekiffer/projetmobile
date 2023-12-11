@@ -11,9 +11,13 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -25,12 +29,14 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.example.challengeit.R
 import com.example.challengeit.ui.dataclass.Challenge
 import com.example.challengeit.ui.dataclass.Group
 import com.example.challengeit.ui.dataclass.Proof
@@ -79,7 +85,7 @@ fun ChallengeBody(navController: NavHostController, modifier: Modifier, challeng
         if (challenge != null) {
             Text(
                 text = challenge.name,
-                color = Color.Black,
+                style = LocalTextStyle.current.copy(color = colorResource(id = R.color.purple)),
                 fontSize = 30.sp,
                 fontWeight = FontWeight.Bold
             )
@@ -90,7 +96,9 @@ fun ChallengeBody(navController: NavHostController, modifier: Modifier, challeng
         if (challenge != null) {
             Text(
                 text = challenge.description,
-                style = MaterialTheme.typography.labelLarge
+                style = LocalTextStyle.current.copy(color = colorResource(id = R.color.purple)),
+                fontSize = 17.sp,
+                fontWeight = FontWeight.Bold
             )
         }
 
@@ -101,7 +109,9 @@ fun ChallengeBody(navController: NavHostController, modifier: Modifier, challeng
         if (challenge != null) {
             Text(
                 text = "Récompense : ${challenge.point} pts",
-                style = MaterialTheme.typography.labelLarge
+                style = LocalTextStyle.current.copy(color = colorResource(id = R.color.purple)),
+                fontSize = 17.sp,
+                fontWeight = FontWeight.Bold
             )
         }
 
@@ -121,7 +131,7 @@ fun ChallengeBody(navController: NavHostController, modifier: Modifier, challeng
                     // Retourne à la page d'avant
                     navController.popBackStack()
                 },
-                colors = ButtonDefaults.buttonColors(containerColor = Color.Blue),
+                colors = ButtonDefaults.buttonColors(containerColor = colorResource(id = R.color.purple)),
                 shape = MaterialTheme.shapes.medium
             ) {
                 Text(text = "Concourir")
@@ -143,10 +153,18 @@ fun ChallengeBody(navController: NavHostController, modifier: Modifier, challeng
             // Ajoute un bouton de retour avec une couleur et une forme spécifiques
             Button(
                 onClick = { navController.popBackStack() },
-                colors = ButtonDefaults.buttonColors(containerColor = Color.Gray),
+                colors = ButtonDefaults.buttonColors(containerColor = colorResource(id = R.color.purple_200)),
                 shape = MaterialTheme.shapes.medium
             ) {
-                Text(text = "Retour")
+                Icon(
+                    imageVector = Icons.Default.ArrowBack,
+                    contentDescription = null,
+                    tint = Color.White
+                )
+                Text(
+                    text = "Retour",
+                    color = Color.White
+                )
             }
         }
     }
