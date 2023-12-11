@@ -115,13 +115,15 @@ fun GroupBody(navController: NavHostController, modifier: Modifier, group: Group
                 ChallengeItem(challenge, navController)
             }
         }
-        // Ajoute un bouton "Nouveau défi" avec une couleur et une forme spécifiques
-        Button(
-            onClick = { navController.navigate(Screen.NewChallenge.giveId(group.id)) },
-            colors = ButtonDefaults.buttonColors(containerColor = Color.Gray),
-            shape = MaterialTheme.shapes.medium
-        ) {
-            Text(text = "Nouveau défi")
+        if (isAdmin) {
+            // Ajoute un bouton "Nouveau défi" avec une couleur et une forme spécifiques
+            Button(
+                onClick = { navController.navigate(Screen.NewChallenge.giveId(group.id)) },
+                colors = ButtonDefaults.buttonColors(containerColor = Color.Gray),
+                shape = MaterialTheme.shapes.medium
+            ) {
+                Text(text = "Nouveau défi")
+            }
         }
         // Ajoute un autre espace vertical
         Spacer(modifier = Modifier.height(16.dp))

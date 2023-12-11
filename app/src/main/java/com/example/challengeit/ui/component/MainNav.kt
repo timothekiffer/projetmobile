@@ -133,8 +133,8 @@ fun MainNav(activity: ComponentActivity?) {
         composable(Screen.Profile.route) {
             // Appelle le composant représentant l'écran de profil (ProfileScreen)
             ProfileScreen(navController)
-
-            composable(Screen.UserList.route) { backStackEntry ->
+        }
+        composable(Screen.UserList.route) { backStackEntry ->
                 // Récupère l'ID du groupe à partir des arguments de la navigation
                 val id = backStackEntry.arguments?.getString("id").orEmpty()
                 Log.d("test1", id)
@@ -151,9 +151,9 @@ fun MainNav(activity: ComponentActivity?) {
 
                 // Utilise le groupe dans votre UI
                 UserListScreen(navController, group)
-            }
+        }
 
-            composable(Screen.UserListAdmin.route) { backStackEntry ->
+        composable(Screen.UserListAdmin.route) { backStackEntry ->
                 // Récupère l'ID du groupe à partir des arguments de la navigation
                 val id = backStackEntry.arguments?.getString("id").orEmpty()
                 Log.d("test1", id)
@@ -173,4 +173,4 @@ fun MainNav(activity: ComponentActivity?) {
             }
         }
     }
-}
+
