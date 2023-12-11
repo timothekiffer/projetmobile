@@ -26,4 +26,14 @@ sealed class Screen(val route: String){
     }
     object Leaderboard : Screen("leaderboard")
     object Profile : Screen("profile")
+    object UserList : Screen("userList/{id}") {
+        fun giveId(id: String): String{
+            return "userList/$id"
+        }
+    }
+    object UserListAdmin : Screen("adminUserList/{id}") {
+        fun giveId(id: String): String{
+            return "adminUserList/$id"
+        }
+    }
 }

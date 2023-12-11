@@ -121,18 +121,57 @@ fun MainNav(activity: ComponentActivity?) {
         composable(Screen.Leaderboard.route) {
             // Liste factice d'utilisateurs
             val users = listOf(
-                User(id = 1, name = "Timothé", point = 150),
-                User(id = 2, name = "Alexandre", point = 89),
-                User(id = 3, name = "Romain", point = 18)
+                User(id = "1", displayName = "Timothé", point = 150),
+                User(id = "2", displayName = "Alexandre", point = 89),
+                User(id = "3", displayName = "Romain", point = 18)
             )
             // Appelle le composant représentant l'écran du classement (LeaderboardScreen)
             LeaderboardScreen(users, navController)
         }
-
+        
         // Écran pour afficher le profil
         composable(Screen.Profile.route) {
             // Appelle le composant représentant l'écran de profil (ProfileScreen)
             ProfileScreen(navController)
+
+        composable(Screen.UserList.route) {
+            backStackEntry ->
+            // Récupère l'ID du groupe à partir des arguments de la navigation
+            val id = backStackEntry.arguments?.getString("id").orEmpty()
+            Log.d("test1",id)
+
+            // Utilise remember pour stocker le résultat de la coroutine
+            var group by remember(id) { mutableStateOf<Group?>(null) }
+
+            // Utilise LaunchedEffect pour lancer une coroutine
+            LaunchedEffect(id) {
+                // Appelle la fonction suspendue getGroupById dans la coroutine
+                val result: Group? = getGroupById(id)
+                group = result
+            }
+
+            // Utilise le groupe dans votre UI
+            UserListScreen(navController, group)
+        }
+        
+        composable(Screen.UserListAdmin.route) {
+                backStackEntry ->
+            // Récupère l'ID du groupe à partir des arguments de la navigation
+            val id = backStackEntry.arguments?.getString("id").orEmpty()
+            Log.d("test1",id)
+
+            // Utilise remember pour stocker le résultat de la coroutine
+            var group by remember(id) { mutableStateOf<Group?>(null) }
+
+            // Utilise LaunchedEffect pour lancer une coroutine
+            LaunchedEffect(id) {
+                // Appelle la fonction suspendue getGroupById dans la coroutine
+                val result: Group? = getGroupById(id)
+                group = result
+            }
+
+            // Utilise le groupe dans votre UI
+            UserListAdminScreen(navController, group)
         }
     }
 }

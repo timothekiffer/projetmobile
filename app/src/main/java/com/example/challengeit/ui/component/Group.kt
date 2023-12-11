@@ -32,6 +32,7 @@ import com.example.challengeit.ui.dataclass.Challenge
 import com.example.challengeit.ui.dataclass.Group
 import com.example.challengeit.ui.navigation.Screen
 import com.example.challengeit.ui.theme.ChallengeItTheme
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
@@ -62,6 +63,7 @@ fun GroupScreen(navController: NavHostController, group: Group?) {
 fun GroupBody(navController: NavHostController, modifier: Modifier, group: Group) {
     // Déclare la liste des défis
     val challenges by remember { mutableStateOf(runBlocking { getChallenges(group.id) }) }
+    val isAdmin by remember  { mutableStateOf(runBlocking { checkIfUserIsAdmin(group.id) }) }
     // Utilise une colonne pour organiser les éléments de manière verticale
     Column(modifier = modifier
         .fillMaxSize()
@@ -131,7 +133,26 @@ fun GroupBody(navController: NavHostController, modifier: Modifier, group: Group
         ) {
             Text(text = "Classement")
         }
+        // Ajoute un autre espace vertical
+        Spacer(modifier = Modifier.height(16.dp))
 
+        if (isAdmin) {
+            Button(
+                onClick = { navController.navigate(Screen.UserListAdmin.giveId(group.id)) },
+                colors = ButtonDefaults.buttonColors(containerColor = Color.Gray),
+                shape = MaterialTheme.shapes.medium
+            ) {
+                Text(text = "Gérer les utilisateurs")
+            }
+        }
+        Button(
+            onClick = { navController.navigate(Screen.UserList.giveId(group.id)) },
+            colors = ButtonDefaults.buttonColors(containerColor = Color.Gray),
+            shape = MaterialTheme.shapes.medium
+        ) {
+            Text(text = "Liste des utilisateurs")
+        }
+        
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -148,6 +169,29 @@ fun GroupBody(navController: NavHostController, modifier: Modifier, group: Group
             }
         }
     }
+}
+
+
+suspend fun checkIfUserIsAdmin(groupId: String): Boolean {
+    // Obtiens l'ID de l'utilisateur courant
+    val currentUserId = FirebaseAuth.getInstance().currentUser?.uid
+
+    // Vérifie si l'utilisateur courant est admin du groupe
+    if (currentUserId != null) {
+
+        val groupSnapshot = FirebaseFirestore.getInstance().collection("group")
+            .document(groupId)
+            .get()
+            .await()
+
+        // Vérifie si l'ID de l'utilisateur courant est présent dans la liste des administrateurs du groupe
+        val adminsList = groupSnapshot.toObject(Group::class.java)?.admins
+        if (adminsList != null) {
+            return adminsList.contains(currentUserId)
+        }
+    }
+
+    return false
 }
 
 // Composable pour afficher un élément de défi dans la liste
