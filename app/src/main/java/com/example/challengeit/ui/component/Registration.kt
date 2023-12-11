@@ -68,7 +68,6 @@ fun RegistrationScreen(navController: NavHostController, activity: ComponentActi
     var email by remember { mutableStateOf("") }
     var pseudo by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
-    var age by remember { mutableStateOf(0) }
     var isPasswordVisible by remember { mutableStateOf(false) }
     // Obtient le contexte local et le contrôleur de clavier
     val context = LocalContext.current
@@ -101,47 +100,6 @@ fun RegistrationScreen(navController: NavHostController, activity: ComponentActi
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
-
-            // Champ pour l'âge
-            Text(
-                text = "Tu dois être majeur pour participer",
-                color = Color.White,
-                fontWeight = FontWeight.Bold,
-                fontSize = 20.sp
-            )
-            Spacer(modifier = Modifier.height(8.dp))
-            TextField(
-                value = age.toString(),
-                onValueChange = {
-                    // Vérifie si la nouvelle valeur est un nombre positif
-                    val newValue = it.toIntOrNull()
-                    if ((newValue != null) && (newValue >= 18)) {
-                        age = newValue
-                    }
-                },
-                label = {
-                    Text(
-                        text = "Âge",
-                        style = LocalTextStyle.current.copy(color = colorResource(id = R.color.purple_200))
-                    )
-                },
-                colors = TextFieldDefaults.textFieldColors(
-                    textColor = colorResource(id = R.color.purple), // Couleur du texte
-                    containerColor = Color.White, // Couleur de fond
-                    cursorColor = colorResource(id = R.color.purple), // Couleur du curseur
-                    focusedIndicatorColor = colorResource(id = R.color.purple_200), // Couleur de l'indicateur lorsqu'il est activé
-                ),
-                keyboardOptions = KeyboardOptions.Default.copy(
-                    keyboardType = KeyboardType.Number,
-                    imeAction = ImeAction.Done
-                ),
-                keyboardActions = KeyboardActions(
-                    onDone = {
-                        // Cache le clavier virtuel lorsque l'utilisateur appuie sur "Done"
-                        keyboardController?.hide()
-                    }
-                ),
-            )
 
             // Ajoute un espace vertical
             Spacer(modifier = Modifier.height(20.dp))
@@ -272,7 +230,7 @@ fun RegistrationScreen(navController: NavHostController, activity: ComponentActi
 
             // Bouton de validation avec l'appel à la fonction "inscription"
             Button(
-                onClick = { inscription(email, password, pseudo, age, activity) },
+                onClick = { inscription(email, password, pseudo, activity) },
                 colors = ButtonDefaults.buttonColors(containerColor = Color.White),
                 shape = MaterialTheme.shapes.medium
             ) {

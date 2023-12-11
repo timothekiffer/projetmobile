@@ -6,6 +6,8 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -14,17 +16,30 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
+import com.example.challengeit.ui.dataclass.Group
 import com.example.challengeit.ui.navigation.Screen
 import com.example.challengeit.ui.theme.ChallengeItTheme
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FieldValue
+import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.withContext
 
 // Composant représentant l'écran de saisie du code pour rejoindre un groupe privé
 @OptIn(ExperimentalMaterial3Api::class)
@@ -36,15 +51,28 @@ fun PrivateGroupScreen(navController: NavHostController) {
             bottomBar = { Navigation(navController = navController) }
         ) { innerPadding ->
             // Utilise le composant PrivateGroupBody pour la partie centrale de l'écran
-            PrivateGroupBody(navController, Modifier.padding(innerPadding))
+            PrivateGroupBody(navController, Modifier.padding(innerPadding), FirebaseAuth.getInstance().currentUser!!.uid)
         }
     }
 }
 
 // Composant représentant le corps de l'écran de saisie du code pour rejoindre un groupe privé
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
 @Composable
-fun PrivateGroupBody(navController: NavHostController, modifier: Modifier) {
+fun PrivateGroupBody(navController: NavHostController, modifier: Modifier, userId: String) {
+    var code by remember { mutableStateOf("") }
+    val keyboardController = LocalSoftwareKeyboardController.current
+
+    // Utilise remember pour stocker le résultat de la coroutine
+    var group by remember(code) { mutableStateOf<Group?>(null) }
+
+    // Utilise LaunchedEffect pour lancer une coroutine
+    LaunchedEffect(code) {
+        // Appelle la fonction suspendue getGroupById dans la coroutine
+        val result: Group? = getGroupByCode(code)
+        group = result
+    }
+
     // Utilise le composant Column pour organiser les éléments de manière verticale
     Column(modifier = Modifier
         .fillMaxSize()
@@ -62,8 +90,18 @@ fun PrivateGroupBody(navController: NavHostController, modifier: Modifier) {
 
         // Champ de texte pour la saisie du code du groupe
         TextField(
-            value = "ABC123",  // Valeur par défaut du code (à remplacer par la logique réelle)
-            onValueChange = {}
+            value = code,
+            onValueChange = { code = it.uppercase() },
+            label = { Text("Code du groupe") },
+            keyboardOptions = KeyboardOptions.Default.copy(
+                imeAction = ImeAction.Done
+            ),
+            keyboardActions = KeyboardActions(
+                onDone = {
+                    // Cache le clavier virtuel lorsque l'utilisateur appuie sur "Done"
+                    keyboardController?.hide()
+                }
+            ),
         )
 
         // Texte d'information sur le format du code du groupe
@@ -76,7 +114,13 @@ fun PrivateGroupBody(navController: NavHostController, modifier: Modifier) {
 
         // Bouton pour rejoindre le groupe
         Button(
-            onClick = { navController.navigate(Screen.Group.route) },
+            onClick = {
+                if (code == group?.code){
+                    joinGroupForCurrentUser(userId, group!!)
+                    // Redirige l'utilisateur vers l'écran du groupe fraichement rejoint
+                    navController.navigate(Screen.Group.route)
+                }
+            },
             colors = ButtonDefaults.buttonColors(containerColor = Color.Gray),
             shape = MaterialTheme.shapes.medium
         ) {
@@ -86,16 +130,30 @@ fun PrivateGroupBody(navController: NavHostController, modifier: Modifier) {
     }
 }
 
-// Prévisualisation de l'écran de saisie du code pour rejoindre un groupe privé
-@Preview()
-@Composable
-fun PrivateGroupScreenPreview() {
-    // Initialise le contrôleur de navigation
-    val navController = rememberNavController()
+fun joinGroupForCurrentUser(userId: String, group: Group) {
+    // Obtenir une instance de la base de données Firestore
+    val firestore = FirebaseFirestore.getInstance()
+    // Ajoute la nouvelle valeur à la liste users du document créé
+    group.id.let {
+        firestore.collection("group").document(it)
+            .update("users", FieldValue.arrayUnion(userId))
+    }
+}
 
-    // Applique le thème ChallengeIt
-    ChallengeItTheme {
-        // Affiche l'écran de saisie du code pour rejoindre un groupe privé dans la prévisualisation
-        PrivateGroupScreen(navController)
+suspend fun getGroupByCode(code: String): Group? {
+    return withContext(Dispatchers.IO) {
+        val snapshot = FirebaseFirestore.getInstance()
+            .collection("group")
+            .whereEqualTo("code", code)
+            .get()
+            .await()
+
+        if (!snapshot.isEmpty) {
+            val group = snapshot.documents[0].toObject(Group::class.java)
+            group?.id = snapshot.documents[0].id
+            group
+        } else {
+            null
+        }
     }
 }

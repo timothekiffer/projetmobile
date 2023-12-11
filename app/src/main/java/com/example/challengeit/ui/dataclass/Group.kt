@@ -8,6 +8,9 @@ data class Group(
     var id: String = "",
     var name: String = "",
     var description: String = "",
+    var code: String = "",
     @PropertyName("private") val isPrivate: Boolean = false,
-    var users: List<String> = listOf()
+    var users: List<String> = listOf(),
+    var admins: List<String> = listOf(),
+    var creator: String = ""
 )

@@ -39,6 +39,7 @@ import com.example.challengeit.ui.navigation.Screen
 import com.example.challengeit.ui.theme.ChallengeItTheme
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import kotlin.random.Random
 
 // Composant représentant l'écran de création d'un nouveau groupe
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
@@ -133,8 +134,9 @@ fun NewGroupBody(navController: NavHostController, modifier: Modifier, userId: S
         // Bouton pour créer le groupe
         Button(
             onClick = {
+                val code: String = generateRandomCode(6)
                 // Crée une instance de Group avec les données fournies
-                val group = Group(name = name, description = description, isPrivate = isPrivate, users= listOf(userId))
+                val group = Group(name = name, description = description, code = code, isPrivate = isPrivate, users= listOf(userId), admins= listOf(userId), creator=userId)
 
                 // Ajoute le groupe à la collection "group" de Firestore
                 firestore.collection("group").add(group)
@@ -155,16 +157,10 @@ fun NewGroupBody(navController: NavHostController, modifier: Modifier, userId: S
         }
     }
 }
-// Prévisualisation de l'écran de création d'un nouveau groupe
-@Preview()
-@Composable
-fun NewGroupScreenPreview() {
-    // Initialise le contrôleur de navigation
-    val navController = rememberNavController()
 
-    // Applique le thème ChallengeIt
-    ChallengeItTheme {
-        // Affiche l'écran de création d'un nouveau groupe dans la prévisualisation
-        NewGroupScreen(navController)
-    }
+fun generateRandomCode(length: Int): String {
+    val charset = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+    return (1..length)
+        .map { charset[Random.nextInt(0, charset.length)] }
+        .joinToString("")
 }
