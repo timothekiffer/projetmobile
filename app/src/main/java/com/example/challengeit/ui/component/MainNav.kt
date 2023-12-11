@@ -56,11 +56,22 @@ fun MainNav(activity: ComponentActivity?) {
         }
 
         // Écran de détails d'un défi
-        composable(Screen.Challenge.route) {
-            // Défi factice pour la prévisualisation
-            val challenge = Challenge(name = "Faire 300 pas en 1 minute", description = "Pour valider le défi, tu dois faire 1000 pas en 1 minute, cela devra être filmé et uploadé sur l’appli", point = 5)
+        composable(Screen.Challenge.route) {backStackEntry ->
+            // Récupère l'ID du challenge à partir des arguments de la navigation
+            val id = backStackEntry.arguments?.getString("id").orEmpty()
+
+            // Utilise remember pour stocker le résultat de la coroutine
+            var challenge by remember(id) { mutableStateOf<Challenge?>(null) }
+
+            // Utilise LaunchedEffect pour lancer une coroutine
+            LaunchedEffect(id) {
+                // Appelle la fonction suspendue getChallengeById dans la coroutine
+                val result: Challenge? = getChallengeById(id)
+                challenge = result
+            }
+
             // Appelle le composant représentant l'écran de détails du défi (ChallengeScreen)
-            ChallengeScreen(challenge, navController)
+            ChallengeScreen(navController, challenge)
         }
 
         // Écran pour rejoindre un groupe privé
@@ -88,9 +99,22 @@ fun MainNav(activity: ComponentActivity?) {
         }
 
         // Écran pour créer un nouveau défi
-        composable(Screen.NewChallenge.route) {
+        composable(Screen.NewChallenge.route) {backStackEntry ->
+            // Récupère l'ID du groupe à partir des arguments de la navigation
+            val id = backStackEntry.arguments?.getString("id").orEmpty()
+
+            // Utilise remember pour stocker le résultat de la coroutine
+            var group by remember(id) { mutableStateOf<Group?>(null) }
+
+            // Utilise LaunchedEffect pour lancer une coroutine
+            LaunchedEffect(id) {
+                // Appelle la fonction suspendue getGroupById dans la coroutine
+                val result: Group? = getGroupById(id)
+                group = result
+            }
+
             // Appelle le composant représentant l'écran de création d'un nouveau défi (NewChallengeScreen)
-            NewChallengeScreen(navController)
+            NewChallengeScreen(navController, group)
         }
 
         // Écran du classement (leaderboard)
@@ -104,6 +128,12 @@ fun MainNav(activity: ComponentActivity?) {
             // Appelle le composant représentant l'écran du classement (LeaderboardScreen)
             LeaderboardScreen(users, navController)
         }
+        
+        // Écran pour afficher le profil
+        composable(Screen.Profile.route) {
+            // Appelle le composant représentant l'écran de profil (ProfileScreen)
+            ProfileScreen(navController)
+
         composable(Screen.UserList.route) {
             backStackEntry ->
             // Récupère l'ID du groupe à partir des arguments de la navigation
@@ -123,6 +153,7 @@ fun MainNav(activity: ComponentActivity?) {
             // Utilise le groupe dans votre UI
             UserListScreen(navController, group)
         }
+        
         composable(Screen.UserListAdmin.route) {
                 backStackEntry ->
             // Récupère l'ID du groupe à partir des arguments de la navigation

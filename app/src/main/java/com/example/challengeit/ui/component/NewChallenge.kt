@@ -17,6 +17,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -29,12 +30,11 @@ import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import com.example.challengeit.ui.dataclass.Challenge
+import com.example.challengeit.ui.dataclass.Group
 import com.example.challengeit.ui.navigation.Screen
 import com.example.challengeit.ui.theme.ChallengeItTheme
 import com.google.firebase.firestore.FirebaseFirestore
@@ -42,14 +42,14 @@ import com.google.firebase.firestore.FirebaseFirestore
 // Composant représentant l'écran de création d'un nouveau défi
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
 @Composable
-fun NewChallengeScreen(navController: NavHostController) {
+fun NewChallengeScreen(navController: NavHostController, group: Group?) {
     ChallengeItTheme {
         // Utilise le composant Scaffold pour la mise en page de l'écran
         Scaffold(
             bottomBar = { Navigation(navController = navController) }
         ) { innerPadding ->
             // Utilise le composant NewChallengeBody pour la partie centrale de l'écran
-            NewChallengeBody(navController, Modifier.padding(innerPadding))
+            NewChallengeBody(navController, Modifier.padding(innerPadding), group)
         }
     }
 }
@@ -57,11 +57,11 @@ fun NewChallengeScreen(navController: NavHostController) {
 // Composant représentant le corps de l'écran de création d'un nouveau défi
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
 @Composable
-fun NewChallengeBody(navController: NavHostController, modifier: Modifier) {
+fun NewChallengeBody(navController: NavHostController, modifier: Modifier, group: Group?) {
     // États pour stocker les valeurs du nom, de la description et du nombre de points du défi
     var name by remember { mutableStateOf("") }
     var description by remember { mutableStateOf("") }
-    var point by remember { mutableStateOf(0) }
+    var point by remember { mutableStateOf<String?>(null) }
 
     // Obtient le contexte local et le contrôleur de clavier
     val context = LocalContext.current
@@ -121,12 +121,15 @@ fun NewChallengeBody(navController: NavHostController, modifier: Modifier) {
 
         // Champ de texte pour le nombre de points du défi
         TextField(
-            value = point.toString(),
+            value = point.orEmpty(), // Utilise la valeur de point ou une chaîne vide si point est null
             onValueChange = {
                 // Vérifie si la nouvelle valeur est un nombre positif
                 val newValue = it.toIntOrNull()
                 if ((newValue != null) && (newValue >= 0)) {
-                    point = newValue
+                    point = newValue.toString()
+                } else {
+                    // Si la nouvelle valeur n'est pas valide, utilise null
+                    point = null
                 }
             },
             label = { Text("Nombre de points du défi") },
@@ -147,7 +150,7 @@ fun NewChallengeBody(navController: NavHostController, modifier: Modifier) {
         Button(
             onClick = {
                 // Crée une instance de Challenge avec les données fournies
-                val challenge = Challenge(name = name, description = description, point = point)
+                val challenge = Challenge(name = name, description = description, point = point?.toInt()?: 0, group = group?.id ?: "")
 
                 // Ajoute le défi à la collection "challenge" de Firestore
                 firestore.collection("challenge").add(challenge)
@@ -155,7 +158,7 @@ fun NewChallengeBody(navController: NavHostController, modifier: Modifier) {
                 // Efface les champs après l'ajout
                 name = ""
                 description = ""
-                point = 0
+                point = ""
 
                 // Redirige l'utilisateur vers l'écran principal après l'ajout du défi
                 navController.navigate(Screen.MainPage.route)
@@ -166,19 +169,5 @@ fun NewChallengeBody(navController: NavHostController, modifier: Modifier) {
             // Texte du bouton "Créer"
             Text(text = "Créer")
         }
-    }
-}
-
-// Prévisualisation de l'écran de création d'un nouveau défi
-@Preview()
-@Composable
-fun NewChallengeScreenPreview() {
-    // Initialise le contrôleur de navigation
-    val navController = rememberNavController()
-
-    // Applique le thème ChallengeIt
-    ChallengeItTheme {
-        // Affiche l'écran de création d'un nouveau défi dans la prévisualisation
-        NewChallengeScreen(navController)
     }
 }

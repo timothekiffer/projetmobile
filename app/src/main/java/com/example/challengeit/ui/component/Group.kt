@@ -34,8 +34,10 @@ import com.example.challengeit.ui.navigation.Screen
 import com.example.challengeit.ui.theme.ChallengeItTheme
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.withContext
 
 // Annotation indiquant que l'utilisation de l'API Material3 est expérimentale
 @OptIn(ExperimentalMaterial3Api::class)
@@ -115,7 +117,7 @@ fun GroupBody(navController: NavHostController, modifier: Modifier, group: Group
         }
         // Ajoute un bouton "Nouveau défi" avec une couleur et une forme spécifiques
         Button(
-            onClick = { navController.navigate(Screen.NewChallenge.route) },
+            onClick = { navController.navigate(Screen.NewChallenge.giveId(group.id)) },
             colors = ButtonDefaults.buttonColors(containerColor = Color.Gray),
             shape = MaterialTheme.shapes.medium
         ) {
@@ -131,7 +133,6 @@ fun GroupBody(navController: NavHostController, modifier: Modifier, group: Group
         ) {
             Text(text = "Classement")
         }
-
         // Ajoute un autre espace vertical
         Spacer(modifier = Modifier.height(16.dp))
 
@@ -144,14 +145,29 @@ fun GroupBody(navController: NavHostController, modifier: Modifier, group: Group
                 Text(text = "Gérer les utilisateurs")
             }
         }
+        Button(
+            onClick = { navController.navigate(Screen.UserList.giveId(group.id)) },
+            colors = ButtonDefaults.buttonColors(containerColor = Color.Gray),
+            shape = MaterialTheme.shapes.medium
+        ) {
+            Text(text = "Liste des utilisateurs")
+        }
+        
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp),
+            horizontalArrangement = Arrangement.End
+        ) {
+            // Ajoute un bouton de retour avec une couleur et une forme spécifiques
             Button(
-                onClick = { navController.navigate(Screen.UserList.giveId(group.id)) },
+                onClick = { navController.popBackStack() },
                 colors = ButtonDefaults.buttonColors(containerColor = Color.Gray),
                 shape = MaterialTheme.shapes.medium
             ) {
-                Text(text = "Liste des utilisateurs")
+                Text(text = "Retour")
             }
-
+        }
     }
 }
 
@@ -190,7 +206,7 @@ fun ChallengeItem(challenge: Challenge, navController: NavHostController) {
     ) {
         // Utilise un bouton pour représenter l'élément de défi avec une couleur et une forme spécifiques
         Button(
-            onClick = { navController.navigate(Screen.Challenge.route) },
+            onClick = { navController.navigate(Screen.Challenge.giveId(challenge.id)) },
             colors = ButtonDefaults.buttonColors(containerColor = Color.Gray),
             shape = MaterialTheme.shapes.medium
         ) {
@@ -216,8 +232,29 @@ suspend fun getChallenges(id: String): List<Challenge> {
     for (document in snapshot.documents) {
         val challenge = document.toObject(Challenge::class.java)
         if (challenge != null){
+            challenge.id = document.id
             resultList.add(challenge)
         }
     }
     return resultList
+}
+
+suspend fun getChallengeById(id: String): Challenge? {
+    return withContext(Dispatchers.IO) {
+        val firestore = FirebaseFirestore.getInstance()
+        val snapshot = firestore.collection("challenge")
+            .document(id)
+            .get()
+            .await()
+
+        if (snapshot.exists()) {
+            val challenge = snapshot.toObject(Challenge::class.java)
+            if (challenge != null) {
+                challenge.id = snapshot.id
+            }
+            challenge
+        } else {
+            null
+        }
+    }
 }
