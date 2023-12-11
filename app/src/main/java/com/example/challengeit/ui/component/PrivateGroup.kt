@@ -134,7 +134,7 @@ fun joinGroupForCurrentUser(userId: String, group: Group) {
     // Obtenir une instance de la base de données Firestore
     val firestore = FirebaseFirestore.getInstance()
     // Ajoute la nouvelle valeur à la liste users du document créé
-    group.id.let {
+     group.id.let {
         firestore.collection("group").document(it)
             .update("users", FieldValue.arrayUnion(userId))
     }

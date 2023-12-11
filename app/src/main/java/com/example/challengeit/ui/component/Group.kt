@@ -129,7 +129,7 @@ fun GroupBody(navController: NavHostController, modifier: Modifier, group: Group
         Spacer(modifier = Modifier.height(16.dp))
         // Ajoute un bouton "Classement" avec une couleur et une forme spécifiques
         Button(
-            onClick = { navController.navigate(Screen.Leaderboard.route) },
+            onClick = { navController.navigate(Screen.Leaderboard.giveId(group.id)) },
             colors = ButtonDefaults.buttonColors(containerColor = Color.Gray),
             shape = MaterialTheme.shapes.medium
         ) {
