@@ -11,9 +11,13 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -24,10 +28,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import com.example.challengeit.R
 import com.example.challengeit.ui.dataclass.Challenge
 import com.example.challengeit.ui.dataclass.Group
 import com.example.challengeit.ui.navigation.Screen
@@ -73,20 +79,24 @@ fun GroupBody(navController: NavHostController, modifier: Modifier, group: Group
         // Affiche le nom du groupe avec une taille de police, une couleur et un style spécifiques
         Text(
             text = "Nom du groupe : " + group.name,
-            color = Color.Black,
+            style = LocalTextStyle.current.copy(color = colorResource(id = R.color.purple)),
             fontSize = 30.sp,
             fontWeight = FontWeight.Bold
         )
+
         // Ajoute un espace vertical
         Spacer(modifier = Modifier.height(16.dp))
 
         // Affiche le code du groupe
         Text(
             text = "Partage ce code avec tes amis : " + group.code,
-            color = Color.Black,
+            style = LocalTextStyle.current.copy(color = colorResource(id = R.color.purple)),
             fontSize = 15.sp,
             fontWeight = FontWeight.Bold
         )
+
+        // Ajoute un espace vertical
+        Spacer(modifier = Modifier.height(16.dp))
 
         // Utilise une rangée pour organiser les éléments horizontalement avec un espacement au début
         Row(
@@ -98,7 +108,7 @@ fun GroupBody(navController: NavHostController, modifier: Modifier, group: Group
             // Affiche le titre "Défis en cours" avec une taille de police, une couleur et un style spécifiques
             Text(
                 text = "Défis en cours :",
-                color = Color.Black,
+                style = LocalTextStyle.current.copy(color = colorResource(id = R.color.purple)),
                 fontSize = 20.sp,
                 fontWeight = FontWeight.Bold
             )
@@ -108,7 +118,7 @@ fun GroupBody(navController: NavHostController, modifier: Modifier, group: Group
 
         // Utilise une colonne pour organiser les éléments de manière verticale avec un espacement à la fin
         LazyColumn(
-            modifier = Modifier.padding(16.dp)
+            modifier = Modifier.padding(8.dp)
         ) {
             // Utilise le composant ChallengeItem pour chaque élément de la liste de défis
             items(challenges) { challenge ->
@@ -119,7 +129,7 @@ fun GroupBody(navController: NavHostController, modifier: Modifier, group: Group
             // Ajoute un bouton "Nouveau défi" avec une couleur et une forme spécifiques
             Button(
                 onClick = { navController.navigate(Screen.NewChallenge.giveId(group.id)) },
-                colors = ButtonDefaults.buttonColors(containerColor = Color.Gray),
+                colors = ButtonDefaults.buttonColors(containerColor = colorResource(id = R.color.purple)),
                 shape = MaterialTheme.shapes.medium
             ) {
                 Text(text = "Nouveau défi")
@@ -136,22 +146,20 @@ fun GroupBody(navController: NavHostController, modifier: Modifier, group: Group
             }
         }
         // Ajoute un autre espace vertical
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(30.dp))
         // Ajoute un bouton "Classement" avec une couleur et une forme spécifiques
         Button(
             onClick = { navController.navigate(Screen.Leaderboard.giveId(group.id)) },
-            colors = ButtonDefaults.buttonColors(containerColor = Color.Gray),
+            colors = ButtonDefaults.buttonColors(containerColor = colorResource(id = R.color.purple)),
             shape = MaterialTheme.shapes.medium
         ) {
             Text(text = "Classement")
         }
-        // Ajoute un autre espace vertical
-        Spacer(modifier = Modifier.height(16.dp))
 
         if (isAdmin) {
             Button(
                 onClick = { navController.navigate(Screen.UserListAdmin.giveId(group.id)) },
-                colors = ButtonDefaults.buttonColors(containerColor = Color.Gray),
+                colors = ButtonDefaults.buttonColors(containerColor = colorResource(id = R.color.purple)),
                 shape = MaterialTheme.shapes.medium
             ) {
                 Text(text = "Gérer les utilisateurs")
@@ -159,7 +167,7 @@ fun GroupBody(navController: NavHostController, modifier: Modifier, group: Group
         }
         Button(
             onClick = { navController.navigate(Screen.UserList.giveId(group.id)) },
-            colors = ButtonDefaults.buttonColors(containerColor = Color.Gray),
+            colors = ButtonDefaults.buttonColors(containerColor = colorResource(id = R.color.purple)),
             shape = MaterialTheme.shapes.medium
         ) {
             Text(text = "Liste des utilisateurs")
@@ -174,10 +182,18 @@ fun GroupBody(navController: NavHostController, modifier: Modifier, group: Group
             // Ajoute un bouton de retour avec une couleur et une forme spécifiques
             Button(
                 onClick = { navController.popBackStack() },
-                colors = ButtonDefaults.buttonColors(containerColor = Color.Gray),
+                colors = ButtonDefaults.buttonColors(containerColor = colorResource(id = R.color.purple_200)),
                 shape = MaterialTheme.shapes.medium
             ) {
-                Text(text = "Retour")
+                Icon(
+                    imageVector = Icons.Default.ArrowBack,
+                    contentDescription = null,
+                    tint = Color.White
+                )
+                Text(
+                    text = "Retour",
+                    color = Color.White
+                )
             }
         }
     }
@@ -219,7 +235,7 @@ fun ChallengeItem(challenge: Challenge, navController: NavHostController) {
         // Utilise un bouton pour représenter l'élément de défi avec une couleur et une forme spécifiques
         Button(
             onClick = { navController.navigate(Screen.Challenge.giveId(challenge.id)) },
-            colors = ButtonDefaults.buttonColors(containerColor = Color.Gray),
+            colors = ButtonDefaults.buttonColors(containerColor = colorResource(id = R.color.purple_200)),
             shape = MaterialTheme.shapes.medium
         ) {
             // Affiche le nom du défi et sa récompense

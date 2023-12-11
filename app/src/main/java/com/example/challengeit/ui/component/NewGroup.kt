@@ -1,17 +1,24 @@
 // Déclaration du package et des importations nécessaires
 package com.example.challengeit.ui.component
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -27,6 +34,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
@@ -34,6 +42,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.example.challengeit.R
 import com.example.challengeit.ui.dataclass.Group
 import com.example.challengeit.ui.navigation.Screen
 import com.example.challengeit.ui.theme.ChallengeItTheme
@@ -81,7 +90,7 @@ fun NewGroupBody(navController: NavHostController, modifier: Modifier, userId: S
         // Titre de la page
         Text(
             text = "Création du groupe",
-            color = Color.Black,
+            style = LocalTextStyle.current.copy(color = colorResource(id = R.color.purple)),
             fontSize = 30.sp,
             fontWeight = FontWeight.Bold
         )
@@ -149,11 +158,36 @@ fun NewGroupBody(navController: NavHostController, modifier: Modifier, userId: S
                 // Redirige l'utilisateur vers l'écran principal après l'ajout du groupe
                 navController.navigate(Screen.MainPage.route)
             },
-            colors = ButtonDefaults.buttonColors(containerColor = Color.Gray),
+            colors = ButtonDefaults.buttonColors(containerColor = colorResource(id = R.color.purple)),
             shape = MaterialTheme.shapes.medium
         ) {
             // Texte du bouton "Créer"
             Text(text = "Créer")
+        }
+
+        // Utilise une rangée pour organiser les éléments horizontalement avec un espacement à la fin
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp),
+            horizontalArrangement = Arrangement.End
+        ) {
+            // Ajoute un bouton de retour avec une couleur et une forme spécifiques
+            Button(
+                onClick = { navController.popBackStack() },
+                colors = ButtonDefaults.buttonColors(containerColor = colorResource(id = R.color.purple_200)),
+                shape = MaterialTheme.shapes.medium
+            ) {
+                Icon(
+                    imageVector = Icons.Default.ArrowBack,
+                    contentDescription = null,
+                    tint = Color.White
+                )
+                Text(
+                    text = "Retour",
+                    color = Color.White
+                )
+            }
         }
     }
 }
