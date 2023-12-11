@@ -146,7 +146,6 @@ fun UserItem(user: User, navController: NavHostController) {
 
 suspend fun getUserList(groupId: String): List<User> {
 
-    Log.d("TEST4",groupId);
     // Obtenir une instance de la base de données Firestore
     val firestore = FirebaseFirestore.getInstance()
 
@@ -163,10 +162,7 @@ suspend fun getUserList(groupId: String): List<User> {
     val resultList = mutableListOf<User>()
     if (users != null) {
         for (user in users) {
-            Log.d("TEST2", user.toString());
             val utilisateur = User(id = user, displayName = getDisplayName(user), point = getClassement(user,groupId));
-            Log.d("TEST10", utilisateur.displayName);
-            Log.d("TEST17", utilisateur.point.toString());
             resultList.add(utilisateur)
         }
     }
@@ -195,30 +191,23 @@ suspend fun getClassement(userId: String, groupId: String): Int {
 
     // Vérifier si le document existe
     if (snapshot.exists()) {
-        Log.d("TEST13","bien")
         // Récupérer le map 'classement' du document
         val classementMap = snapshot.get("classement") as? Map<*, *>
-        Log.d("TEST15",classementMap.toString())
-        Log.d("TEST16",groupId)
         // Vérifier si le map et la clé groupId existent
         if (classementMap != null && classementMap.containsKey(groupId)) {
 
-            Log.d("TEST14","tresbien")
             // Récupérer le classement associé au groupId
             val classement = classementMap[groupId]
 
-            // Log the values for debugging
             println("classementMap: $classementMap")
             println("groupId: $groupId")
             println("classement: $classement")
 
             // Vérifier si le classement est un nombre
             if (classement is Number) {
-                Log.d("TEST11",classement.toString())
                 return classement.toInt()
             }
         }
     }
-    Log.d("TEST12","nul")
     return 0
 }

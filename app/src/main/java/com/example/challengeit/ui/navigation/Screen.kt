@@ -40,4 +40,9 @@ sealed class Screen(val route: String){
             return "adminUserList/$id"
         }
     }
+    object Validation : Screen("validation/{id}") {
+        fun giveId(id: String): String{
+            return "validation/$id"
+        }
+    }
 }

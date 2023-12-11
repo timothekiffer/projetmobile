@@ -174,6 +174,24 @@ fun MainNav(activity: ComponentActivity?) {
                 // Utilise le groupe dans votre UI
                 UserListAdminScreen(navController, group)
             }
+        composable(Screen.Validation.route) { backStackEntry ->
+            // Récupère l'ID du groupe à partir des arguments de la navigation
+            val id = backStackEntry.arguments?.getString("id").orEmpty()
+            Log.d("test12", id)
+
+            // Utilise remember pour stocker le résultat de la coroutine
+            var group by remember(id) { mutableStateOf<Group?>(null) }
+
+            // Utilise LaunchedEffect pour lancer une coroutine
+            LaunchedEffect(id) {
+                // Appelle la fonction suspendue getGroupById dans la coroutine
+                val result: Group? = getGroupById(id)
+                group = result
+            }
+
+            // Utilise le groupe dans votre UI
+            ValidationScreen(navController, group)
+        }
         }
     }
 

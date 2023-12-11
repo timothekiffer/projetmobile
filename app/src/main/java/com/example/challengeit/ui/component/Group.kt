@@ -125,6 +125,16 @@ fun GroupBody(navController: NavHostController, modifier: Modifier, group: Group
                 Text(text = "Nouveau défi")
             }
         }
+        if (isAdmin) {
+            // Ajoute un bouton "Nouveau défi" avec une couleur et une forme spécifiques
+            Button(
+                onClick = { navController.navigate(Screen.Validation.giveId(group.id)) },
+                colors = ButtonDefaults.buttonColors(containerColor = Color.Gray),
+                shape = MaterialTheme.shapes.medium
+            ) {
+                Text(text = "Validation")
+            }
+        }
         // Ajoute un autre espace vertical
         Spacer(modifier = Modifier.height(16.dp))
         // Ajoute un bouton "Classement" avec une couleur et une forme spécifiques
