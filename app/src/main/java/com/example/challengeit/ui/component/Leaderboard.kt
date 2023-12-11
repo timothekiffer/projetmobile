@@ -127,4 +127,3 @@ fun LeaderboardBody(group: Group, navController: NavHostController, modifier: Mo
         }
     }
 }
-

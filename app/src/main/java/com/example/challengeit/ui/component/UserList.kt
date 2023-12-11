@@ -138,7 +138,7 @@ fun UserItem(user: User, navController: NavHostController) {
             .padding(16.dp),
         horizontalArrangement = Arrangement.Center
     ) {
-        Text(text = "${user.displayName}")
+        Text(text = user.displayName)
     }
 }
 

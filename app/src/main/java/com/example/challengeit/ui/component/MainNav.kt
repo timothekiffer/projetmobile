@@ -66,9 +66,10 @@ fun MainNav(activity: ComponentActivity?) {
             // Utilise LaunchedEffect pour lancer une coroutine
             LaunchedEffect(id) {
                 // Appelle la fonction suspendue getChallengeById dans la coroutine
-                val result: Challenge? = getChallengeById(id)
+                val result: Challenge = getChallengeById(id)!!
                 challenge = result
             }
+            val challengeId = challenge?.id ?: "id null"
 
             // Appelle le composant représentant l'écran de détails du défi (ChallengeScreen)
             ChallengeScreen(navController, challenge)
