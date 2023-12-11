@@ -1,6 +1,7 @@
 // Déclaration du package et des importations nécessaires
 package com.example.challengeit.ui.component
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -20,44 +21,53 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
+import com.example.challengeit.ui.dataclass.Challenge
+import com.example.challengeit.ui.dataclass.Group
 import com.example.challengeit.ui.navigation.Screen
 import com.example.challengeit.ui.theme.ChallengeItTheme
-
-// Data class représentant un utilisateur avec un identifiant, un nom et un nombre de points
-data class User(val id: String, val displayName: String, val point: Int)
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.withContext
 
 // Annotation indiquant que l'utilisation de l'API Material3 est expérimentale
 @OptIn(ExperimentalMaterial3Api::class)
-// Composable principal pour l'écran du classement
+// Composable principal pour l'écran de groupe
 @Composable
-fun LeaderboardScreen(users: List<User>, navController: NavHostController) {
+fun UserListScreen(navController: NavHostController, group: Group?) {
     // Applique le thème personnalisé ChallengeItTheme
     ChallengeItTheme {
         // Utilise le composant Scaffold pour définir la structure de base de l'écran
         Scaffold(
             bottomBar = { Navigation(navController = navController) }
         ) { innerPadding ->
-            // Appelle le composant LeaderboardBody pour définir le contenu principal de l'écran
-            LeaderboardBody(users, navController, Modifier.padding(innerPadding))
+            // Appelle le composant GroupBody pour définir le contenu principal de l'écran
+            if (group != null) {
+                UserBody(navController, Modifier.padding(innerPadding), group)
+            }
         }
     }
 }
 
-// Annotation indiquant que l'utilisation de l'API Material3 est expérimentale
-@OptIn(ExperimentalMaterial3Api::class)
-// Composable pour le corps principal de l'écran du classement
+// Composable pour le corps principal de l'écran de groupe
 @Composable
-fun LeaderboardBody(users: List<User>, navController: NavHostController, modifier: Modifier) {
-    // Utilise une colonne pour organiser les éléments de manière verticale
+fun UserBody(navController: NavHostController, modifier: Modifier, group: Group) {
+
+    val userList by remember { mutableStateOf(runBlocking { getUserList(group.id) }) }
+
     Column(modifier = modifier
         .fillMaxSize()
         .padding(10.dp),
@@ -65,7 +75,7 @@ fun LeaderboardBody(users: List<User>, navController: NavHostController, modifie
     ) {
         // Affiche le titre "Classement" avec une taille de police, une couleur et un style spécifiques
         Text(
-            text = "Classement",
+            text = "Liste des joueurs",
             color = Color.Black,
             fontSize = 30.sp,
             fontWeight = FontWeight.Bold
@@ -84,13 +94,12 @@ fun LeaderboardBody(users: List<User>, navController: NavHostController, modifie
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     Text("Nom", fontWeight = FontWeight.Bold)
-                    Text("Points", fontWeight = FontWeight.Bold)
                 }
                 // Ajoute un espacement après la ligne d'en-tête
                 Spacer(modifier = Modifier.height(4.dp))
             }
             // Ajoute des éléments pour chaque utilisateur dans la liste
-            items(users) { user ->
+            items(userList) { user ->
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -101,7 +110,6 @@ fun LeaderboardBody(users: List<User>, navController: NavHostController, modifie
                 ) {
                     // Affiche l'ID, le nom et le nombre de points de chaque utilisateur
                     Text(user.displayName)
-                    Text(user.point.toString())
                 }
             }
         }
@@ -117,20 +125,64 @@ fun LeaderboardBody(users: List<User>, navController: NavHostController, modifie
     }
 }
 
-// Fonction de prévisualisation pour l'écran du classement
-@Preview()
+
+
+// Composable pour afficher un élément de défi dans la liste
 @Composable
-fun LeaderboardScreenPreview() {
-    // Initialise un contrôleur de navigation factice pour la prévisualisation
-    val navController = rememberNavController()
-    // Initialise une liste d'utilisateurs pour la prévisualisation
-    val users = listOf<User>(
-        User(id = "1", displayName = "Timothé", point = 150),
-        User(id = "2", displayName = "Alexandre", point = 89),
-        User(id = "3", displayName = "Romain", point = 18)
-    )
-    // Applique le thème personnalisé ChallengeItTheme et appelle le composant LeaderboardScreen
-    ChallengeItTheme {
-        LeaderboardScreen(users, navController)
+fun UserItem(user: User, navController: NavHostController) {
+    // Utilise une rangée pour organiser les éléments horizontalement centrés
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(16.dp),
+        horizontalArrangement = Arrangement.Center
+    ) {
+        Text(text = "${user.displayName}")
     }
+}
+
+// Fonction suspendue pour récupérer la liste des groupes depuis Firestore
+
+suspend fun getUserList(groupId: String): List<User> {
+
+    Log.d("TEST4",groupId);
+    // Obtenir une instance de la base de données Firestore
+    val firestore = FirebaseFirestore.getInstance()
+
+    // Effectuer une requête asynchrone pour obtenir un snapshot de la collection "GROUP"
+    val snapshot = firestore.collection("group")
+        .document(groupId)
+        .get()
+        .await()
+
+    val group = snapshot.toObject(Group::class.java)
+    val users = group?.users
+
+
+    val resultList = mutableListOf<User>()
+    if (users != null) {
+        for (user in users) {
+            Log.d("TEST2", user.toString());
+            val utilisateur = User(id = user, displayName = getDisplayName(user), point =0);
+            Log.d("TEST10", utilisateur.displayName);
+            resultList.add(utilisateur)
+        }
+    }
+    return resultList
+}
+
+suspend fun getDisplayName(userId: String): String {
+    val firestore = FirebaseFirestore.getInstance()
+    val snapshot = firestore.collection("user").document(userId).get().await()
+
+    // Vérifier si le document existe
+    if (snapshot.exists()) {
+        // Récupérer le displayName du document
+        val displayName = snapshot.getString("displayName")
+        if (displayName != null) {
+            return displayName
+        }
+    }
+
+    return "Anonymous"
 }

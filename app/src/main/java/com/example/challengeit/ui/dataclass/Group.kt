@@ -10,5 +10,7 @@ data class Group(
     var description: String = "",
     var code: String = "",
     @PropertyName("private") val isPrivate: Boolean = false,
-    var users: List<String> = listOf()
+    var users: List<String> = listOf(),
+    var admins: List<String> = listOf(),
+    var creator: String = ""
 )

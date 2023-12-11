@@ -136,7 +136,7 @@ fun NewGroupBody(navController: NavHostController, modifier: Modifier, userId: S
             onClick = {
                 val code: String = generateRandomCode(6)
                 // Crée une instance de Group avec les données fournies
-                val group = Group(name = name, description = description, code = code, isPrivate = isPrivate, users= listOf(userId))
+                val group = Group(name = name, description = description, code = code, isPrivate = isPrivate, users= listOf(userId), admins= listOf(userId), creator=userId)
 
                 // Ajoute le groupe à la collection "group" de Firestore
                 firestore.collection("group").add(group)
